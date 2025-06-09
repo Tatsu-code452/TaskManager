@@ -18,7 +18,7 @@ function Header() {
         };
         updateDatetime();
         const timer = setInterval(updateDatetime, 1000);
-
+        return () => clearInterval(timer);
     }, []);
 
     return (

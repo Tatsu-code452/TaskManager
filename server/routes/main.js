@@ -17,13 +17,13 @@ router.use('/', menuRouter);
 //   }
 // });
 
-// // セッション状態確認API（router.useの前に配置）
-// router.get('/session', (req, res) => {
-//   if (!req.session || !req.session.user) {
-//     return res.status(401).json({ success: false, message: 'セッション切れ' });
-//   }
-//   res.json({ success: true, user: req.session.user });
-// });
+// セッション状態確認API（router.useの前に配置）
+router.get('/session', (req, res) => {
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ success: false, message: 'セッション切れ' });
+  }
+  res.json({ success: true, user: req.session.user });
+});
 
 // // 認証チェック（/sessionは除外）
 // router.use((req, res, next) => {

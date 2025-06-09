@@ -1,40 +1,56 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import useScreenTitle from "./useScreenTitle";
+import useSessionCheck from "./useSessionCheck";
+import { useNavigate } from "react-router-dom";
 
 function Menu() {
-    const navigate = useNavigate();
+    useSessionCheck();
     useScreenTitle("メニュー画面");
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        fetch("/session", { credentials: "include" })
-            .then((res) => {
-                if (res.status === 401) {
-                    navigate("/login");
-                }
-            })
-            .catch(() => {
-                navigate("/login");
-            });
-    }, [navigate]);
+    // ページ遷移のための関数
+    const moveDisp = (e, page) => {
+        e.preventDefault();
+        navigate(page);
+    };
 
     return (
         <div className="row justify-content-center">
-            <div class="text-center mb-4">
-                <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
-                    <a href="task.html" class="btn btn-primary">
+            <div className="text-center mb-4">
+                <div className="d-flex flex-wrap justify-content-center gap-3 mt-4">
+                    <a
+                        className="btn btn-primary"
+                        href="#"
+                        onClick={(e) => moveDisp(e, "/task")}
+                    >
                         タスク一覧
                     </a>
-                    <a href="effort_list.html" class="btn btn-primary">
+                    <a
+                        className="btn btn-primary"
+                        href="#"
+                        onClick={(e) => moveDisp(e, "/effort_list")}
+                    >
                         工数予実一覧
                     </a>
-                    <a href="gantt.html" class="btn btn-primary">
+                    <a
+                        className="btn btn-primary"
+                        href="#"
+                        onClick={(e) => moveDisp(e, "/gantt")}
+                    >
                         ガントチャート
                     </a>
-                    <a href="alarm_history.html" class="btn btn-primary">
+                    <a
+                        className="btn btn-primary"
+                        href="#"
+                        onClick={(e) => moveDisp(e, "/alarm_history")}
+                    >
                         アラーム履歴
                     </a>
-                    <a href="master_edit.html" class="btn btn-primary">
+                    <a
+                        className="btn btn-primary"
+                        href="#"
+                        onClick={(e) => moveDisp(e, "/master_edit")}
+                    >
                         マスタ修正
                     </a>
                 </div>

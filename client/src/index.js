@@ -7,18 +7,13 @@ import Footer from "./components/Footer";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <>
-        <Header />
-        <React.StrictMode>
-            <BrowserRouter>
-                <main
-                    className="container py-5"
-                    style={{ paddingBottom: "90px" }}
-                >
-                    <App />
-                </main>
-            </BrowserRouter>
-        </React.StrictMode>
-        <Footer />
-    </>
+    <React.StrictMode>
+        <BrowserRouter>
+            <Header />
+            <main className="container py-5" style={{ paddingBottom: "90px" }}>
+                <App />
+            </main>
+            <Footer />
+        </BrowserRouter>
+    </React.StrictMode>
 );

@@ -1,8 +1,10 @@
-const path = require("path");
 const express = require("express");
-const router = express.Router();
-const env = require("../common/env");
+const path = require("path");
 const { Pool } = require("pg");
+const env = require("../common/env");
+
+const router = express.Router();
+
 // PostgreSQL接続プール作成
 const pool = new Pool({
     host: env.DB_HOST,
@@ -21,7 +23,6 @@ router.post("/login", async (req, res) => {
             message: "ユーザー名またはパスワードが未入力です",
         });
     }
-
     try {
         // USERテーブルから認証
         const result = await pool.query(
@@ -41,9 +42,7 @@ router.post("/login", async (req, res) => {
         }
     } catch (err) {
         console.error("DB認証エラー:", err);
-        return res
-            .status(500)
-            .json({ success: false, message: "サーバーエラー" });
+        return res.status(500).json({ success: false, message: "サーバーエラー" });
     }
 });
 
