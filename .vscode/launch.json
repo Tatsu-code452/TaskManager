@@ -1,0 +1,26 @@
+{
+    // IntelliSense を使用して利用可能な属性を学べます。
+    // 既存の属性の説明をホバーして表示します。
+    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "サーバ起動",
+            "program": "${workspaceFolder}/server/server.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "React 起動",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "start"
+            ],
+            "cwd": "${workspaceFolder}/client",
+            "console": "integratedTerminal"
+        }
+    ]
+}

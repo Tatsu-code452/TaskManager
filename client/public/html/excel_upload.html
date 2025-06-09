@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>エクセルアップロード</title>
+    <link rel="stylesheet" href="../css/excel_upload.css">
+</head>
+<body>
+    <header>
+        <h1>エクセルアップロード</h1>
+    </header>
+    <main class="excel-upload-container">
+        <form id="uploadForm">
+            <label>エクセルファイル選択: <input type="file" name="excelFile" accept=".xlsx,.xls" required></label>
+            <button type="submit">アップロード</button>
+        </form>
+        <div id="mappingSection" style="display:none;">
+            <h2>列-項目紐づけ</h2>
+            <p>（ダミーUI）</p>
+            <button id="registerBtn">一括タスク登録</button>
+        </div>
+    </main>
+    <script src="../js/excel_upload.js"></script>
+</body>
+</html>

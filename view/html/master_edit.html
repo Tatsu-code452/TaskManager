@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>マスタ修正</title>
+    <link rel="stylesheet" href="../css/master_edit.css">
+    <script src="../js/common.js"></script>
+</head>
+<body>
+    <div id="header-container"></div>
+    <main class="master-edit-container">
+        <form id="masterForm">
+            <label>マスタ種別:
+                <select name="masterType" required>
+                    <option value="CATEGORY">カテゴリ</option>
+                    <option value="PHASE">フェーズ</option>
+                    <option value="PROJECT">プロジェクト</option>
+                    <option value="USER">ユーザー</option>
+                </select>
+            </label>
+            <label>名称: <input type="text" name="name" required></label>
+            <div class="form-buttons">
+                <button type="submit">登録/更新</button>
+                <button type="button" id="deleteBtn">削除</button>
+            </div>
+        </form>
+        <div id="masterListSection">
+            <h2>マスタ一覧（ダミー）</h2>
+            <ul id="masterList"></ul>
+        </div>
+    </main>
+    <div id="footer-container"></div>
+    <script src="../js/master_edit.js"></script>
+</body>
+</html>
