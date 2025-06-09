@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useScreenTitle from "./useScreenTitle";
 
 function Login() {
+    useScreenTitle("ログイン画面");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -11,20 +15,34 @@ function Login() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
             credentials: "include",
-        });
-        if (res.ok) {
-            // ログイン成功時の処理
-            alert("ログイン成功");
-        } else {
-            alert("ログイン失敗");
-        }
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(
+                        "ネットワークエラー: " + response.statusText
+                    );
+                }
+                return response;
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    navigate("/menu"); // React Routerでメニュー画面へ遷移
+                } else {
+                    alert("ユーザー名またはパスワードが間違っています");
+                }
+            })
+            .catch((error) => {
+                console.error(
+                    "ログインリクエスト中にエラーが発生しました:",
+                    error
+                );
+                alert("ログインリクエスト中にエラーが発生しました");
+            });
     };
 
     return (
         <div className="row justify-content-center">
-            <span style={{ display: "none" }} id="screen-title-act">
-                ログイン画面
-            </span>
             <div className="col-md-4">
                 <h2 className="mb-4 text-center">ログイン</h2>
                 <form onSubmit={handleSubmit}>

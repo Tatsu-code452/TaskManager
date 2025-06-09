@@ -10,12 +10,29 @@ router.use('/', loginRouter);
 // メニュー系
 router.use('/', menuRouter);
 
-// ルート
-router.get('/', (req, res) => {
-  if (!req.session || !req.session.user) {
-    return res.redirect('/login');
-  }
-});
+// // ルート
+// router.get('/', (req, res) => {
+//   if (!req.session || !req.session.user) {
+//     return res.redirect('/login');
+//   }
+// });
+
+// // セッション状態確認API（router.useの前に配置）
+// router.get('/session', (req, res) => {
+//   if (!req.session || !req.session.user) {
+//     return res.status(401).json({ success: false, message: 'セッション切れ' });
+//   }
+//   res.json({ success: true, user: req.session.user });
+// });
+
+// // 認証チェック（/sessionは除外）
+// router.use((req, res, next) => {
+//   if (req.path === '/session') return next();
+//   if (!req.session || !req.session.user) {
+//     return res.redirect('/login');
+//   }
+//   next();
+// });
 
 // 任意のファイルを送信（セキュリティ考慮: view配下のみ許可）
 router.get('/:filename', (req, res) => {

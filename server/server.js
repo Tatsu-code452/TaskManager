@@ -11,6 +11,8 @@ applySecurity(app);
 
 // 静的ファイルの配信
 app.use(express.static(path.join(__dirname, '../view')));
+app.use(express.json()); // JSONデータを解析
+app.use(express.urlencoded({ extended: true })); // URLエンコードされたデータを解析
 
 // ルーティング
 app.use('/', mainRouter);

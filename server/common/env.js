@@ -16,7 +16,7 @@ module.exports = {
     DB_USER: process.env.DB_USER || "postgres",
     DB_PASSWORD: process.env.DB_PASSWORD || "postgrespass",
     DB_NAME: process.env.DB_NAME || "postgres",
-    DB_SCHEMA: process.env.DB_SCHEMA || "TASK_NAMAGE",
+    DB_SCHEMA: process.env.DB_SCHEMA || "TASK_MANAGE",
 
     // 必要に応じて追加
 };

@@ -21,6 +21,16 @@
             ],
             "cwd": "${workspaceFolder}/client",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "React Attach",
+            "type": "msedge",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMapPathOverrides": {
+                "webpack:///src/*": "${webRoot}/*"
+            }
         }
     ]
 }
