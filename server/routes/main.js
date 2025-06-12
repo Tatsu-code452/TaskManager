@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const loginRouter = require('./login');
 const menuRouter = require('./menu');
+const taskRouter = require('./task');
 const router = express.Router();
 const env = require('../common/env');
 
@@ -9,6 +10,8 @@ const env = require('../common/env');
 router.use('/', loginRouter);
 // メニュー系
 router.use('/', menuRouter);
+// タスク系
+router.use('/', taskRouter);
 
 // // ルート
 // router.get('/', (req, res) => {

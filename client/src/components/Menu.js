@@ -14,45 +14,28 @@ function Menu() {
         navigate(page);
     };
 
+    const menuItems = [
+        { label: "タスク一覧", path: "/task" },
+        { label: "工数予実一覧", path: "/effort_list" },
+        { label: "ガントチャート", path: "/gantt" },
+        { label: "アラーム履歴", path: "/alarm_history" },
+        { label: "マスタ修正", path: "/master_edit" },
+    ];
+
     return (
         <div className="row justify-content-center">
             <div className="text-center mb-4">
                 <div className="d-flex flex-wrap justify-content-center gap-3 mt-4">
-                    <a
-                        className="btn btn-primary"
-                        href="#"
-                        onClick={(e) => moveDisp(e, "/task")}
-                    >
-                        タスク一覧
-                    </a>
-                    <a
-                        className="btn btn-primary"
-                        href="#"
-                        onClick={(e) => moveDisp(e, "/effort_list")}
-                    >
-                        工数予実一覧
-                    </a>
-                    <a
-                        className="btn btn-primary"
-                        href="#"
-                        onClick={(e) => moveDisp(e, "/gantt")}
-                    >
-                        ガントチャート
-                    </a>
-                    <a
-                        className="btn btn-primary"
-                        href="#"
-                        onClick={(e) => moveDisp(e, "/alarm_history")}
-                    >
-                        アラーム履歴
-                    </a>
-                    <a
-                        className="btn btn-primary"
-                        href="#"
-                        onClick={(e) => moveDisp(e, "/master_edit")}
-                    >
-                        マスタ修正
-                    </a>
+                    {menuItems.map((item) => (
+                        <a
+                            key={item.path}
+                            className="btn btn-primary"
+                            href="#"
+                            onClick={(e) => moveDisp(e, item.path)}
+                        >
+                            {item.label}
+                        </a>
+                    ))}
                 </div>
             </div>
         </div>

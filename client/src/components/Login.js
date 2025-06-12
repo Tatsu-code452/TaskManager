@@ -8,37 +8,38 @@ function Login() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
+    // ログインAPI呼び出し
+    const login = async (username, password) => {
+        try {
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
+                credentials: "include",
+            });
+            if (!response.ok) {
+                throw new Error("ネットワークエラー: " + response.statusText);
+            }
+            return await response.json();
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    // フォーム送信時の処理
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await fetch("/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
-            credentials: "include",
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(
-                        "ネットワークエラー: " + response.statusText
-                    );
-                }
-                return response;
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.success) {
-                    navigate("/menu"); // React Routerでメニュー画面へ遷移
-                } else {
-                    alert("ユーザー名またはパスワードが間違っています");
-                }
-            })
-            .catch((error) => {
-                console.error(
-                    "ログインリクエスト中にエラーが発生しました:",
-                    error
-                );
-                alert("ログインリクエスト中にエラーが発生しました");
-            });
+        try {
+            const data = await login(username, password);
+            if (data.success) {
+                navigate("/menu");
+            } else {
+                alert("ユーザー名またはパスワードが間違っています");
+            }
+        } catch (error) {
+            console.error("ログインリクエスト中にエラーが発生しました:", error);
+            alert("ログインリクエスト中にエラーが発生しました");
+        }
     };
 
     return (
@@ -57,6 +58,7 @@ function Login() {
                             required
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            autoComplete="username"
                         />
                     </div>
                     <div className="mb-3">
@@ -70,6 +72,7 @@ function Login() {
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="current-password"
                         />
                     </div>
                     <button type="submit" className="btn btn-primary w-100">
