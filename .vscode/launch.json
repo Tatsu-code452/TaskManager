@@ -16,10 +16,12 @@
             "name": "React 起動",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
-                "run",
                 "start"
             ],
             "cwd": "${workspaceFolder}/client",
+            "env": {
+                "BROWSER": "none"
+            },
             "console": "integratedTerminal"
         },
         {
@@ -27,10 +29,20 @@
             "type": "msedge",
             "request": "launch",
             "url": "http://localhost:3000",
-            "webRoot": "${workspaceFolder}/src",
+            "webRoot": "${workspaceFolder}/client/src",
             "sourceMapPathOverrides": {
                 "webpack:///src/*": "${webRoot}/*"
             }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "All: サーバ & React & Attach",
+            "configurations": [
+                "サーバ起動",
+                "React 起動",
+                "React Attach"
+            ]
         }
     ]
 }
