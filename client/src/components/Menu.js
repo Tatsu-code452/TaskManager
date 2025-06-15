@@ -19,7 +19,7 @@ function Menu() {
         { label: "工数予実一覧", path: "/effort_list" },
         { label: "ガントチャート", path: "/gantt" },
         { label: "アラーム履歴", path: "/alarm_history" },
-        { label: "マスタ修正", path: "/master_edit" },
+        { label: "マスタ管理", path: "/master" },
     ];
 
     return (

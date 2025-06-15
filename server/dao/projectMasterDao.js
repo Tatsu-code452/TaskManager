@@ -6,15 +6,13 @@ const {
 } = require("./commonDao");
 
 const TABLE_NAME = "project_master";
-const COLUMN_NAMES = ["id"];
+const COLUMN_NAMES = ["id", "name", "description", "start_date", "end_date"];
 
 function extractData(obj) {
-    return COLUMN_NAMES
-        .filter(isUpdatableKey(obj))
-        .reduce((acc, key) => {
-            acc[key] = obj[key];
-            return acc;
-        }, {});
+    return COLUMN_NAMES.filter(isUpdatableKey(obj)).reduce((acc, key) => {
+        acc[key] = obj[key];
+        return acc;
+    }, {});
 }
 
 function isUpdatableKey(obj) {

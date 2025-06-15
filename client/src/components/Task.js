@@ -1,38 +1,25 @@
 import React, { useState, useEffect } from "react";
 import useScreenTitle from "./useScreenTitle";
+import { fetchApiWithLock, formatDate } from "../module/fetchModule";
+import DataTable from "./parts/DataTable";
+import useSessionCheck from "./useSessionCheck";
 
 function Task() {
+    useSessionCheck();
     useScreenTitle("タスク一覧");
-    const [tasks, setTasks] = useState([]);
-
-    // 日付フォーマット関数
-    const formatDate = (date, withTime = false) => {
-        if (!date) return "";
-        const d = new Date(date);
-        return withTime ? d.toLocaleString() : d.toLocaleDateString();
-    };
+    const [data, setData] = useState([]);
 
     // タスク一覧のデータを取得
-    const fetchTasks = async () => {
-        try {
-            const response = await fetch("/tasks", {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-            });
-            if (!response.ok) {
-                throw new Error("ネットワークエラー: " + response.statusText);
-            }
-            const data = await response.json();
-            setTasks(data.tasks || []);
-        } catch (error) {
-            console.error("タスクの取得中にエラーが発生しました:", error);
-            alert("タスクの取得中にエラーが発生しました");
-        }
-    };
-
     useEffect(() => {
-        fetchTasks();
+        (async () => {
+            try {
+                const data = await fetchApiWithLock("GET", "/tasks");
+                setData(data || []);
+            } catch (error) {
+                console.error("タスクの取得中にエラーが発生しました:", error);
+                alert("タスクの取得中にエラーが発生しました");
+            }
+        })();
     }, []);
 
     const columns = [
@@ -47,34 +34,22 @@ function Task() {
         { key: "endDate", label: "終了日", format: formatDate },
         { key: "workload", label: "工数" },
         { key: "description", label: "説明" },
-        { key: "createDate", label: "作成日時", format: (d) => formatDate(d, true) },
-        { key: "updateDate", label: "更新日時", format: (d) => formatDate(d, true) },
+        {
+            key: "createDate",
+            label: "作成日時",
+            format: (d) => formatDate(d, true),
+        },
+        {
+            key: "updateDate",
+            label: "更新日時",
+            format: (d) => formatDate(d, true),
+        },
     ];
 
     return (
         <div className="row justify-content-center">
-            <h2 className="mb-4 text-center">タスク一覧</h2>
             <div className="overflow-scroll col-md-12 border border-2 rounded p-3">
-                <table className="table table-striped table-bordered">
-                    <thead className="table-primary">
-                        <tr>
-                            {columns.map((col) => (
-                                <th key={col.key}>{col.label}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {tasks.map((task) => (
-                            <tr key={task.taskId}>
-                                {columns.map((col) => (
-                                    <td key={col.key}>
-                                        {col.format ? col.format(task[col.key]) : task[col.key]}
-                                    </td>
-                                ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <DataTable columns={columns} data={data} rowKey="taskId" />
             </div>
         </div>
     );

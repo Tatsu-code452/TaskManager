@@ -146,3 +146,47 @@ COMMENT ON COLUMN ALARM_HISTORY.alarm_type IS 'アラーム種別';
 COMMENT ON COLUMN ALARM_HISTORY.alarm_time IS 'アラーム発生日時';
 COMMENT ON COLUMN ALARM_HISTORY.message IS 'メッセージ';
 COMMENT ON COLUMN ALARM_HISTORY.created_at IS '作成日時';
+
+-- 各テーブルのシーケンスをIntegerの上限(2147483647)まで使用し、1に戻るように設定
+
+-- TASK_PLAN
+ALTER SEQUENCE task_plan_id_seq RESTART WITH 1;
+ALTER SEQUENCE task_plan_id_seq MAXVALUE 2147483647 CYCLE;
+
+-- TASK_ACTUAL
+ALTER SEQUENCE task_actual_id_seq RESTART WITH 1;
+ALTER SEQUENCE task_actual_id_seq MAXVALUE 2147483647 CYCLE;
+
+-- TASK_INPUT
+ALTER SEQUENCE task_input_id_seq RESTART WITH 1;
+ALTER SEQUENCE task_input_id_seq MAXVALUE 2147483647 CYCLE;
+
+-- "USER"
+ALTER SEQUENCE "USER_id_seq" RESTART WITH 1;
+ALTER SEQUENCE "USER_id_seq" MAXVALUE 2147483647 CYCLE;
+
+-- PROJECT_MASTER
+ALTER SEQUENCE project_master_id_seq RESTART WITH 1;
+ALTER SEQUENCE project_master_id_seq MAXVALUE 2147483647 CYCLE;
+
+-- PHASE_MASTER
+ALTER SEQUENCE phase_master_id_seq RESTART WITH 1;
+ALTER SEQUENCE phase_master_id_seq MAXVALUE 2147483647 CYCLE;
+
+-- CATEGORY_MASTER
+ALTER SEQUENCE category_master_id_seq RESTART WITH 1;
+ALTER SEQUENCE category_master_id_seq MAXVALUE 2147483647 CYCLE;
+
+-- ALARM_HISTORY
+ALTER SEQUENCE alarm_history_id_seq RESTART WITH 1;
+ALTER SEQUENCE alarm_history_id_seq MAXVALUE 2147483647 CYCLE;
+
+SELECT relname FROM pg_class WHERE relkind = 'S';
+SELECT setval('task_plan_id_seq', (SELECT MAX(id) FROM task_plan));
+SELECT setval('task_actual_id_seq', (SELECT MAX(id) FROM task_actual));
+SELECT setval('task_input_id_seq', (SELECT MAX(id) FROM task_input));
+SELECT setval('project_master_id_seq', (SELECT MAX(id) FROM project_master));
+SELECT setval('phase_master_id_seq', (SELECT MAX(id) FROM phase_master));
+SELECT setval('"USER_id_seq"', (SELECT MAX(id) FROM "USER"));
+SELECT setval('category_master_id_seq', (SELECT MAX(id) FROM category_master));
+SELECT setval('alarm_history_id_seq', (SELECT MAX(id) FROM alarm_history));

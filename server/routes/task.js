@@ -53,7 +53,7 @@ router.get("/tasks", async (req, res) => {
 });
 
 // タスク追加API（POST）
-router.post("/task", async (req, res) => {
+router.post("/tasks", async (req, res) => {
     const { title, description } = req.body;
     if (!title || !description) {
         return res.status(400).json({

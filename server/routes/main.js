@@ -3,6 +3,7 @@ const express = require('express');
 const loginRouter = require('./login');
 const menuRouter = require('./menu');
 const taskRouter = require('./task');
+const projectMasterRouter = require('./projectMaster');
 const router = express.Router();
 const env = require('../common/env');
 
@@ -12,6 +13,8 @@ router.use('/', loginRouter);
 router.use('/', menuRouter);
 // タスク系
 router.use('/', taskRouter);
+// プロジェクトマスタ系
+router.use('/', projectMasterRouter);
 
 // // ルート
 // router.get('/', (req, res) => {

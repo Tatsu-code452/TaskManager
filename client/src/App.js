@@ -7,7 +7,7 @@ import Task from "./components/Task";
 import EffortList from "./components/EffortList";
 import Gantt from "./components/Gantt";
 import AlarmHistory from "./components/AlarmHistory";
-import MasterEdit from "./components/MasterEdit";
+import Master from "./components/Master";
 
 function App() {
     return (
@@ -18,7 +18,7 @@ function App() {
             <Route path="/effort_list" element={<EffortList />} />
             <Route path="/gantt" element={<Gantt />} />
             <Route path="/alarm_history" element={<AlarmHistory />} />
-            <Route path="/master_edit" element={<MasterEdit />} />
+            <Route path="/master" element={<Master />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
     );

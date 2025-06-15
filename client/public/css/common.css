@@ -10,3 +10,7 @@ footer {
 footer .btn {
   min-width: 90px;
 }
+
+tr.selected td {
+  background-color: lightblue !important;
+}
