@@ -8,41 +8,37 @@ import React, { useState } from "react";
  */
 function DataTable({ columns, data, rowKey }) {
     const [selectedRow, setSelectedRow] = useState(null);
+    // hiddenがfalse、undefinedのカラムのみを表示
+    const visibleColumns = columns.filter((col) => !col.hidden);
 
-    const handleRowClick = (rowId) => {
-        setSelectedRow(rowId === selectedRow ? null : rowId); // トグル選択        
-    };
+    const handleRowClick = (rowId) =>
+        setSelectedRow((prev) => (prev === rowId ? null : rowId));
 
     return (
         <table className="table table-striped table-bordered">
             <thead className="table-primary">
                 <tr>
-                    {columns
-                        .filter((col) => col.hidden === false)
-                        .map((col) => (
-                            <th key={col.key}>{col.label}</th>
-                        ))}
+                    {visibleColumns.map((col) => (
+                        <th key={col.key}>{col.label}</th>
+                    ))}
                 </tr>
             </thead>
             <tbody>
                 {data.map((row) => {
                     const isSelected = row[rowKey] === selectedRow;
-
                     return (
                         <tr
                             key={row[rowKey]}
                             className={isSelected ? "selected" : ""}
                             onClick={() => handleRowClick(row[rowKey])}
                         >
-                            {columns
-                                .filter((col) => col.hidden === false)
-                                .map((col) => (
-                                    <td key={col.key}>
-                                        {col.format
-                                            ? col.format(row[col.key])
-                                            : row[col.key]}
-                                    </td>
-                                ))}
+                            {visibleColumns.map((col) => (
+                                <td key={col.key}>
+                                    {col.format
+                                        ? col.format(row[col.key])
+                                        : row[col.key]}
+                                </td>
+                            ))}
                         </tr>
                     );
                 })}
