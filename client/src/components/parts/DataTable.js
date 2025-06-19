@@ -5,14 +5,16 @@ import React, { useState } from "react";
  * @param {Array} columns - [{ key, label, format? }]
  * @param {Array} data - データ配列
  * @param {string} rowKey - 各行のユニークキー
+ * @param {Function} onRowSelect - 行選択時のコールバック関数
  */
-function DataTable({ columns, data, rowKey }) {
+function DataTable({ columns, data, rowKey, onRowSelect }) {
     const [selectedRow, setSelectedRow] = useState(null);
-    // hiddenがfalse、undefinedのカラムのみを表示
     const visibleColumns = columns.filter((col) => !col.hidden);
 
-    const handleRowClick = (rowId) =>
-        setSelectedRow((prev) => (prev === rowId ? null : rowId));
+    const handleRowClick = (row) => {
+        setSelectedRow((prev) => (prev === row[rowKey] ? null : row[rowKey]));
+        onRowSelect(row); // 選択した行のデータ全体を親コンポーネントに渡す
+    };
 
     return (
         <table className="table table-striped table-bordered">
@@ -30,7 +32,7 @@ function DataTable({ columns, data, rowKey }) {
                         <tr
                             key={row[rowKey]}
                             className={isSelected ? "selected" : ""}
-                            onClick={() => handleRowClick(row[rowKey])}
+                            onClick={() => handleRowClick(row)}
                         >
                             {visibleColumns.map((col) => (
                                 <td key={col.key}>
