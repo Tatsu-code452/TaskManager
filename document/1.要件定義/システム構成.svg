@@ -1,0 +1,41 @@
+<svg width="600" height="450" xmlns="http://www.w3.org/2000/svg">
+  <!-- 矢印マーカー -->
+  <defs>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#555"/>
+    </marker>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#333" />
+    </marker>
+    <marker id="arrow-reverse" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="100%" height="100%" fill="#ffffff"/>
+
+  <!-- React Client -->
+  <rect x="200" y="20" width="200" height="50" fill="#61dafb" stroke="#21a1f1" rx="6"/>
+  <text x="300" y="52" text-anchor="middle" font-size="16" fill="#003366">React Client</text>
+
+  <!-- Express Server -->
+  <rect x="200" y="140" width="200" height="50" fill="#ffcc00" stroke="#e6b800" rx="6"/>
+  <text x="300" y="172" text-anchor="middle" font-size="16" fill="#000000">Express Server</text>
+
+  <!-- PostgreSQL -->
+  <rect x="200" y="260" width="200" height="50" fill="#336791" stroke="#27496d" rx="6"/>
+  <text x="300" y="292" text-anchor="middle" font-size="16" fill="#ffffff">PostgreSQL</text>
+
+  <!-- CSV Export -->
+  <rect x="420" y="90" width="120" height="40" fill="#f5f5f5" stroke="#cccccc" rx="4"/>
+  <text x="480" y="118" text-anchor="middle" font-size="14" fill="#333333">CSV Export</text>
+
+  <!-- 接続ラベル -->
+  <text x="260" y="110" font-size="12" fill="#333333" text-anchor="middle">HTTP/JSON</text>
+
+  <!-- 矢印 -->
+  <line x1="300" y1="70" x2="300" y2="140" stroke="#555" stroke-width="2" marker-start="url(#arrow-reverse)" marker-end="url(#arrow)"/>
+  <line x1="310" y1="70" x2="420" y2="110" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="300" y1="190" x2="300" y2="260" stroke="#555" stroke-width="2" marker-start="url(#arrow-reverse)" marker-end="url(#arrow)"/>
+</svg>

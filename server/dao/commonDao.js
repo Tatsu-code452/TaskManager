@@ -44,6 +44,9 @@ const buildUpdateQuery = (table, updates, id) => {
     if (fields.length === 0) {
         throw new Error("更新するフィールドがありません");
     }
+    
+    fields.push(`"updated_at" = $${idx++}`);
+    params.push(new Date().toISOString());
 
     params.push(id);
     const fullTableName = `"${SCHEMA_NAME}"."${table}"`;

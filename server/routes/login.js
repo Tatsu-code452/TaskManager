@@ -1,21 +1,11 @@
 const express = require("express");
 const path = require("path");
-const { Pool } = require("pg");
-const env = require("../common/env");
 
 const router = express.Router();
 
-// PostgreSQL接続プール作成
-const pool = new Pool({
-    host: env.DB_HOST,
-    port: env.DB_PORT,
-    user: env.DB_USER,
-    password: env.DB_PASSWORD,
-    database: env.DB_NAME,
-});
-
 // ログインAPI（POST）
 router.post("/login", async (req, res) => {
+    const userDao = require("../dao/userDao"); // ここで毎回require
     const { username, password } = req.body;
     if (!username || !password) {
         return res.status(400).json({
@@ -25,16 +15,11 @@ router.post("/login", async (req, res) => {
     }
     try {
         // USERテーブルから認証
-        const result = await pool.query(
-            `SELECT * FROM "${env.DB_SCHEMA}"."USER" WHERE username = $1 AND password = $2`,
-            [username, password]
-        );
-        if (result.rows.length > 0) {
-            // 認証成功: セッション開始
+        const result = await userDao.find({ username, password });
+        if (result.length > 0) {
             req.session.user = { username };
             return res.json({ success: true, message: "ログイン成功" });
         } else {
-            // 認証失敗
             return res.status(401).json({
                 success: false,
                 message: "ユーザー名またはパスワードが間違っています",
