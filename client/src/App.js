@@ -1,15 +1,15 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import Login from "./components/Login";
-import Menu from "./components/Menu";
+import Login from "./pages/Login";
+import Menu from "./pages/Menu";
 import Task from "./components/Task";
 import EffortList from "./components/EffortList";
 import Gantt from "./components/Gantt";
 import AlarmHistory from "./components/AlarmHistory";
-import Master from "./components/Master";
+import Master from "./pages/Master";
 
-function App() {
+const App = () => {
     return (
         <Routes>
             <Route path="/login" element={<Login />} />
@@ -22,6 +22,6 @@ function App() {
             <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
     );
-}
+};
 
 export default App;

@@ -41,13 +41,13 @@ router.get('/session', (req, res) => {
 // });
 
 // 任意のファイルを送信（セキュリティ考慮: view配下のみ許可）
-router.get('/:filename', (req, res) => {
-  const relPath = req.params.filename;
-  const absPath = path.join(env.HTML_PATH, relPath);
-  if (!absPath.startsWith(env.VIEW_PATH)) {
-    return res.status(403).send('Forbidden');
-  }
-  res.sendFile(absPath);
-});
+// router.get('/:filename', (req, res) => {
+//   const relPath = req.params.filename;
+//   const absPath = path.join(env.HTML_PATH, relPath);
+//   if (!absPath.startsWith(env.VIEW_PATH)) {
+//     return res.status(403).send('Forbidden');
+//   }
+//   res.sendFile(absPath);
+// });
 
 module.exports = router;

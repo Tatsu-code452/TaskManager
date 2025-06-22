@@ -13,8 +13,32 @@ function applySecurity(app) {
         })
     );
 
-    // セキュリティヘッダー
-    app.use(helmet());
+    // セキュリティヘッダー（CSPをカスタマイズ）
+    app.use(
+        helmet.contentSecurityPolicy({
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: [
+                    "'self'",
+                    "https://cdn.jsdelivr.net"
+                ],
+                styleSrc: [
+                    "'self'",
+                    "https://cdn.jsdelivr.net",
+                    "https://fonts.googleapis.com",
+                    "'unsafe-inline'"
+                ],
+                fontSrc: [
+                    "'self'",
+                    "https://fonts.gstatic.com"
+                ],
+                imgSrc: ["'self'", "data:"],
+                connectSrc: ["'self'"],
+                objectSrc: ["'none'"],
+                upgradeInsecureRequests: [],
+            },
+        })
+    );
 
     // セッション管理
     app.use(

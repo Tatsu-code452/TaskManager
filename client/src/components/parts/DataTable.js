@@ -7,21 +7,21 @@ import React, { useState } from "react";
  * @param {string} rowKey - 各行のユニークキー
  * @param {Function} onRowSelect - 行選択時のコールバック関数
  */
-function DataTable({ columns, data, rowKey, onRowSelect }) {
+const DataTable = ({ columns, data, rowKey, onRowSelect }) => {
     const [selectedRow, setSelectedRow] = useState(null);
     const visibleColumns = columns.filter((col) => !col.hidden);
 
-    const handleRowClick = (row) => {
+    const handleRowClick = (e, row) => {
         setSelectedRow((prev) => (prev === row[rowKey] ? null : row[rowKey]));
-        onRowSelect(row); // 選択した行のデータ全体を親コンポーネントに渡す
+        onRowSelect(e, row); // 選択した行のデータ全体を親コンポーネントに渡す
     };
 
     return (
         <table className="table table-striped table-bordered">
             <thead className="table-primary">
                 <tr>
-                    {visibleColumns.map((col) => (
-                        <th key={col.key}>{col.label}</th>
+                    {visibleColumns.map(({ key, label }) => (
+                        <th key={key}>{label}</th>
                     ))}
                 </tr>
             </thead>
@@ -32,13 +32,11 @@ function DataTable({ columns, data, rowKey, onRowSelect }) {
                         <tr
                             key={row[rowKey]}
                             className={isSelected ? "selected" : ""}
-                            onClick={() => handleRowClick(row)}
+                            onClick={(e) => handleRowClick(e, row)}
                         >
-                            {visibleColumns.map((col) => (
-                                <td key={col.key}>
-                                    {col.format
-                                        ? col.format(row[col.key])
-                                        : row[col.key]}
+                            {visibleColumns.map(({ key, format }) => (
+                                <td key={key}>
+                                    {format ? format(row[key]) : row[key]}
                                 </td>
                             ))}
                         </tr>
@@ -47,6 +45,6 @@ function DataTable({ columns, data, rowKey, onRowSelect }) {
             </tbody>
         </table>
     );
-}
+};
 
 export default DataTable;

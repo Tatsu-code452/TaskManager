@@ -1,5 +1,5 @@
 import React from "react";
-import useScreenTitle from "./useScreenTitle";
+import useScreenTitle from "../hooks/useScreenTitle";
 
 function AlarmHistory() {
     useScreenTitle("アラーム履歴");

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useScreenTitle from "./useScreenTitle";
+import useScreenTitle from "../hooks/useScreenTitle";
 
 function Gantt() {
     const navigate = useNavigate();

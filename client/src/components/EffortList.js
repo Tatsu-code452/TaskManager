@@ -1,5 +1,5 @@
 import React from "react";
-import useScreenTitle from "./useScreenTitle";
+import useScreenTitle from "../hooks/useScreenTitle";
 
 function EffortList() {
     useScreenTitle("工数予実一覧");
