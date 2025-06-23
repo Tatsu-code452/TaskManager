@@ -43,7 +43,7 @@ const ProjectMasterModal = ({
                                     ? formatToDateInput(form[col.key])
                                     : form[col.key] || ""
                             }
-                            onChange={handleInputChange}
+                            onChange={(e) => handleInputChange(e)}
                             disabled={col.disabled}
                         />
                     </div>

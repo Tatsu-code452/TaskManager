@@ -1,5 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
-import { fetchApiWithLock, formatDate } from "../../module/fetchModule";
+import { useState, useCallback } from "react";
 
 const useInputModal = (initialFormState) => {
     const [showModal, setShowModal] = useState(false);
@@ -23,12 +22,12 @@ const useInputModal = (initialFormState) => {
         if (data) {
             // 行選択の入力値変更
             setForm((prev) => ({ ...prev, ...data }));
-        } else if (!e.target) {
+        } else if (e.target) {
             // 直接データをセットする場合
-            setForm((prev) => ({ ...prev, ...e }));
+            const { name, value } = e.target;
+            setForm((prev) => ({ ...prev, [name]: value }));
         }
     }, []);
-
     return {
         showModal,
         form,

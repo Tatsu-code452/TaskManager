@@ -94,7 +94,7 @@ const useProjectMaster = () => {
     const fetchData = useCallback(async () => {
         try {
             const result = await apiActions.fetch();
-            setData(result || []);
+            setData(result.data || []);
         } catch (error) {
             console.error("データ取得エラー:", error);
         }
@@ -118,7 +118,7 @@ const useProjectMaster = () => {
         } catch (error) {
             console.error("データ保存エラー:", error);
         }
-    }, [operationType, form, fetchData]);
+    }, [operationType, form, fetchData, closeModal]);
 
     // データの削除
     const deleteData = useCallback(
