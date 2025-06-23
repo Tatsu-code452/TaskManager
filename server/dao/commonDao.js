@@ -44,15 +44,31 @@ const buildUpdateQuery = (table, updates, id) => {
     if (fields.length === 0) {
         throw new Error("更新するフィールドがありません");
     }
-    
+
     fields.push(`"updated_at" = $${idx++}`);
     params.push(new Date().toISOString());
 
     params.push(id);
     const fullTableName = `"${SCHEMA_NAME}"."${table}"`;
-    const query = `UPDATE ${fullTableName} SET ${fields.join(", ")} WHERE id = $${idx} RETURNING *;`;
+    const query = `UPDATE ${fullTableName} SET ${fields.join(
+        ", "
+    )} WHERE id = $${idx} RETURNING *;`;
 
     return { query, params };
+};
+
+// 定義されたカラム名から、更新可能なキーのみを抽出
+const extractData = (obj, columnNames) => {
+    return columnNames.filter(isUpdatableKey(obj)).reduce((acc, key) => {
+        acc[key] = obj[key];
+        return acc;
+    }, {});
+};
+
+// 更新可能なキーを判定するユーティリティ関数
+// ここでは "id" キーを除外し、値が undefined でないキーのみを対象とする
+const isUpdatableKey = (obj) => {
+    return (key) => key !== "id" && obj[key] !== undefined;
 };
 
 // ユーティリティ関数: クエリ結果をIDでマップ化
@@ -74,7 +90,8 @@ async function find(table, criteria = {}) {
     return rows;
 }
 
-async function insert(table, inserts) {
+async function insert(table, columnNames, data) {
+    const inserts = extractData(data, columnNames); // 更新可能なキーのみを抽出
     const keys = Object.keys(inserts).map((key) => `"${key}"`);
     const placeholders = Object.keys(inserts).map((_, i) => `$${i + 1}`);
     const values = Object.values(inserts);
@@ -90,7 +107,8 @@ async function insert(table, inserts) {
     return rows[0];
 }
 
-async function update(table, id, updates) {
+async function update(table, columnNames, id, data) {
+    const updates = extractData(data, columnNames); // 更新可能なキーのみを抽出
     const { query, params } = buildUpdateQuery(table, updates, id);
     const { rows } = await pool.query(query, params);
     return rows[0];
@@ -104,14 +122,22 @@ async function remove(table, id) {
     return rows[0];
 }
 
+// 汎用DAOファクトリ
+function createDao(tableName, columnNames) {
+    return {
+        find: (criteria = {}) => find(tableName, criteria),
+        insert: (data) => insert(tableName, columnNames, data),
+        update: (id, data) => update(tableName, columnNames, id, data),
+        remove: (id) => remove(tableName, id),
+        COLUMN_NAMES: columnNames,
+    };
+}
+
 // モジュールエクスポート
 module.exports = {
-    pool,
-    buildQuery,
-    buildUpdateQuery,
-    createMap,
     find,
     insert,
     update,
     remove,
+    createDao,
 };
