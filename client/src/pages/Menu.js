@@ -2,6 +2,7 @@ import React from "react";
 import useScreenTitle from "../hooks/useScreenTitle";
 import useSessionCheck from "../hooks/useSessionCheck";
 import { useNavigate } from "react-router-dom";
+import Button from "../components/parts/Button";
 
 const menuItems = [
     { label: "タスク一覧", path: "/task" },
@@ -26,14 +27,10 @@ const Menu = () => {
         <div className="text-center mb-4">
             <div className="d-flex flex-wrap justify-content-center gap-3 mt-4">
                 {menuItems.map((item) => (
-                    <a
-                        key={item.path}
-                        className="btn btn-primary"
-                        href="#"
-                        onClick={(e) => moveDisp(e, item.path)}
-                    >
-                        {item.label}
-                    </a>
+                    <Button
+                        text={item.label}
+                        callback={(e) => moveDisp(e, item.path)}
+                    />
                 ))}
             </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useEffect } from "react";
 import useScreenTitle from "../hooks/useScreenTitle";
 import useSessionCheck from "../hooks/useSessionCheck";
 import DataTable from "../components/parts/DataTable";

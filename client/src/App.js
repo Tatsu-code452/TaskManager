@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Menu from "./pages/Menu";
-import Task from "./components/Task";
+import Task from "./pages/Task";
 import EffortList from "./components/EffortList";
 import Gantt from "./components/Gantt";
 import AlarmHistory from "./components/AlarmHistory";
