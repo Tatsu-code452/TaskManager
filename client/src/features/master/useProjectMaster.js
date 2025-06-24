@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
-import { fetchApiWithLock, formatDate } from "../../module/fetchModule";
+import { fetchApiWithLock } from "../../module/fetchModule";
+import { formatDate } from "../../module/dateModule";
 import useInputModal from "../../components/hooks/useInputModal";
 
 /**

@@ -37,7 +37,7 @@
     ],
     "compounds": [
         {
-            "name": "All: サーバ & React & Attach",
+            "name": "All: サーバ & React",
             "configurations": [
                 "サーバ起動",
                 "React 起動",

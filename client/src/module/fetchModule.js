@@ -40,11 +40,7 @@ export async function fetchApi(action, url, data = null) {
 export async function fetchApiWithLock(action, url, data = null) {
     screenLock();
     try {
-        const result = await fetchApi(action, url, data);
-        return result;
-    } catch (error) {
-        console.error("API通信エラー:", error);
-        throw error;
+        return await fetchApi(action, url, data);
     } finally {
         screenUnlock();
     }
@@ -64,13 +60,4 @@ export function screenLock() {
 
 export function screenUnlock() {
     document.getElementById("screenLock")?.remove();
-}
-
-/**
- * 日付フォーマット
- */
-export function formatDate(date, withTime = false) {
-    if (!date) return "";
-    const d = new Date(date);
-    return withTime ? d.toLocaleString() : d.toLocaleDateString();
 }
