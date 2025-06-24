@@ -31,7 +31,7 @@ const Login = () => {
                     required
                 />
 
-                <Button text="ログイン" callback={handleLogin} />
+                <Button text="ログイン" onClick={handleLogin} />
             </form>
         </div>
     );

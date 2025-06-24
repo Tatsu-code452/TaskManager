@@ -27,10 +27,12 @@ const Menu = () => {
         <div className="text-center mb-4">
             <div className="d-flex flex-wrap justify-content-center gap-3 mt-4">
                 {menuItems.map((item) => (
-                    <Button
-                        text={item.label}
-                        callback={(e) => moveDisp(e, item.path)}
-                    />
+                    <div key={item.path}>
+                        <Button
+                            text={item.label}
+                            onClick={(e) => moveDisp(e, item.path)}
+                        />
+                    </div>
                 ))}
             </div>
         </div>

@@ -32,9 +32,9 @@ const Master = () => {
     return (
         <>
             <div className="col-md-12 mb-3 d-flex gap-2 flex-wrap">
-                <Button text="追加" callback={() => openModal("create")} />
-                <Button text="更新" callback={() => openModal("edit", form)} />
-                <Button text="削除" callback={() => deleteData(form.id)} />
+                <Button text="追加" onClick={() => openModal("create")} />
+                <Button text="更新" onClick={() => openModal("edit", form)} />
+                <Button text="削除" onClick={() => deleteData(form.id)} />
             </div>
             <div className="overflow-scroll col-md-12 border border-2 rounded p-3">
                 <DataTable

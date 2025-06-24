@@ -2,18 +2,27 @@ import React, { useState } from "react";
 
 /**
  * 汎用テーブルコンポーネント
- * @param {Array} columns - [{ key, label, format? }]
- * @param {Array} data - データ配列
- * @param {string} rowKey - 各行のユニークキー
- * @param {Function} onRowSelect - 行選択時のコールバック関数
+ * @param {Object} props
+ * @param {Array} props.columns - 列定義: [{ key, label, format?, hidden? }]
+ * @param {Array} props.data - 行データ配列
+ * @param {string} props.rowKey - 各行の一意なキー
+ * @param {Function} props.onRowSelect - 行クリック時のコールバック
+ * @returns {JSX.Element}
  */
-const DataTable = ({ columns, data, rowKey, onRowSelect }) => {
-    const [selectedRow, setSelectedRow] = useState(null);
+const DataTable = ({
+    columns = [],
+    data = [],
+    rowKey,
+    onRowSelect = () => {},
+}) => {
+    const [selectedRowKey, setSelectedRowKey] = useState(null);
+
     const visibleColumns = columns.filter((col) => !col.hidden);
 
     const handleRowClick = (e, row) => {
-        setSelectedRow((prev) => (prev === row[rowKey] ? null : row[rowKey]));
-        onRowSelect(e, row); // 選択した行のデータ全体を親コンポーネントに渡す
+        const currentKey = row[rowKey];
+        setSelectedRowKey((prev) => (prev === currentKey ? null : currentKey));
+        onRowSelect(e, row);
     };
 
     return (
@@ -27,10 +36,12 @@ const DataTable = ({ columns, data, rowKey, onRowSelect }) => {
             </thead>
             <tbody>
                 {data.map((row) => {
-                    const isSelected = row[rowKey] === selectedRow;
+                    const rowId = row[rowKey];
+                    const isSelected = rowId === selectedRowKey;
+
                     return (
                         <tr
-                            key={row[rowKey]}
+                            key={rowId}
                             className={isSelected ? "selected" : ""}
                             onClick={(e) => handleRowClick(e, row)}
                         >
