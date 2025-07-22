@@ -1,0 +1,3 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+const TaskList = ({ tasks, onEdit, onDelete, onDetail }) => (_jsxs("table", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "\u30BF\u30A4\u30C8\u30EB" }), _jsx("th", { children: "\u64CD\u4F5C" })] }) }), _jsx("tbody", { children: tasks.map(task => (_jsxs("tr", { children: [_jsx("td", { children: task.title }), _jsxs("td", { children: [_jsx("button", { onClick: () => onEdit(task.id), children: "\u7DE8\u96C6" }), _jsx("button", { onClick: () => onDelete(task.id), children: "\u524A\u9664" }), _jsx("button", { onClick: () => onDetail(task.id), children: "\u8A73\u7D30" })] })] }, task.id))) })] }));
+export default TaskList;

@@ -1,0 +1,3 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+const UserList = ({ users, onEdit, onDelete }) => (_jsxs("table", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "\u6C0F\u540D" }), _jsx("th", { children: "\u64CD\u4F5C" })] }) }), _jsx("tbody", { children: users.map(user => (_jsxs("tr", { children: [_jsx("td", { children: user.name }), _jsxs("td", { children: [_jsx("button", { onClick: () => onEdit(user.id), children: "\u7DE8\u96C6" }), _jsx("button", { onClick: () => onDelete(user.id), children: "\u524A\u9664" })] })] }, user.id))) })] }));
+export default UserList;
