@@ -1,3 +1,0 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-const MasterList = ({ items, type, onEdit, onDelete }) => (_jsxs("table", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "\u9805\u76EE\u540D" }), _jsx("th", { children: "\u64CD\u4F5C" })] }) }), _jsx("tbody", { children: items.map(item => (_jsxs("tr", { children: [_jsx("td", { children: item.name }), _jsxs("td", { children: [_jsx("button", { onClick: () => onEdit(item.id), children: "\u7DE8\u96C6" }), _jsx("button", { onClick: () => onDelete(item.id), children: "\u524A\u9664" })] })] }, item.id))) })] }));
-export default MasterList;

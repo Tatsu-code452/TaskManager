@@ -11,4 +11,8 @@ export default defineConfig({
       '/api': 'http://localhost:3000', // Expressのポートに合わせる
     },
   },
+  build: {
+    outDir: 'dist', // ビルド成果物の出力先
+    emptyOutDir: true // ビルド前にdistを空にする
+  },
 })
