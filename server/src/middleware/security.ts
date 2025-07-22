@@ -10,7 +10,7 @@ import env from "../common/env";
 
 const applySecurity = (app: Application) => {
   // CORS: AllowList方式
-  const allowList = ["http://localhost:3000", "https://yourdomain.com"];
+  const allowList = ["http://localhost:3000", "http://localhost:3001", "https://yourdomain.com"];
   const corsOptions = {
     origin: (origin: string | undefined, callback: Function) => {
       if (!origin || allowList.includes(origin)) {
