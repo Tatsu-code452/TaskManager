@@ -1,46 +1,47 @@
 {
-    // IntelliSense を使用して利用可能な属性を学べます。
-    // 既存の属性の説明をホバーして表示します。
-    // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
             "type": "node",
             "request": "launch",
             "name": "サーバ起動",
-            "program": "${workspaceFolder}/server/server.js"
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ts-node-dev",
+                "${workspaceFolder}/server/src/server.ts"
+            ],
+            "cwd": "${workspaceFolder}/server",
+            "console": "integratedTerminal",
+            "env": {
+                "NODE_ENV": "development"
+            }
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "React 起動",
+            "name": "クライアント起動",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
-                "start"
+                "run",
+                "dev"
             ],
             "cwd": "${workspaceFolder}/client",
-            "env": {
-                "BROWSER": "none"
-            },
             "console": "integratedTerminal"
         },
         {
-            "name": "React Attach",
-            "type": "msedge",
+            "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:3000",
-            "webRoot": "${workspaceFolder}/client/src",
-            "sourceMapPathOverrides": {
-                "webpack:///src/*": "${webRoot}/*"
-            }
+            "name": "Vite Attach",
+            "url": "http://localhost:3001",
+            "webRoot": "${workspaceFolder}/client/src"
         }
     ],
     "compounds": [
         {
-            "name": "All: サーバ & React",
+            "name": "All: TypeScript サーバ & Vite",
             "configurations": [
                 "サーバ起動",
-                "React 起動",
+                "クライアント起動"
             ]
         }
     ]
