@@ -24,7 +24,7 @@ router.post("/login", async (req: Request, res) => {
     }
     try {
         // USERテーブルから認証
-        const result = await userDao.find({ username, password });
+        const result = await userDao.find({ name: username, password });
         if (result.length > 0) {
             if (req.session) req.session.user = { username };
             return alarm.createOkResponse(res, {}, "ログイン成功");

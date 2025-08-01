@@ -9,7 +9,7 @@ const env = {
     DB_USER: process.env.DB_USER || "postgres",
     DB_PASSWORD: process.env.DB_PASSWORD || "postgrespass",
     DB_NAME: process.env.DB_NAME || "postgres",
-    DB_SCHEMA: process.env.DB_SCHEMA || "TASK_MANAGE",
+    DB_SCHEMA: process.env.DB_SCHEMA || "taskmanage",
 };
 
 export default env;

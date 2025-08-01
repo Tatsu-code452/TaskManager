@@ -11,19 +11,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // セキュリティ設定を適用
-applySecurity(app);
+// applySecurity(app);
 
 // APIルーティング
 app.use("/api", mainRouter);
 
-// 静的ファイル（Viteの dist）を配信
-const distPath = path.resolve(__dirname, "../dist");
-app.use(express.static(distPath));
+// // 静的ファイル（Viteの dist）を配信
+// const distPath = path.resolve(__dirname, "../dist");
+// app.use(express.static(distPath));
 
-// SPAのための catch-all（React Router対応）
-app.get("*", (req, res) => {
-  res.sendFile(path.join(distPath, "index.html"));
-});
+// // SPAのための catch-all（React Router対応）
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(distPath, "index.html"));
+// });
 
 // サーバー起動
 app.listen(env.PORT, () => {

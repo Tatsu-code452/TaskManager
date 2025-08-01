@@ -27,10 +27,8 @@ const buildUpdateQuery = (table: string, updates: Record<string, any>, id: any) 
     const fields: string[] = [];
     let idx = 1;
     for (const [key, value] of Object.entries(updates)) {
-        if (value !== undefined) {
-            fields.push(`"${key}" = $${idx++}`);
-            params.push(value);
-        }
+        fields.push(`"${key}" = $${idx++}`);
+        params.push(value);
     }
     if (fields.length === 0) throw new Error("更新するフィールドがありません");
     fields.push(`"updated_at" = $${idx++}`);
@@ -50,15 +48,6 @@ const extractData = (obj: any, columnNames: string[]) => {
 
 const isUpdatableKey = (obj: any) => {
     return (key: string) => key !== "id" && obj[key] !== undefined;
-};
-
-const createMap = (queryResult: any, key: string) => {
-    const map = new Map();
-    const rows = Array.isArray(queryResult?.rows) ? queryResult.rows : [];
-    rows.forEach((row: any) => {
-        map.set(row[key], row);
-    });
-    return map;
 };
 
 export const createDao = (table: string, columnNames: string[]) => {
