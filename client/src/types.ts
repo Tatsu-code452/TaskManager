@@ -1,7 +1,7 @@
 
 // LoginFormProps
 export type LoginFormProps = {
-  onSubmit: (userId: string, password: string) => void;
+  onSubmit: (username: string, password: string) => void;
   errorMessage?: string;
   isLoading?: boolean;
 };

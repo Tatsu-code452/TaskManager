@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import type { LoginFormProps } from '../types';
 
 const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, errorMessage, isLoading }) => {
-  const [userId, setUserId] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(userId, password);
+    onSubmit(username, password);
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <label>ユーザID</label>
-        <input type="text" value={userId} onChange={e => setUserId(e.target.value)} />
+        <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
       </div>
       <div>
         <label>パスワード</label>
