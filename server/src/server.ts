@@ -25,7 +25,11 @@ app.use("/api", mainRouter);
 //   res.sendFile(path.join(distPath, "index.html"));
 // });
 
-// サーバー起動
-app.listen(env.PORT, () => {
-  console.log(`Server running at http://localhost:${env.PORT}`);
-});
+// サーバー起動（直接実行時のみ）
+if (require.main === module) {
+  app.listen(env.PORT, () => {
+    console.log(`Server running at http://localhost:${env.PORT}`);
+  });
+}
+
+export default app;

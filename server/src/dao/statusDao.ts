@@ -1,6 +1,14 @@
 import { createDao } from "./commonDao";
 
-const TABLE_NAME = "statuses";
-const COLUMN_NAMES = ["id", "name", "color", "created_at", "updated_at"];
+export type Status = {
+	id: number;
+	name: string;
+	color: string;
+	created_at: string;
+	updated_at: string;
+};
 
-export default createDao(TABLE_NAME, COLUMN_NAMES);
+const TABLE_NAME = "statuses";
+const COLUMN_NAMES: (keyof Status)[] = ["id", "name", "color", "created_at", "updated_at"];
+
+export default createDao<Status>(TABLE_NAME, COLUMN_NAMES);

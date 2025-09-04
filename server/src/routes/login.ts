@@ -14,7 +14,7 @@ declare module "express-session" {
 }
 
 // ログインAPI（POST）
-router.post("/login", async (req: Request, res) => {
+router.post("/", async (req: Request, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
         return alarm.createBadRequestResponse(

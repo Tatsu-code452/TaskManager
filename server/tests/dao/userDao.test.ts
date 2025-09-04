@@ -2,7 +2,11 @@ import userDao from '../../src/dao/userDao';
 import pool from '../../src/dao/pool';
 
 jest.mock('../../src/dao/pool', () => ({
-    query: jest.fn(),
+    __esModule: true,
+    default: {
+        query: jest.fn(),
+        connect: jest.fn(),
+    }
 }));
 
 describe('userDao', () => {
@@ -17,6 +21,32 @@ describe('userDao', () => {
     const mockRows = [mockRow, { ...mockRow, id: 2, name: 'ユーザーB' }];
     const mockInsert = { password: 'pass2', name: 'ユーザーC', role: 'user' };
     const mockUpdate = { name: 'ユーザーD' };
+
+    test('transaction: トランザクション実行', async () => {
+        (pool.connect as jest.Mock).mockResolvedValue({
+            query: jest.fn(),
+            release: jest.fn(),
+        });
+        const fn = jest.fn().mockResolvedValue('ok');
+        if (userDao.transaction) {
+            const ret = await userDao.transaction(fn);
+            expect(ret).toBe('ok');
+            expect(fn).toHaveBeenCalled();
+        }
+    });
+
+    test('型検証: User型', () => {
+        const user: import('../../src/dao/userDao').User = {
+            id: 1,
+            password: 'pass',
+            name: 'test',
+            role: 'admin',
+            created_at: '2025-01-01',
+            updated_at: '2025-01-01',
+        };
+        expect(user).toHaveProperty('id');
+        expect(typeof user.name).toBe('string');
+    });
 
     beforeEach(() => {
         jest.clearAllMocks();

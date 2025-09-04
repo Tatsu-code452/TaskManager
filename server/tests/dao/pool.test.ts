@@ -30,6 +30,8 @@ describe('pool', () => {
             user: 'user',
             password: 'pass',
             database: 'testdb',
+            max: 20,
+            idleTimeoutMillis: 30000,
         });
         expect(poolModule.default).toBeDefined();
     });

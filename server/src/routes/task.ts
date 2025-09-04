@@ -5,9 +5,9 @@ import * as alarm from "../common/alarm";
 const router = express.Router();
 
 // タスク一覧取得API（GET）
-router.get("/tasks", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
-        const tasks = await taskDao.find();
+        const tasks = await taskDao.find({}, undefined);
         return alarm.createOkResponse(res, { data: tasks }, "取得成功");
     } catch (err) {
         return alarm.createInternalErrorResponse(res, err, req);
@@ -15,10 +15,10 @@ router.get("/tasks", async (req, res) => {
 });
 
 // タスク詳細取得API（GET）
-router.get("/tasks/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const task = await taskDao.findById(id);
+        const task = await taskDao.findById(id, undefined);
         if (!task) {
             return alarm.createBadRequestResponse(res, "タスクが見つかりません");
         }
@@ -29,13 +29,16 @@ router.get("/tasks/:id", async (req, res) => {
 });
 
 // タスク新規登録API（POST）
-router.post("/tasks", async (req, res) => {
+router.post("/", async (req, res) => {
     try {
         const { data } = req.body;
-        if (!data || !data.name || !data.project_id) {
+        if (!data || !data.id) {
             return alarm.createBadRequestResponse(res, "必須フィールドが不足しています");
         }
-        const ret = await taskDao.insert(data);
+        // トランザクションで登録
+        const ret = await taskDao.transaction(async (client) => {
+            return await taskDao.insert(data, client);
+        });
         return alarm.createCreatedResponse(res, { task: ret }, "タスク作成");
     } catch (err) {
         return alarm.createInternalErrorResponse(res, err, req);
@@ -43,14 +46,17 @@ router.post("/tasks", async (req, res) => {
 });
 
 // タスク情報更新API（PUT）
-router.put("/tasks/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { data } = req.body;
         if (!data) {
             return alarm.createBadRequestResponse(res, "データがありません");
         }
-        const ret = await taskDao.update(id, data);
+        // トランザクションで更新
+        const ret = await taskDao.transaction(async (client) => {
+            return await taskDao.update(id, data, client);
+        });
         return alarm.createOkResponse(res, { updated: ret }, "更新完了");
     } catch (err) {
         return alarm.createInternalErrorResponse(res, err, req);
@@ -58,10 +64,12 @@ router.put("/tasks/:id", async (req, res) => {
 });
 
 // タスク削除API（DELETE）
-router.delete("/tasks/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const ret = await taskDao.remove(id);
+        const ret = await taskDao.transaction(async (client) => {
+            return await taskDao.remove(id, client);
+        });
         return alarm.createOkResponse(res, { deleted: ret }, "削除完了");
     } catch (err) {
         return alarm.createInternalErrorResponse(res, err, req);

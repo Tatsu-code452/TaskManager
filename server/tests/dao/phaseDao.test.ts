@@ -3,7 +3,20 @@ import pool from '../../src/dao/pool';
 
 jest.mock('../../src/dao/pool', () => ({
     query: jest.fn(),
+    connect: jest.fn(),
 }));
+    test('transaction: トランザクション実行', async () => {
+        (pool.connect as jest.Mock).mockResolvedValue({
+            query: jest.fn(),
+            release: jest.fn(),
+        });
+        const fn = jest.fn().mockResolvedValue('ok');
+        if (phaseDao.transaction) {
+            const ret = await phaseDao.transaction(fn);
+            expect(ret).toBe('ok');
+            expect(fn).toHaveBeenCalled();
+        }
+    });
 
 describe('phaseDao', () => {
     const mockRow = { id: 1, name: '要件定義', sort_no: 1, created_at: '', updated_at: '' };
@@ -11,8 +24,22 @@ describe('phaseDao', () => {
     const mockInsert = { name: '実装', sort_no: 3 };
     const mockUpdate = { name: 'テスト' };
 
+
     beforeEach(() => {
         jest.clearAllMocks();
+    });
+
+    test('型検証: Phase型', () => {
+        const phase: import('../../src/dao/phaseDao').Phase = {
+            id: 1,
+            name: '要件定義',
+            sort_no: 1,
+            created_at: '2025-01-01',
+            updated_at: '2025-01-01',
+        };
+        expect(phase).toHaveProperty('id');
+        expect(typeof phase.name).toBe('string');
+        expect(typeof phase.sort_no).toBe('number');
     });
 
     test('find: 全件取得', async () => {

@@ -3,7 +3,20 @@ import pool from '../../src/dao/pool';
 
 jest.mock('../../src/dao/pool', () => ({
     query: jest.fn(),
+    connect: jest.fn(),
 }));
+    test('transaction: トランザクション実行', async () => {
+        (pool.connect as jest.Mock).mockResolvedValue({
+            query: jest.fn(),
+            release: jest.fn(),
+        });
+        const fn = jest.fn().mockResolvedValue('ok');
+        if (projectDao.transaction) {
+            const ret = await projectDao.transaction(fn);
+            expect(ret).toBe('ok');
+            expect(fn).toHaveBeenCalled();
+        }
+    });
 
 describe('projectDao', () => {
     const mockRow = { id: 1, name: 'プロジェクトA', start_date: '', end_date: '', created_at: '', updated_at: '' };
@@ -11,8 +24,22 @@ describe('projectDao', () => {
     const mockInsert = { name: 'プロジェクトC', start_date: '', end_date: '' };
     const mockUpdate = { name: 'プロジェクトD' };
 
+
     beforeEach(() => {
         jest.clearAllMocks();
+    });
+
+    test('型検証: Project型', () => {
+        const project: import('../../src/dao/projectDao').Project = {
+            id: 1,
+            name: 'プロジェクトA',
+            start_date: '2025-01-01',
+            end_date: '2025-01-31',
+            created_at: '2025-01-01',
+            updated_at: '2025-01-01',
+        };
+        expect(project).toHaveProperty('id');
+        expect(typeof project.name).toBe('string');
     });
 
     test('find: 全件取得', async () => {

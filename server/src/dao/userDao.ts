@@ -1,7 +1,16 @@
 import { createDao } from "./commonDao";
 
+export type User = {
+    id: number;
+    password: string;
+    name: string;
+    role: string;
+    created_at: string;
+    updated_at: string;
+};
+
 const TABLE_NAME = "users";
-const COLUMN_NAMES = [
+const COLUMN_NAMES: (keyof User)[] = [
     "id",
     "password",
     "name",
@@ -10,4 +19,4 @@ const COLUMN_NAMES = [
     "updated_at",
 ];
 
-export default createDao(TABLE_NAME, COLUMN_NAMES);
+export default createDao<User>(TABLE_NAME, COLUMN_NAMES);

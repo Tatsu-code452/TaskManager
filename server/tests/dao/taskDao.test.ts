@@ -3,7 +3,20 @@ import pool from '../../src/dao/pool';
 
 jest.mock('../../src/dao/pool', () => ({
     query: jest.fn(),
+    connect: jest.fn(),
 }));
+    test('transaction: トランザクション実行', async () => {
+        (pool.connect as jest.Mock).mockResolvedValue({
+            query: jest.fn(),
+            release: jest.fn(),
+        });
+        const fn = jest.fn().mockResolvedValue('ok');
+        if (taskDao.transaction) {
+            const ret = await taskDao.transaction(fn);
+            expect(ret).toBe('ok');
+            expect(fn).toHaveBeenCalled();
+        }
+    });
 
 describe('taskDao', () => {
     const mockRow = {
@@ -44,12 +57,40 @@ describe('taskDao', () => {
         progress_rate: 0,
         priority: 2,
         pre_task_id: null,
-        next_task_id: null
+        next_task_id: null,
     };
     const mockUpdate = { name: 'タスクD' };
 
+
     beforeEach(() => {
         jest.clearAllMocks();
+    });
+
+    test('型検証: Task型', () => {
+        const task: import('../../src/dao/taskDao').Task = {
+            id: 1,
+            name: 'タスクA',
+            project_id: 1,
+            phase_id: 1,
+            category_id: 1,
+            user_id: 1,
+            planned_start_date: '2025-01-01',
+            planned_end_date: '2025-01-02',
+            planned_effort: 10,
+            actual_start_date: '2025-01-01',
+            actual_end_date: '2025-01-02',
+            actual_effort: 8,
+            status_id: 1,
+            progress_rate: 50,
+            priority: 1,
+            pre_task_id: null,
+            next_task_id: null,
+            created_at: '2025-01-01',
+            updated_at: '2025-01-01',
+        };
+        expect(task).toHaveProperty('id');
+        expect(typeof task.name).toBe('string');
+        expect(typeof task.project_id).toBe('number');
     });
 
     test('find: 全件取得', async () => {
