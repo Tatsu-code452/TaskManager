@@ -10,6 +10,7 @@ const env = {
     DB_PASSWORD: process.env.DB_PASSWORD || "postgrespass",
     DB_NAME: process.env.DB_NAME || "postgres",
     DB_SCHEMA: process.env.DB_SCHEMA || "taskmanage",
+    CORS_ALLOW_LIST: process.env.CORS_ALLOW_LIST || "http://localhost:3000,http://localhost:3001",
 };
 
 export default env;

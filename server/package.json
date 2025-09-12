@@ -16,7 +16,7 @@
     "test:coverage:collect": "jest --coverage --coverageDirectory=tests/coverage --coverageReporters=text --coverageReporters=html",
     "test:coverage": "npm run test:coverage:clean && npm run test:coverage:collect",
     "clean:all": "npm run clean && npm run test:coverage:clean",
-    "test:coverage:target": "jest tests/dao/commonDao.test.ts --coverage --collectCoverageFrom=\"src/dao/commonDao.ts\" --coverageDirectory=tests/coverage --coverageReporters=text --coverageReporters=html"
+    "test:coverage:target": "jest tests/routes/user.test.ts --coverage --collectCoverageFrom=\"src/dao/commonDao.ts\" --coverageDirectory=tests/coverage --coverageReporters=text --coverageReporters=html"
   },
   "keywords": [],
   "author": "",

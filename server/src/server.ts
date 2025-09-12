@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // セキュリティ設定を適用
-// applySecurity(app);
+applySecurity(app);
 
 // APIルーティング
 app.use("/api", mainRouter);
