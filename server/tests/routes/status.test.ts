@@ -1,4 +1,4 @@
-jest.mock('../../src/dao/userDao', () => ({
+jest.mock('../../src/dao/user.dao', () => ({
   __esModule: true,
   default: {
     find: jest.fn(),
@@ -12,13 +12,13 @@ jest.mock('../../src/dao/userDao', () => ({
 // status.ts のルーティング単体テスト
 
 import request from 'supertest';
-import * as statusDao from '../../src/dao/statusDao';
+import * as statusDao from '../../src/dao/status.dao';
 import app from '../../src/server';
 import { setupTestSession } from '../utils/testSession';
 import { setUserDaoMock } from '../utils/mockUserDao';
 
 // statusDaoをモック
-jest.mock('../../src/dao/statusDao', () => ({
+jest.mock('../../src/dao/status.dao', () => ({
   __esModule: true,
   default: {
     find: jest.fn(),

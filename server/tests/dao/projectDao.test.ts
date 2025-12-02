@@ -1,22 +1,22 @@
-import projectDao from '../../src/dao/projectDao';
+import projectDao from '../../src/dao/project.dao';
 import pool from '../../src/dao/pool';
 
 jest.mock('../../src/dao/pool', () => ({
     query: jest.fn(),
     connect: jest.fn(),
 }));
-    test('transaction: トランザクション実行', async () => {
-        (pool.connect as jest.Mock).mockResolvedValue({
-            query: jest.fn(),
-            release: jest.fn(),
-        });
-        const fn = jest.fn().mockResolvedValue('ok');
-        if (projectDao.transaction) {
-            const ret = await projectDao.transaction(fn);
-            expect(ret).toBe('ok');
-            expect(fn).toHaveBeenCalled();
-        }
+test('transaction: トランザクション実行', async () => {
+    (pool.connect as jest.Mock).mockResolvedValue({
+        query: jest.fn(),
+        release: jest.fn(),
     });
+    const fn = jest.fn().mockResolvedValue('ok');
+    if (projectDao.transaction) {
+        const ret = await projectDao.transaction(fn);
+        expect(ret).toBe('ok');
+        expect(fn).toHaveBeenCalled();
+    }
+});
 
 describe('projectDao', () => {
     const mockRow = { id: 1, name: 'プロジェクトA', start_date: '', end_date: '', created_at: '', updated_at: '' };
@@ -30,7 +30,7 @@ describe('projectDao', () => {
     });
 
     test('型検証: Project型', () => {
-        const project: import('../../src/dao/projectDao').Project = {
+        const project: import('../../src/types/project.interface').Project = {
             id: 1,
             name: 'プロジェクトA',
             start_date: '2025-01-01',

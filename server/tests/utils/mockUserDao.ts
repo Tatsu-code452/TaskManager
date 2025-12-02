@@ -1,4 +1,4 @@
-import * as userDao from '../../src/dao/userDao';
+import * as userDao from '../../src/dao/user.dao';
 
 export function setUserDaoMock(user = { id: 1, name: 'test', password: 'test' }) {
   (userDao.default.find as any).mockResolvedValue([user]);

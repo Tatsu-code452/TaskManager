@@ -1,4 +1,4 @@
-jest.mock('../../src/dao/userDao', () => ({
+jest.mock('../../src/dao/user.dao', () => ({
   __esModule: true,
   default: {
     find: jest.fn(),
@@ -10,7 +10,7 @@ jest.mock('../../src/dao/userDao', () => ({
   }
 }));
 import request from "supertest";
-import * as userDao from "../../src/dao/userDao";
+import * as userDao from "../../src/dao/user.dao";
 import app from '../../src/server';
 import { setupTestSession } from '../utils/testSession';
 import { setUserDaoMock } from '../utils/mockUserDao';

@@ -1,5 +1,5 @@
 import express from "express";
-import categoryDao from "../dao/categoryDao";
+import categoryDao from "../dao/category.dao";
 import * as alarm from "../common/alarm";
 
 const router = express.Router();

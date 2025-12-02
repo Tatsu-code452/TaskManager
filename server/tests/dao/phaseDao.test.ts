@@ -1,22 +1,22 @@
-import phaseDao from '../../src/dao/phaseDao';
+import phaseDao from '../../src/dao/phase.dao';
 import pool from '../../src/dao/pool';
 
 jest.mock('../../src/dao/pool', () => ({
     query: jest.fn(),
     connect: jest.fn(),
 }));
-    test('transaction: トランザクション実行', async () => {
-        (pool.connect as jest.Mock).mockResolvedValue({
-            query: jest.fn(),
-            release: jest.fn(),
-        });
-        const fn = jest.fn().mockResolvedValue('ok');
-        if (phaseDao.transaction) {
-            const ret = await phaseDao.transaction(fn);
-            expect(ret).toBe('ok');
-            expect(fn).toHaveBeenCalled();
-        }
+test('transaction: トランザクション実行', async () => {
+    (pool.connect as jest.Mock).mockResolvedValue({
+        query: jest.fn(),
+        release: jest.fn(),
     });
+    const fn = jest.fn().mockResolvedValue('ok');
+    if (phaseDao.transaction) {
+        const ret = await phaseDao.transaction(fn);
+        expect(ret).toBe('ok');
+        expect(fn).toHaveBeenCalled();
+    }
+});
 
 describe('phaseDao', () => {
     const mockRow = { id: 1, name: '要件定義', sort_no: 1, created_at: '', updated_at: '' };
@@ -30,7 +30,7 @@ describe('phaseDao', () => {
     });
 
     test('型検証: Phase型', () => {
-        const phase: import('../../src/dao/phaseDao').Phase = {
+        const phase: import('../../src/types/phase.interface').Phase = {
             id: 1,
             name: '要件定義',
             sort_no: 1,

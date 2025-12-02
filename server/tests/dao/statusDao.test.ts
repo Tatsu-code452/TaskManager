@@ -1,22 +1,22 @@
-import statusDao from '../../src/dao/statusDao';
+import statusDao from '../../src/dao/status.dao';
 import pool from '../../src/dao/pool';
 
 jest.mock('../../src/dao/pool', () => ({
     query: jest.fn(),
     connect: jest.fn(),
 }));
-    test('transaction: トランザクション実行', async () => {
-        (pool.connect as jest.Mock).mockResolvedValue({
-            query: jest.fn(),
-            release: jest.fn(),
-        });
-        const fn = jest.fn().mockResolvedValue('ok');
-        if (statusDao.transaction) {
-            const ret = await statusDao.transaction(fn);
-            expect(ret).toBe('ok');
-            expect(fn).toHaveBeenCalled();
-        }
+test('transaction: トランザクション実行', async () => {
+    (pool.connect as jest.Mock).mockResolvedValue({
+        query: jest.fn(),
+        release: jest.fn(),
     });
+    const fn = jest.fn().mockResolvedValue('ok');
+    if (statusDao.transaction) {
+        const ret = await statusDao.transaction(fn);
+        expect(ret).toBe('ok');
+        expect(fn).toHaveBeenCalled();
+    }
+});
 
 describe('statusDao', () => {
     const mockRow = { id: 1, name: '進行中', color: '#00f', created_at: '', updated_at: '' };
@@ -30,7 +30,7 @@ describe('statusDao', () => {
     });
 
     test('型検証: Status型', () => {
-        const status: import('../../src/dao/statusDao').Status = {
+        const status: import('../../src/types/status.interface').Status = {
             id: 1,
             name: '進行中',
             color: '#00f',

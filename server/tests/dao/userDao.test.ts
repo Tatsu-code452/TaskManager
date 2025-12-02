@@ -1,4 +1,4 @@
-import userDao from '../../src/dao/userDao';
+import userDao from '../../src/dao/user.dao';
 import pool from '../../src/dao/pool';
 
 jest.mock('../../src/dao/pool', () => ({
@@ -36,7 +36,7 @@ describe('userDao', () => {
     });
 
     test('型検証: User型', () => {
-        const user: import('../../src/dao/userDao').User = {
+        const user: import('../../src/types/user.interface').User = {
             id: 1,
             password: 'pass',
             name: 'test',

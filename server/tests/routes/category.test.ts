@@ -1,6 +1,6 @@
 // category.ts のルーティング単体テスト
 
-jest.mock('../../src/dao/userDao', () => ({
+jest.mock('../../src/dao/user.dao', () => ({
   __esModule: true,
   default: {
     find: jest.fn(),
@@ -11,7 +11,7 @@ jest.mock('../../src/dao/userDao', () => ({
     transaction: jest.fn(),
   }
 }));
-jest.mock('../../src/dao/categoryDao', () => ({
+jest.mock('../../src/dao/category.dao', () => ({
   __esModule: true,
   default: {
     find: jest.fn(),
@@ -24,7 +24,7 @@ jest.mock('../../src/dao/categoryDao', () => ({
 }));
 
 import request from 'supertest';
-import * as categoryDao from '../../src/dao/categoryDao';
+import * as categoryDao from '../../src/dao/category.dao';
 import app from '../../src/server';
 
 import { setupTestSession } from '../utils/testSession';

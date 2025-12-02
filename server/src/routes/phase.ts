@@ -1,5 +1,5 @@
 import express from "express";
-import phaseDao from "../dao/phaseDao";
+import phaseDao from "../dao/phase.dao";
 import * as alarm from "../common/alarm";
 
 const router = express.Router();

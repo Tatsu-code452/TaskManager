@@ -1,0 +1,7 @@
+
+> server-app@1.0.0 dev
+> ts-node src/server.ts
+
+Server running at http://localhost:3000
+[2025-10-08T04:26:25.011Z] GET /api/session IP:::1
+[2025-10-08T04:26:25.087Z] POST /api/login IP:::1

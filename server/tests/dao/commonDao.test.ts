@@ -1,4 +1,4 @@
-import { createDao } from '../../src/dao/commonDao';
+import createDao from '../../src/dao/common.dao';
 import pool from '../../src/dao/pool';
 
 jest.mock('../../src/dao/pool', () => ({
@@ -8,7 +8,7 @@ jest.mock('../../src/dao/pool', () => ({
 describe('createDao ユーティリティ', () => {
     const table = 'users';
     const columnNames = ['id', 'name', 'email', 'created_at', 'updated_at'];
-    const dao = createDao(table, columnNames);
+    const dao = new createDao(table, columnNames);
 
     const mockRow = { id: 1, name: 'Alice', email: 'alice@example.com', created_at: '', updated_at: '' };
     const mockRows = [mockRow, { id: 2, name: 'Bob', email: 'bob@example.com', created_at: '', updated_at: '' }];
@@ -104,11 +104,11 @@ describe('createDao ユーティリティ', () => {
         });
 
         test('IDなしで更新を呼び出すと例外が出る', async () => {
-            await expect(dao.update(undefined as any, mockUpdate)).rejects.toThrow('更新する ID が必要です');
+            await expect(dao.update(undefined as any, mockUpdate)).rejects.toThrow('更新対象の ID が必要です');
         });
 
         test('更新フィールドなしで呼び出すと例外が出る', async () => {
-            await expect(dao.update(1, { name: undefined })).rejects.toThrow('更新するフィールドがありません');
+            await expect(dao.update(1, { name: undefined })).rejects.toThrow('更新フィールドが指定されていません');
         });
 
         test('DBエラー時に例外が出る', async () => {

@@ -1,4 +1,4 @@
-jest.mock('../../src/dao/userDao', () => ({
+jest.mock('../../src/dao/user.dao', () => ({
   __esModule: true,
   default: {
     find: jest.fn(),

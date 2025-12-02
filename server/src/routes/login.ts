@@ -1,16 +1,16 @@
 import express from "express";
 import path from "path";
 import * as alarm from "../common/alarm";
-import userDao from "../dao/userDao";
+import userDao from "../dao/user.dao";
 
 const router = express.Router();
 
 // ExpressのRequest型拡張
 import type { Request } from "express";
 declare module "express-session" {
-  interface SessionData {
-    user?: { username: string };
-  }
+    interface SessionData {
+        user?: { username: string };
+    }
 }
 
 // ログインAPI（POST）

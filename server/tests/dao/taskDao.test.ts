@@ -1,22 +1,22 @@
-import taskDao from '../../src/dao/taskDao';
+import taskDao from '../../src/dao/task.dao';
 import pool from '../../src/dao/pool';
 
 jest.mock('../../src/dao/pool', () => ({
     query: jest.fn(),
     connect: jest.fn(),
 }));
-    test('transaction: トランザクション実行', async () => {
-        (pool.connect as jest.Mock).mockResolvedValue({
-            query: jest.fn(),
-            release: jest.fn(),
-        });
-        const fn = jest.fn().mockResolvedValue('ok');
-        if (taskDao.transaction) {
-            const ret = await taskDao.transaction(fn);
-            expect(ret).toBe('ok');
-            expect(fn).toHaveBeenCalled();
-        }
+test('transaction: トランザクション実行', async () => {
+    (pool.connect as jest.Mock).mockResolvedValue({
+        query: jest.fn(),
+        release: jest.fn(),
     });
+    const fn = jest.fn().mockResolvedValue('ok');
+    if (taskDao.transaction) {
+        const ret = await taskDao.transaction(fn);
+        expect(ret).toBe('ok');
+        expect(fn).toHaveBeenCalled();
+    }
+});
 
 describe('taskDao', () => {
     const mockRow = {
@@ -67,7 +67,7 @@ describe('taskDao', () => {
     });
 
     test('型検証: Task型', () => {
-        const task: import('../../src/dao/taskDao').Task = {
+        const task: import('../../src/types/task.interface').Task = {
             id: 1,
             name: 'タスクA',
             project_id: 1,
