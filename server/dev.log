@@ -3,5 +3,611 @@
 > ts-node src/server.ts
 
 Server running at http://localhost:3000
-[2025-10-08T04:26:25.011Z] GET /api/session IP:::1
-[2025-10-08T04:26:25.087Z] POST /api/login IP:::1
+[2026-01-13T04:17:52.974Z] GET /api/session IP:::1
+[2026-01-13T04:17:53.000Z] GET /api/session IP:::1
+[2026-01-13T04:17:53.433Z] POST /api/login IP:::1
+[2026-01-13T04:18:13.909Z] GET /api/tasks IP:::1
+[2026-01-13T04:19:39.581Z] GET /api/session IP:::1
+[2026-01-13T04:19:39.596Z] GET /api/session IP:::1
+[2026-01-13T04:19:39.614Z] POST /api/login IP:::1
+[2026-01-13T04:19:39.701Z] GET /api/session IP:::1
+[2026-01-13T04:19:45.702Z] GET /api/protected IP:::1
+[2026-01-13T04:19:49.582Z] GET /api/protected IP:::1
+[2026-01-13T04:19:50.410Z] GET /api/protected IP:::1
+[2026-01-13T04:19:52.729Z] GET /api/session IP:::1
+[2026-01-13T04:19:53.883Z] GET /api/protected IP:::1
+[2026-01-13T04:20:09.968Z] GET /api/tasks IP:::1
+[2026-01-13T04:20:13.238Z] GET /api/tasks IP:::1
+[2026-01-13T04:20:13.786Z] GET /api/tasks IP:::1
+[2026-01-13T04:30:14.894Z] GET /api/tasks IP:::1
+[2026-01-13T04:30:16.429Z] GET /api/tasks IP:::1
+[2026-01-13T04:31:09.716Z] GET /api/session IP:::1
+[2026-01-13T04:31:09.729Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています',
+  stack: 'error: リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:31:26.118Z] GET /api/session IP:::1
+[2026-01-13T04:31:26.132Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています',
+  stack: 'error: リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:32:06.427Z] GET /api/session IP:::1
+[2026-01-13T04:32:06.436Z] POST /api/tasks IP:::1
+[2026-01-13T04:32:19.284Z] GET /api/protected IP:::1
+[2026-01-13T04:34:03.504Z] GET /api/session IP:::1
+[2026-01-13T04:34:03.516Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています',
+  stack: 'error: リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:34:24.533Z] GET /api/users IP:::1
+[2026-01-13T04:35:06.871Z] GET /api/session IP:::1
+[2026-01-13T04:35:06.882Z] POST /api/tasks IP:::1
+[2026-01-13T04:35:37.229Z] GET /api/session IP:::1
+[2026-01-13T04:35:37.239Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています',
+  stack: 'error: リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:37:00.086Z] GET /api/session IP:::1
+[2026-01-13T04:37:00.102Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています',
+  stack: 'error: リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:37:03.847Z] GET /api/session IP:::1
+[2026-01-13T04:37:03.856Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています',
+  stack: 'error: リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:37:21.650Z] GET /api/session IP:::1
+[2026-01-13T04:37:21.661Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています',
+  stack: 'error: リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:37:25.283Z] GET /api/session IP:::1
+[2026-01-13T04:37:25.291Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています',
+  stack: 'error: リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:37:31.597Z] GET /api/session IP:::1
+[2026-01-13T04:37:34.246Z] GET /api/session IP:::1
+[2026-01-13T04:37:34.257Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています',
+  stack: 'error: リレーション"tasks"の列"priority"のNULL値が非NULL制約に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:40:53.860Z] GET /api/session IP:::1
+[2026-01-13T04:40:53.874Z] POST /api/tasks IP:::1
+[2026-01-13T04:41:23.059Z] GET /api/tasks IP:::1
+[2026-01-13T04:41:29.735Z] GET /api/session IP:::1
+[2026-01-13T04:41:29.746Z] POST /api/tasks IP:::1
+[2026-01-13T04:42:23.003Z] GET /api/session IP:::1
+[2026-01-13T04:42:23.011Z] POST /api/tasks IP:::1
+[2026-01-13T04:43:45.760Z] GET /api/protected IP:::1
+[2026-01-13T04:43:52.816Z] GET /api/session IP:::1
+[2026-01-13T04:43:52.825Z] POST /api/tasks IP:::1
+[2026-01-13T04:44:06.781Z] GET /api/session IP:::1
+[2026-01-13T04:44:06.792Z] POST /api/tasks IP:::1
+[2026-01-13T04:45:29.359Z] GET /api/session IP:::1
+[2026-01-13T04:45:29.371Z] POST /api/tasks IP:::1
+[2026-01-13T04:48:46.983Z] GET /api/session IP:::1
+[2026-01-13T04:48:46.997Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:50:19.457Z] GET /api/tasks IP:::1
+[2026-01-13T04:50:24.979Z] GET /api/session IP:::1
+[2026-01-13T04:50:26.659Z] GET /api/tasks IP:::1
+[2026-01-13T04:50:36.874Z] GET /api/session IP:::1
+[2026-01-13T04:50:36.882Z] GET /api/session IP:::1
+[2026-01-13T04:50:36.891Z] POST /api/login IP:::1
+[2026-01-13T04:50:36.946Z] GET /api/session IP:::1
+[2026-01-13T04:50:43.041Z] GET /api/session IP:::1
+[2026-01-13T04:50:43.049Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:52:00.150Z] GET /api/session IP:::1
+[2026-01-13T04:52:00.161Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:52:18.320Z] GET /api/tasks IP:::1
+[2026-01-13T04:52:19.602Z] GET /api/tasks IP:::1
+[2026-01-13T04:52:20.441Z] GET /api/tasks IP:::1
+[2026-01-13T04:52:22.114Z] GET /api/session IP:::1
+[2026-01-13T04:52:22.120Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:53:14.978Z] GET /api/session IP:::1
+[2026-01-13T04:53:14.986Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:53:52.103Z] GET /api/session IP:::1
+[2026-01-13T04:53:52.118Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:54:24.786Z] GET /api/session IP:::1
+[2026-01-13T04:54:24.793Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:54:33.524Z] GET /api/session IP:::1
+[2026-01-13T04:54:33.535Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:55:38.994Z] GET /api/session IP:::1
+[2026-01-13T04:55:39.003Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:55:52.664Z] GET /api/session IP:::1
+[2026-01-13T04:55:52.673Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:56:00.411Z] GET /api/session IP:::1
+[2026-01-13T04:56:00.423Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:57:41.066Z] GET /api/session IP:::1
+[2026-01-13T04:57:41.077Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T04:59:09.957Z] GET /api/session IP:::1
+[2026-01-13T04:59:09.968Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T05:00:33.949Z] GET /api/session IP:::1
+[2026-01-13T05:00:33.962Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T05:01:06.731Z] GET /api/session IP:::1
+[2026-01-13T05:01:06.740Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T05:03:49.090Z] GET /api/session IP:::1
+[2026-01-13T05:03:49.098Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T05:04:41.628Z] GET /api/session IP:::1
+[2026-01-13T05:04:41.636Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T05:05:08.461Z] GET /api/session IP:::1
+[2026-01-13T05:05:08.471Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_project_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T05:08:58.560Z] GET /api/session IP:::1
+[2026-01-13T05:08:58.567Z] POST /api/projects IP:::1
+[2026-01-13T05:08:58.627Z] GET /api/projects IP:::1
+[2026-01-13T05:09:16.774Z] GET /api/session IP:::1
+[2026-01-13T05:09:16.784Z] POST /api/projects IP:::1
+[2026-01-13T05:09:16.795Z] GET /api/projects IP:::1
+[2026-01-13T05:09:17.628Z] GET /api/session IP:::1
+[2026-01-13T05:09:17.636Z] POST /api/projects IP:::1
+[2026-01-13T05:09:17.643Z] GET /api/projects IP:::1
+[2026-01-13T05:09:18.125Z] GET /api/session IP:::1
+[2026-01-13T05:09:18.132Z] POST /api/projects IP:::1
+[2026-01-13T05:09:18.142Z] GET /api/projects IP:::1
+[2026-01-13T05:09:25.656Z] GET /api/session IP:::1
+[2026-01-13T05:09:25.668Z] POST /api/categories IP:::1
+[2026-01-13T05:09:25.683Z] GET /api/categories IP:::1
+[2026-01-13T05:09:29.045Z] GET /api/session IP:::1
+[2026-01-13T05:09:29.053Z] POST /api/categories IP:::1
+[2026-01-13T05:09:29.066Z] GET /api/categories IP:::1
+[2026-01-13T05:09:33.494Z] GET /api/session IP:::1
+[2026-01-13T05:09:33.504Z] POST /api/categories IP:::1
+[2026-01-13T05:09:33.513Z] GET /api/categories IP:::1
+[2026-01-13T05:10:21.387Z] GET /api/session IP:::1
+[2026-01-13T05:10:21.397Z] DELETE /api/categories/65651 IP:::1
+[2026-01-13T05:10:21.456Z] GET /api/categories IP:::1
+[2026-01-13T05:10:22.071Z] GET /api/session IP:::1
+[2026-01-13T05:10:22.079Z] DELETE /api/categories/69041 IP:::1
+[2026-01-13T05:10:22.087Z] GET /api/categories IP:::1
+[2026-01-13T05:10:22.727Z] GET /api/session IP:::1
+[2026-01-13T05:10:22.737Z] DELETE /api/categories/71684 IP:::1
+[2026-01-13T05:10:22.744Z] GET /api/categories IP:::1
+[2026-01-13T05:10:26.480Z] GET /api/session IP:::1
+[2026-01-13T05:10:26.485Z] POST /api/categories IP:::1
+[2026-01-13T05:10:26.491Z] GET /api/categories IP:::1
+[2026-01-13T05:10:29.714Z] GET /api/session IP:::1
+[2026-01-13T05:10:29.724Z] DELETE /api/categories/26477 IP:::1
+[2026-01-13T05:10:29.731Z] GET /api/categories IP:::1
+[2026-01-13T05:10:38.892Z] GET /api/session IP:::1
+[2026-01-13T05:10:38.902Z] POST /api/categories IP:::1
+[2026-01-13T05:10:38.909Z] GET /api/categories IP:::1
+[2026-01-13T05:10:41.475Z] GET /api/session IP:::1
+[2026-01-13T05:10:41.482Z] POST /api/categories IP:::1
+Internal Server Error: {
+  message: '重複したキー値は一意性制約"categories_pkey"違反となります',
+  stack: 'error: 重複したキー値は一意性制約"categories_pkey"違反となります\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\category.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\category.ts:39:21',
+  url: '/api/categories'
+}
+[2026-01-13T05:10:49.105Z] GET /api/projects IP:::1
+[2026-01-13T05:10:58.683Z] GET /api/session IP:::1
+[2026-01-13T05:10:58.693Z] POST /api/phases IP:::1
+[2026-01-13T05:10:58.707Z] GET /api/phases IP:::1
+[2026-01-13T05:11:08.043Z] GET /api/session IP:::1
+[2026-01-13T05:11:08.053Z] POST /api/statuses IP:::1
+[2026-01-13T05:11:08.068Z] GET /api/statuses IP:::1
+[2026-01-13T05:11:18.541Z] GET /api/session IP:::1
+[2026-01-13T05:11:18.551Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_status_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_status_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T05:11:23.069Z] GET /api/session IP:::1
+[2026-01-13T05:11:23.078Z] POST /api/tasks IP:::1
+Internal Server Error: {
+  message: 'テーブル"tasks"への挿入、更新は外部キー制約"tasks_status_id_fkey"に違反しています',
+  stack: 'error: テーブル"tasks"への挿入、更新は外部キー制約"tasks_status_id_fkey"に違反しています\n' +
+    '    at C:\\workspace\\work20250531\\NODE_PJ\\server\\node_modules\\pg\\lib\\client.js:545:17\n' +
+    '    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n' +
+    '    at async GenericDao.runQuery (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:39:24)\n' +
+    '    at async GenericDao.insert (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:72:21)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:40:20\n' +
+    '    at async GenericDao.transaction (C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\dao\\common.dao.ts:116:28)\n' +
+    '    at async C:\\workspace\\work20250531\\NODE_PJ\\server\\src\\routes\\task.ts:39:21',
+  url: '/api/tasks'
+}
+[2026-01-13T05:11:44.073Z] GET /api/statuses IP:::1
+[2026-01-13T05:11:47.164Z] GET /api/session IP:::1
+[2026-01-13T05:11:47.170Z] DELETE /api/statuses/68038 IP:::1
+[2026-01-13T05:11:47.177Z] GET /api/statuses IP:::1
+[2026-01-13T05:11:52.636Z] GET /api/session IP:::1
+[2026-01-13T05:11:52.644Z] POST /api/statuses IP:::1
+[2026-01-13T05:11:52.650Z] GET /api/statuses IP:::1
+[2026-01-13T05:11:59.839Z] GET /api/session IP:::1
+[2026-01-13T05:11:59.849Z] POST /api/tasks IP:::1
+[2026-01-13T05:11:59.860Z] GET /api/tasks IP:::1
+[2026-01-13T05:12:04.457Z] GET /api/session IP:::1
+[2026-01-13T05:12:04.464Z] POST /api/tasks IP:::1
+[2026-01-13T05:12:04.475Z] GET /api/tasks IP:::1
+[2026-01-13T05:12:05.358Z] GET /api/session IP:::1
+[2026-01-13T05:12:05.364Z] POST /api/tasks IP:::1
+[2026-01-13T05:12:05.372Z] GET /api/tasks IP:::1
+[2026-01-13T05:12:05.938Z] GET /api/session IP:::1
+[2026-01-13T05:12:05.946Z] POST /api/tasks IP:::1
+[2026-01-13T05:12:05.954Z] GET /api/tasks IP:::1
+[2026-01-13T05:12:42.836Z] GET /api/session IP:::1
+[2026-01-13T05:12:42.844Z] DELETE /api/tasks/25932 IP:::1
+[2026-01-13T05:12:42.891Z] GET /api/tasks IP:::1
+[2026-01-13T05:12:43.624Z] GET /api/session IP:::1
+[2026-01-13T05:12:43.631Z] DELETE /api/tasks/25355 IP:::1
+[2026-01-13T05:12:43.639Z] GET /api/tasks IP:::1
+[2026-01-13T05:12:44.135Z] GET /api/session IP:::1
+[2026-01-13T05:12:44.144Z] DELETE /api/tasks/24454 IP:::1
+[2026-01-13T05:12:44.155Z] GET /api/tasks IP:::1
+[2026-01-13T05:12:44.897Z] GET /api/session IP:::1
+[2026-01-13T05:12:44.905Z] DELETE /api/tasks/19835 IP:::1
+[2026-01-13T05:12:44.912Z] GET /api/tasks IP:::1
+[2026-01-13T05:20:38.034Z] GET /api/session IP:::1
+[2026-01-13T05:20:38.047Z] POST /api/tasks IP:::1
+[2026-01-13T05:20:44.505Z] GET /api/session IP:::1
+[2026-01-13T05:20:44.512Z] GET /api/session IP:::1
+[2026-01-13T05:20:44.519Z] POST /api/login IP:::1
+[2026-01-13T05:20:44.573Z] GET /api/session IP:::1
+[2026-01-13T05:20:46.669Z] GET /api/session IP:::1
+[2026-01-13T05:20:46.676Z] POST /api/tasks IP:::1
+[2026-01-13T05:20:46.691Z] GET /api/tasks IP:::1
+[2026-01-13T05:21:00.893Z] GET /api/session IP:::1
+[2026-01-13T05:21:00.899Z] POST /api/tasks IP:::1
+[2026-01-13T05:21:00.906Z] GET /api/tasks IP:::1
+[2026-01-13T05:21:04.193Z] GET /api/session IP:::1
+[2026-01-13T05:21:04.199Z] POST /api/tasks IP:::1
+[2026-01-13T05:21:04.207Z] GET /api/tasks IP:::1
+[2026-01-13T05:32:47.730Z] GET /api/session IP:::1
+[2026-01-13T05:32:47.737Z] GET /api/session IP:::1
+[2026-01-13T05:32:47.748Z] POST /api/login IP:::1
+[2026-01-13T05:32:47.802Z] GET /api/session IP:::1
+[2026-01-13T05:32:50.946Z] GET /api/tasks IP:::1
+[2026-01-13T05:42:36.718Z] GET /api/tasks IP:::1
+[2026-01-13T05:43:15.197Z] GET /api/session IP:::1
+[2026-01-13T05:43:25.821Z] GET /api/session IP:::1
+[2026-01-13T05:43:25.829Z] GET /api/session IP:::1
+[2026-01-13T05:43:25.839Z] POST /api/login IP:::1
+[2026-01-13T05:43:25.880Z] GET /api/session IP:::1
+[2026-01-13T05:58:38.901Z] GET /api/session IP:::1
+[2026-01-13T05:58:38.923Z] GET /api/session IP:::1
+[2026-01-13T05:58:38.935Z] POST /api/login IP:::1
+[2026-01-13T05:58:38.995Z] GET /api/session IP:::1
+[2026-01-13T07:01:12.268Z] GET /api/session IP:::1
+[2026-01-13T07:01:12.284Z] GET /api/session IP:::1
+[2026-01-13T07:01:12.300Z] POST /api/login IP:::1
+[2026-01-13T07:01:12.361Z] GET /api/session IP:::1
+[2026-01-13T07:01:16.546Z] GET /api/session IP:::1
+[2026-01-13T07:01:16.553Z] GET /api/session IP:::1
+[2026-01-13T07:01:16.562Z] POST /api/login IP:::1
+[2026-01-13T07:01:21.597Z] GET /api/session IP:::1
+[2026-01-13T07:01:21.608Z] GET /api/session IP:::1
+[2026-01-13T07:01:21.619Z] POST /api/login IP:::1
+[2026-01-13T07:01:21.628Z] GET /api/session IP:::1
+[2026-01-13T07:01:25.136Z] GET /api/tasks IP:::1
+[2026-01-13T07:09:36.761Z] GET /api/tasks IP:::1
+[2026-01-13T07:09:47.582Z] GET /api/session IP:::1
+[2026-01-13T07:09:47.592Z] POST /api/tasks IP:::1
+[2026-01-13T07:09:47.616Z] GET /api/tasks IP:::1
+[2026-01-13T07:11:43.582Z] GET /api/protected IP:::1
+[2026-01-13T07:12:44.016Z] GET /api/session IP:::1
+[2026-01-13T07:12:44.026Z] GET /api/session IP:::1
+[2026-01-13T07:12:44.047Z] POST /api/login IP:::1
+[2026-01-13T07:12:44.103Z] GET /api/session IP:::1
+[2026-01-13T07:13:13.704Z] GET /api/session IP:::1
+[2026-01-13T07:13:13.710Z] GET /api/session IP:::1
+[2026-01-13T07:13:13.726Z] POST /api/login IP:::1
+[2026-01-13T07:13:13.736Z] GET /api/session IP:::1
+[2026-01-13T07:15:29.250Z] GET /api/session IP:::1
+[2026-01-13T07:15:29.259Z] GET /api/session IP:::1
+[2026-01-13T07:15:29.278Z] POST /api/login IP:::1
+[2026-01-13T07:15:36.040Z] GET /api/session IP:::1
+[2026-01-13T07:15:36.048Z] GET /api/session IP:::1
+[2026-01-13T07:15:36.069Z] POST /api/login IP:::1
+[2026-01-13T07:15:36.080Z] GET /api/session IP:::1
