@@ -1,0 +1,45 @@
+import {
+    success as notifySuccess,
+    error as notifyError
+} from "../../../utils/notify";
+import { login as Auth } from "../../../api/auth";
+
+export const useLogin = ({
+    setCsrfToken,
+    setLoginResult
+}: {
+    setCsrfToken: (value: string) => void;
+    setLoginResult: (value: string | null) => void;
+}) => {
+    // CSRFトークン取得
+    const fetchCsrfToken = async () => {
+        try {
+            const res = await fetch(`/api/session`, {
+                credentials: "include",
+            });
+            const data = await res.json();
+            if (data.csrfToken) setCsrfToken(data.csrfToken);
+        } catch (err: any) {
+            notifyError(err?.message || String(err));
+        }
+    };
+
+    // ログイン（uses api/auth）
+    const login = async (username: string, password: string) => {
+        setLoginResult(null);
+        await fetchCsrfToken();
+        try {
+            const res = await Auth(username, password);
+            setLoginResult(JSON.stringify(res, null, 2));
+            notifySuccess("ログイン成功");
+            await fetchCsrfToken();
+        } catch (err: any) {
+            notifyError(err?.message || String(err));
+            setLoginResult(String(err));
+        }
+    };
+    return {
+        login,
+        fetchCsrfToken,
+    };
+};

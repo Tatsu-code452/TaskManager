@@ -1,18 +1,22 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3001,        // 任意のポート番号に変更
-    strictPort: true,  // 使用中なら起動を失敗させる（falseなら自動で別ポートに切り替わる）
+    port: 3001,
+    strictPort: true,
     proxy: {
-      '/api': 'http://localhost:3000', // Expressのポートに合わせる
+      '/api': 'http://localhost:3000',
     },
   },
+  preview: {
+    port: 3001,        // ← ここで preview のポートを指定
+    strictPort: true,
+  },
   build: {
-    outDir: 'dist', // ビルド成果物の出力先
-    emptyOutDir: true // ビルド前にdistを空にする
+    outDir: './dist',
+    emptyOutDir: true,
+    cssCodeSplit: true,
   },
 })
