@@ -1,4 +1,4 @@
-import { Status } from "../types/status.interface";
+import Status from "../types/status.interface";
 import { request } from "./fetchHelper";
 
 export async function listStatuses(): Promise<Status[]> {

@@ -1,4 +1,4 @@
-import { User } from "../types/user.interface";
+import User from "../types/user.interface";
 import { request } from "./fetchHelper";
 
 export async function listUsers(): Promise<User[]> {

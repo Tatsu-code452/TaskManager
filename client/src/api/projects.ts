@@ -1,4 +1,4 @@
-import { Project } from "../types/project.interface";
+import Project from "../types/project.interface";
 import { request } from "./fetchHelper";
 
 export async function listProjects(): Promise<Project[]> {

@@ -1,4 +1,4 @@
-import { Category } from "../types/category.interface";
+import Category from "../types/category.interface";
 import { request } from "./fetchHelper";
 
 export async function listCategories(): Promise<Category[]> {

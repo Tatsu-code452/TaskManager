@@ -1,4 +1,4 @@
-import { Phase } from "../types/phase.interface";
+import Phase from "../types/phase.interface";
 import { request } from "./fetchHelper";
 
 export async function listPhases(): Promise<Phase[]> {

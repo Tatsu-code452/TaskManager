@@ -1,4 +1,4 @@
-export interface Phase {
+export default interface Phase {
     id: number;
     name: string;
     sort_no: number;

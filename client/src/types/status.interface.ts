@@ -1,4 +1,4 @@
-export interface Status {
+export default interface Status {
     id: number;
     name: string;
     color: string;
