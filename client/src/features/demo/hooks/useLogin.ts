@@ -1,7 +1,4 @@
-import {
-    success as notifySuccess,
-    error as notifyError
-} from "../../../utils/notify";
+import { success, error } from "../../../utils/notify";
 import { login as Auth } from "../../../api/auth";
 
 export const useLogin = ({
@@ -19,8 +16,9 @@ export const useLogin = ({
             });
             const data = await res.json();
             if (data.csrfToken) setCsrfToken(data.csrfToken);
-        } catch (err: any) {
-            notifyError(err?.message || String(err));
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            error(msg);
         }
     };
 
@@ -31,10 +29,11 @@ export const useLogin = ({
         try {
             const res = await Auth(username, password);
             setLoginResult(JSON.stringify(res, null, 2));
-            notifySuccess("ログイン成功");
+            success("ログイン成功");
             await fetchCsrfToken();
-        } catch (err: any) {
-            notifyError(err?.message || String(err));
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            error(msg);
             setLoginResult(String(err));
         }
     };

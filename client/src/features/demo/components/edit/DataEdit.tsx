@@ -1,7 +1,7 @@
 import React from "react";
-import { Entity } from "../const/demoConst";
-import { useDataEdit } from "../hooks/crud/useDataEdit";
-import { useEntityEffects } from "../hooks/crud/useEntityEffects";
+import { Entity } from "../../const/demoConst";
+import { useDataEdit } from "../../hooks/crud/useDataEdit";
+import { useEntityEffects } from "../../hooks/crud/useEntityEffects";
 
 export interface DataEditProps {
     selectedId: number | null;

@@ -89,7 +89,7 @@ while true; do
   echo "6: プレビュー起動 (start)"
   echo "7: 型チェック (type-check)"
   echo "8: Lint (lint)"
-  echo "9: 終了"
+  echo "q: 終了"
   read -p "番号を選択してください: " choice
 
   case $choice in
@@ -101,7 +101,7 @@ while true; do
     6) npm run start ;;
     7) npm run type-check ;;
     8) npm run lint ;;
-    9) echo "終了します"; exit 0 ;;
+    q) echo "終了します"; exit 0 ;;
     *) echo "無効な選択です" ;;
   esac
   echo ""

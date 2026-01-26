@@ -4,7 +4,7 @@ import { Entity } from "../../const/demoConst";
 // CRUD操作用のカスタムフック
 export const useCrudState = () => {
     const [entity, setEntity] = useState<Entity>("tasks");
-    const [items, setItems] = useState<any[]>([]);
+    const [items, setItems] = useState<Entity[]>([]);
     const [newId, setNewId] = useState("");
     const [newName, setNewName] = useState("");
     const [payloadJson, setPayloadJson] = useState<string>("");

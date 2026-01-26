@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction, useState, MouseEventHandler } from "react";
 import { useEntityEffects } from "./useEntityEffects";
 import { Entity } from "../../const/demoConst";
 
@@ -12,11 +11,10 @@ export const useTableMaintenance = ({
 
     const { refreshList } = effects;
 
-    const mouseHandleFetch: MouseEventHandler<HTMLButtonElement> = (e) => {
-        e.preventDefault();
+    const handleFetch = async () => {
         refreshList(entity);
     };
     return {
-        mouseHandleFetch,
+        handleFetch,
     };
 };

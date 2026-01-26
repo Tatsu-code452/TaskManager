@@ -4,10 +4,10 @@ import "./SimpleApiDemo.css";
 
 import Login from "./components/Login";
 import Token from "./components/Token";
-import TableMaintenance from "./components/TableMaintenance";
-import DataCreate from "./components/create/DataCreate";
-import DataEdit from "./components/DataEdit";
-import DataList from "./components/DataList";
+import TableMaintenance from "./components/list/TableMaintenance";
+import DataCreate from "./components/edit/DataCreate";
+import DataEdit from "./components/edit/DataEdit";
+import DataList from "./components/list/DataList";
 import ResponseApi from "./components/ResponseApi";
 
 import { useSimpleApiDemoProps } from "./hooks/useSimpleApiDemoProps";

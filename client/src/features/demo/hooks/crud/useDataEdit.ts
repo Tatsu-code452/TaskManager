@@ -1,67 +1,69 @@
-import { error as notifyError } from "../../../../utils/notify";
-import { Entity } from "../../const/demoConst";
+import { error } from "../../../../utils/notify";
+import { parsePayload, defaultPayloadFor } from "../../utils/utils";
+import { Entity, PayloadOf } from "../../const/demoConst";
 import { useEntityApi } from "../api/useEntityApi";
 import { useEntityEffects } from "./useEntityEffects";
-import { useEntityPresets } from "./useEntityPresets";
 
-export const useDataEdit = ({ selectedId, newName, payloadJson, entity, effects }: {
+export const useDataEdit = <E extends Entity>({ selectedId, newName, payloadJson, entity, effects }: {
     selectedId: number | null;
     newName: string;
     payloadJson: string;
-    entity: Entity;
+    entity: E;
     effects: ReturnType<typeof useEntityEffects>;
 }) => {
     const { handleSuccess } = effects;
     const { updateItem, deleteItem } = useEntityApi();
-    const { defaultPayloadFor } = useEntityPresets();
+
+    const executeUpdate = async (payload: PayloadOf<E>) => {
+        try {
+            const res = await updateItem(entity, selectedId, payload);
+            await handleSuccess(entity, res, "更新");
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            error(msg);
+        }
+    }
+
+    const isUpdate = () => {
+        if (selectedId == null) {
+            error("更新対象を選択してください");
+            return false;
+        }
+        return true;
+    }
 
     // 更新
     const update = async () => {
-        if (selectedId == null) {
-            notifyError("更新対象を選択してください");
-            return;
-        }
-        try {
-            const payload = payloadJson.trim()
-                ? JSON.parse(payloadJson)
-                : { name: newName || `updated-${Date.now()}` };
-            const res = await updateItem(entity, selectedId, payload);
-            await handleSuccess(entity, res, "更新");
-        } catch (err: any) {
-            notifyError(err?.message || String(err));
+        if (isUpdate()) {
+            executeUpdate(parsePayload(String(selectedId),
+                newName,
+                payloadJson,
+                entity));
         }
     };
 
     // 自動生成ペイロードで更新（選択ID を使う）
     const updateAuto = async () => {
-        if (selectedId == null) {
-            notifyError("更新対象を選択してください");
-            return;
-        }
-        try {
-            const payload = defaultPayloadFor(
+        if (isUpdate()) {
+            executeUpdate(defaultPayloadFor(
                 entity,
-                selectedId,
-                `updated-${Date.now()}`
-            );
-            const res = await updateItem(entity, selectedId, payload);
-            await handleSuccess(entity, res, "更新");
-        } catch (err: any) {
-            notifyError(err?.message || String(err));
+                selectedId
+            ));
         }
     };
 
     // 選択IDを削除
     const deleteId = async () => {
         if (selectedId == null) {
-            notifyError("削除対象を選択してください");
+            error("削除対象を選択してください");
             return;
         }
         try {
             const res = await deleteItem(entity, selectedId);
             await handleSuccess(entity, res, "削除");
-        } catch (err: any) {
-            notifyError(err?.message || String(err));
+        } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            error(msg);
         }
     };
 

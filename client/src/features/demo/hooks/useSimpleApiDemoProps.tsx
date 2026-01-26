@@ -1,19 +1,19 @@
 import { useStates } from "./useStates";
 import { LoginProps } from "../components/Login";
 import { TokenProps } from "../components/Token";
-import { TableMaintenanceProps } from "../components/TableMaintenance";
-import { DataCreateProps } from "../components/create/DataCreate";
+import { TableMaintenanceProps } from "../components/list/TableMaintenance";
+import { DataCreateProps } from "../components/edit/DataCreate";
 import DataCreatePreset, {
     DataCreatePresetProps,
-} from "../components/create/DataCreatePreset";
+} from "../components/edit/DataCreatePreset";
 import DataCreateFormInput, {
     DataCreateFormInputProps,
-} from "../components/create/DataCreateFormInput";
+} from "../components/edit/DataCreateFormInput";
 import DataCreateForm, {
     DataCreateFormProps,
-} from "../components/create/DataCreateForm";
-import { DataEditProps } from "../components/DataEdit";
-import { DataListProps } from "../components/DataList";
+} from "../components/edit/DataCreateForm";
+import { DataEditProps } from "../components/edit/DataEdit";
+import { DataListProps } from "../components/list/DataList";
 
 export const useSimpleApiDemoProps = () => {
     const { auth, api, crud } = useStates();

@@ -1,15 +1,15 @@
 import React from "react";
-import { useTableMaintenance } from "../hooks/crud/useTableMaintenance";
-import { useEntityEffects } from "../hooks/crud/useEntityEffects";
-import { ENTITIES, Entity } from "../const/demoConst";
+import { useTableMaintenance } from "../../hooks/crud/useTableMaintenance";
+import { useEntityEffects } from "../../hooks/crud/useEntityEffects";
+import { ENTITIES, Entity } from "../../const/demoConst";
 
 export interface TableMaintenanceProps {
     entity: Entity;
     setEntity: (value: Entity) => void;
-    setItems: (items: any[]) => void;
-    setSelectedId: (id: number | null) => void;
-    setPayloadJson: (json: string) => void;
-    setApiResult: (json: string) => void;
+    setItems: (items: Entity[]) => void;
+    setSelectedId: React.Dispatch<React.SetStateAction<number | null>>;
+    setPayloadJson: React.Dispatch<React.SetStateAction<string>>;
+    setApiResult: React.Dispatch<React.SetStateAction<string | null>>;
     isFetching: React.RefObject<boolean>;
 }
 
@@ -32,7 +32,7 @@ const TableMaintenance = (props: TableMaintenanceProps) => {
         isFetching,
     });
 
-    const { mouseHandleFetch } = useTableMaintenance({
+    const { handleFetch } = useTableMaintenance({
         entity,
         effects,
     });
@@ -60,7 +60,7 @@ const TableMaintenance = (props: TableMaintenanceProps) => {
                 <button
                     type="button"
                     className="button secondary"
-                    onClick={mouseHandleFetch}
+                    onClick={handleFetch}
                 >
                     一覧取得
                 </button>

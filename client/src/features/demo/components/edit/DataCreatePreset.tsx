@@ -63,7 +63,7 @@ const DataCreatePreset = (props: DataCreatePresetProps) => {
 
             <textarea
                 className="payload-textarea"
-                value={payloadJson}
+                defaultValue={payloadJson}
                 rows={6}
             />
         </>
