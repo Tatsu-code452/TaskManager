@@ -1,9 +1,9 @@
 import React from "react";
-import { useDataEdit } from "../hooks/useDataEdit";
-import { useEntityEffects } from "../hooks/useEntityEffects";
 import { Entity } from "../const/demoConst";
+import { useDataEdit } from "../hooks/crud/useDataEdit";
+import { useEntityEffects } from "../hooks/crud/useEntityEffects";
 
-interface DataEditProps {
+export interface DataEditProps {
     selectedId: number | null;
     newName: string;
     payloadJson: string;
@@ -14,7 +14,8 @@ interface DataEditProps {
     isFetching: React.RefObject<boolean>;
 }
 
-const DataEdit: React.FC<DataEditProps> = (props) => {
+// データ編集コンポーネント
+const DataEdit = (props: DataEditProps) => {
     const {
         selectedId,
         newName,

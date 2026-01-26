@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState, MouseEventHandler } from "react";
 import { useEntityEffects } from "./useEntityEffects";
-import { Entity } from "../const/demoConst";
+import { Entity } from "../../const/demoConst";
 
 export const useTableMaintenance = ({
     entity,

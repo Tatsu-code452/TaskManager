@@ -1,17 +1,16 @@
 import React from "react";
 import { useLogin } from "../hooks/useLogin";
 
-interface TokenProps {
+export interface TokenProps {
     csrfToken: string;
     setCsrfToken: (value: string) => void;
     setLoginResult: (value: string | null) => void;
 }
 
-const Token: React.FC<TokenProps> = ({ 
-    csrfToken,
-    setCsrfToken, 
-    setLoginResult, 
- }) => {
+// トークン用コンポーネント
+const Token = (props: TokenProps) => {
+    const { csrfToken, setCsrfToken, setLoginResult } = props;
+
     const { fetchCsrfToken } = useLogin({
         setCsrfToken,
         setLoginResult,

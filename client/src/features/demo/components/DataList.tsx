@@ -1,9 +1,9 @@
 import React from "react";
-import { useDataList } from "../hooks/useDataList";
-import { useEntityEffects } from "../hooks/useEntityEffects";
 import { Entity } from "../const/demoConst";
+import { useDataList } from "../hooks/crud/useDataList";
+import { useEntityEffects } from "../hooks/crud/useEntityEffects";
 
-interface DataListProps {
+export interface DataListProps {
     entity: Entity;
     items: Record<string, any>[];
     selectedId: number | null;
@@ -13,7 +13,8 @@ interface DataListProps {
     isFetching: React.RefObject<boolean>;
 }
 
-const DataList: React.FC<DataListProps> = (props) => {
+// データ表示コンポーネント
+const DataList = (props: DataListProps) => {
     const {
         entity,
         items,

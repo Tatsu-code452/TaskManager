@@ -1,11 +1,13 @@
-// IDを数値変換する。変換できない場合はundefinedを返す。
+import { Entity, PayloadOf } from "../const/demoConst";
+
+// ID を数値変換
 export const toNumberId = (id: string | number | null | undefined): number | undefined => {
     if (id == null || id === "") return undefined;
     const num = typeof id === "number" ? id : parseInt(String(id), 10);
     return Number.isNaN(num) ? undefined : num;
 };
 
-// 安全にJSON文字列をパースする。エラー時はundefinedを返す。
+// 安全 JSON パース
 export const parseJsonSafe = <T = any>(str: string, onError?: (msg: string) => void): T | undefined => {
     try {
         return JSON.parse(str) as T;
@@ -15,34 +17,55 @@ export const parseJsonSafe = <T = any>(str: string, onError?: (msg: string) => v
     }
 };
 
-// 有効なIDかどうかを判定する。
+// ID の妥当性チェック
 export const isValidId = (v: unknown): boolean => {
     const n = toNumberId(v as any);
     return typeof n === "number" && !Number.isNaN(n);
 };
 
-// ペイロードを解析または生成
-export const parsePayload = (idStr: string, nameStr: string, payloadJson: string, entity: string) => {
-    if (payloadJson.trim()) {
-        const parsed = parseJsonSafe(payloadJson);
-        if (parsed === undefined) throw new Error("Invalid JSON payload");
-        return parsed;
-    }
+// ===============================
+// 型安全 parsePayload
+// ===============================
+export const parsePayload = <E extends Entity>(
+    idStr: string,
+    nameStr: string,
+    payloadJson: string,
+    entity: E
+): PayloadOf<E> => {
     const idNum = toNumberId(idStr);
-    return defaultPayloadFor(entity, idNum, nameStr || undefined);
+
+    // ① JSON があればそれをベースにする
+    const base: PayloadOf<E> =
+        payloadJson.trim()
+            ? (() => {
+                  const parsed = parseJsonSafe<PayloadOf<E>>(payloadJson);
+                  if (!parsed) throw new Error("Invalid JSON payload");
+                  return parsed;
+              })()
+            : defaultPayloadFor(entity);
+
+    // ② UI の入力で上書き（共通処理）
+    return {
+        ...base,
+        id: idNum ?? base.id,
+        name: nameStr || base.name,
+    };
 };
 
-// デフォルトペイロード生成
-export const defaultPayloadFor = (
-    entityKey: string,
+// ===============================
+// 型安全 defaultPayloadFor
+// ===============================
+export const defaultPayloadFor = <E extends Entity>(
+    entityKey: E,
     id?: number | null,
     name?: string
-) => {
+): PayloadOf<E> => {
     const idNum = toNumberId(id as any);
+
     switch (entityKey) {
         case "tasks":
             return {
-                id: idNum ?? new Date().getTime() % 100000,
+                id: idNum ?? Date.now() % 100000,
                 name: name || `task-${Date.now()}`,
                 project_id: 1,
                 phase_id: 1,
@@ -51,50 +74,63 @@ export const defaultPayloadFor = (
                 planned_start_date: new Date().toISOString().slice(0, 10),
                 planned_end_date: new Date().toISOString().slice(0, 10),
                 planned_effort: 0,
+                actual_effort: 0,
                 status_id: 1,
                 progress_rate: 0,
                 priority: 1,
-            };
+                pre_task_id: null,
+                next_task_id: null,
+            } as PayloadOf<E>;
+
         case "users":
             return {
-                id: idNum ?? new Date().getTime() % 100000,
+                id: idNum ?? Date.now() % 100000,
                 name: name || `user-${Date.now()}`,
                 password: "password",
                 role: "user",
-            };
+                created_at: "",
+                updated_at: "",
+            } as PayloadOf<E>;
+
         case "categories":
             return {
-                id: idNum ?? new Date().getTime() % 100000,
+                id: idNum ?? Date.now() % 100000,
                 name: name || `category-${Date.now()}`,
-            };
+            } as PayloadOf<E>;
+
         case "projects":
             return {
-                id: idNum ?? new Date().getTime() % 100000,
+                id: idNum ?? Date.now() % 100000,
                 name: name || `project-${Date.now()}`,
                 start_date: new Date().toISOString().slice(0, 10),
                 end_date: new Date().toISOString().slice(0, 10),
-            };
+            } as PayloadOf<E>;
+
         case "phases":
             return {
-                id: idNum ?? new Date().getTime() % 100000,
+                id: idNum ?? Date.now() % 100000,
                 name: name || `phase-${Date.now()}`,
                 sort_no: 0,
-            };
+            } as PayloadOf<E>;
+
         case "statuses":
             return {
-                id: idNum ?? new Date().getTime() % 100000,
+                id: idNum ?? Date.now() % 100000,
                 name: name || `status-${Date.now()}`,
                 color: "#000000",
-            };
+            } as PayloadOf<E>;
+
         default:
-            return { id: idNum ?? undefined, name };
+            return { id: idNum ?? undefined, name } as PayloadOf<E>;
     }
 };
 
-export const SAMPLE_PRESETS: Record<
-    string,
-    Array<{ label: string; payload: any }>
-> = {
+// ===============================
+// SAMPLE_PRESETS（型安全化）
+// ===============================
+export const SAMPLE_PRESETS: {
+    [K in Entity]: Array<{ label: string; payload: Partial<PayloadOf<K>> }>
+} = {
     tasks: [
         {
             label: "タスク(最小)",

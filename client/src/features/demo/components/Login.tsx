@@ -1,7 +1,7 @@
 import React from "react";
 import { useLogin } from "../hooks/useLogin";
 
-interface LoginProps {
+export interface LoginProps {
     username: string;
     password: string;
     loginResult: string | null;
@@ -11,15 +11,17 @@ interface LoginProps {
     setLoginResult: (value: string | null) => void;
 }
 
-const Login: React.FC<LoginProps> = ({
-    username,
-    password,
-    loginResult,
-    setUsername,
-    setPassword,
-    setCsrfToken,
-    setLoginResult,
-}) => {
+// ログインコンポーネント
+const Login = (props: LoginProps) => {
+    const {
+        username,
+        password,
+        loginResult,
+        setUsername,
+        setPassword,
+        setCsrfToken,
+        setLoginResult,
+    } = props;
     const { login } = useLogin({
         setCsrfToken,
         setLoginResult,
@@ -36,6 +38,7 @@ const Login: React.FC<LoginProps> = ({
                 <input
                     id="username-input"
                     className="input"
+                    type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     aria-label="username"

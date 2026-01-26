@@ -1,9 +1,9 @@
 import React from "react";
-import { useTableMaintenance } from "../hooks/useTableMaintenance";
-import { useEntityEffects } from "../hooks/useEntityEffects";
+import { useTableMaintenance } from "../hooks/crud/useTableMaintenance";
+import { useEntityEffects } from "../hooks/crud/useEntityEffects";
 import { ENTITIES, Entity } from "../const/demoConst";
 
-interface TableMaintenanceProps {
+export interface TableMaintenanceProps {
     entity: Entity;
     setEntity: (value: Entity) => void;
     setItems: (items: any[]) => void;
@@ -13,15 +13,18 @@ interface TableMaintenanceProps {
     isFetching: React.RefObject<boolean>;
 }
 
-const TableMaintenance: React.FC<TableMaintenanceProps> = ({
-    entity,
-    setEntity,
-    setItems,
-    setSelectedId,
-    setPayloadJson,
-    setApiResult,
-    isFetching,
-}) => {
+// テーブルメンテナンスコンポーネント
+const TableMaintenance = (props: TableMaintenanceProps) => {
+    const {
+        entity,
+        setEntity,
+        setItems,
+        setSelectedId,
+        setPayloadJson,
+        setApiResult,
+        isFetching,
+    } = props;
+
     const effects = useEntityEffects({
         onItemsUpdated: setItems,
         onResult: setApiResult,

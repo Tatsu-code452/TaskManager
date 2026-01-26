@@ -4,7 +4,9 @@ interface ResponseApiProps {
     apiResult: string;
 }
 
-const ResponseApi: React.FC<ResponseApiProps> = ({ apiResult }) => {
+// レスポンス表示コンポーネント
+const ResponseApi = (props: ResponseApiProps) => {
+    const { apiResult } = props;
     return (
         <div style={{ marginTop: 12 }}>
             <label>API レスポンス</label>

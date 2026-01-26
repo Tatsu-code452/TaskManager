@@ -1,5 +1,6 @@
-import { request } from "../../../api";
+import { request } from "../../../../api";
 
+// Httpリクエスト用カスタムフック
 export const useApi = () => {
 
     // URLビルダー

@@ -1,6 +1,6 @@
-import { error as notifyError } from "../../../utils/notify";
-import { Entity } from "../const/demoConst";
-import { useEntityApi } from "./useEntityApi";
+import { error as notifyError } from "../../../../utils/notify";
+import { Entity } from "../../const/demoConst";
+import { useEntityApi } from "../api/useEntityApi";
 import { useEntityEffects } from "./useEntityEffects";
 
 export const useDataList = ({ selectedId, entity, effects }: {
