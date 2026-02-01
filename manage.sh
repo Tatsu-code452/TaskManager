@@ -4,7 +4,7 @@ while true; do
   echo "==== Project 管理メニュー ===="
   echo "1: client 管理メニューを起動"
   echo "2: server 管理メニューを起動"
-  echo "3: 終了"
+  echo "q: 終了"
   read -p "番号を選択してください: " choice
 
   case $choice in
@@ -22,7 +22,7 @@ while true; do
         echo "server/manage.sh が見つかりません"
       fi
       ;;
-    3)
+    q)
       echo "終了します"
       exit 0
       ;;

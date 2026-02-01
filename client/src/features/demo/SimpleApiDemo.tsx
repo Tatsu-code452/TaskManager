@@ -2,47 +2,69 @@ import React from "react";
 
 import "./SimpleApiDemo.css";
 
-import Login from "./components/Login";
-import Token from "./components/Token";
-import TableMaintenance from "./components/list/TableMaintenance";
-import DataCreate from "./components/edit/DataCreate";
-import DataEdit from "./components/edit/DataEdit";
-import DataList from "./components/list/DataList";
-import ResponseApi from "./components/ResponseApi";
+import { useStates } from "./hooks/useStates";
 
-import { useSimpleApiDemoProps } from "./hooks/useSimpleApiDemoProps";
+import Login from "./ui/Login";
+import Token from "./ui/Token";
+import DataFetch from "./ui/list/DataFetch";
+import DataCreatePreset from "./ui/edit/DataCreatePreset";
+import DataCreateFormInput from "./ui/edit/DataCreateFormInput";
+import DataCreateForm from "./ui/edit/DataCreateForm";
+import DataEdit from "./ui/edit/DataEdit";
+import DataList from "./ui/list/DataList";
+import ResponseApi from "./ui/ResponseApi";
+import { createLoginProps } from "./ui/propsCreators/createLoginProps";
+import { createTokenProps } from "./ui/propsCreators/createTokenProps";
+import { createDataFetchProps } from "./ui/propsCreators/createDataFetchProps";
+import {
+    createDataCreateFormInputProps,
+    createDataCreateFormProps,
+    createDataCreatePresetProps,
+} from "./ui/propsCreators/createDataCreateProps";
+import { createDataEditProps } from "./ui/propsCreators/createDataEditProps";
+import { createDataListProps } from "./ui/propsCreators/createDataListProps";
+import { createApiResultProps } from "./ui/propsCreators/createApiResultProps";
 
 const SimpleApiDemo: React.FC = () => {
-    const {
-        loginProps,
-        tokenProps,
-        tableMaintenanceProps,
-        dataCreateProps,
-        dataEditProps,
-        dataListProps,
-        apiResult,
-    } = useSimpleApiDemoProps();
+    const { auth, api, crud } = useStates();
+    const dataCreateChildren = (
+        <>
+            <div className="form-row">
+                <DataCreateFormInput
+                    {...createDataCreateFormInputProps(crud)}
+                />
+            </div>
+
+            <div className="form-row">
+                <DataCreatePreset {...createDataCreatePresetProps(crud)} />
+            </div>
+
+            <div className="form-row">
+                <DataCreateForm {...createDataCreateFormProps(crud, api)} />
+            </div>
+        </>
+    );
 
     return (
         <div className="demo-container">
             <h2 className="demo-title">簡易APIデモ画面</h2>
-            <Login {...loginProps} />
+            <Login {...createLoginProps(auth)} />
             <hr />
 
-            <Token {...tokenProps} />
+            <Token {...createTokenProps(auth)} />
             <hr />
 
             <h3>汎用 CRUD デモ</h3>
 
-            <TableMaintenance {...tableMaintenanceProps} />
+            <DataFetch {...createDataFetchProps(api, crud)} />
 
-            <DataCreate {...dataCreateProps} />
+            {dataCreateChildren}
 
-            <DataEdit {...dataEditProps} />
+            <DataEdit {...createDataEditProps(crud, api)} />
 
-            <DataList {...dataListProps} />
+            <DataList {...createDataListProps(crud, api)} />
 
-            <ResponseApi apiResult={apiResult} />
+            <ResponseApi {...createApiResultProps(api)} />
         </div>
     );
 };

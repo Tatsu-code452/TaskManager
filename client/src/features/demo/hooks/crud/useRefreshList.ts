@@ -1,12 +1,12 @@
 import { error as notifyError } from "../../../../utils/notify";
 import { useEntityApi } from "../api/useEntityApi";
-import { Entity } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/demoConst";
 
 export const useRefreshList = ({
     onItemsUpdated,
     isFetching,
 }: {
-    onItemsUpdated: (items: any[]) => void;
+    onItemsUpdated: (items: DataItem[]) => void;
     isFetching: React.RefObject<boolean>;
 }) => {
     const { fetchList } = useEntityApi();

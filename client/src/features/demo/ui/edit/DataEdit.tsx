@@ -1,5 +1,5 @@
 import React from "react";
-import { Entity } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/demoConst";
 import { useDataEdit } from "../../hooks/crud/useDataEdit";
 import { useEntityEffects } from "../../hooks/crud/useEntityEffects";
 
@@ -8,7 +8,7 @@ export interface DataEditProps {
     newName: string;
     payloadJson: string;
     entity: Entity;
-    setItems: React.Dispatch<React.SetStateAction<any[]>>;
+    setItems: React.Dispatch<React.SetStateAction<DataItem[]>>;
     setSelectedId: React.Dispatch<React.SetStateAction<number | null>>;
     setApiResult: React.Dispatch<React.SetStateAction<string | null>>;
     isFetching: React.RefObject<boolean>;

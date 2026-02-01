@@ -1,7 +1,7 @@
 import { useEntityEffects } from "./useEntityEffects";
 import { Entity } from "../../const/demoConst";
 
-export const useTableMaintenance = ({
+export const useDataFetch = ({
     entity,
     effects,
 }: {

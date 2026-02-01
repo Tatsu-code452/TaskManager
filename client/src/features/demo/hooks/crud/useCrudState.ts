@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Entity } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/demoConst";
 
 // CRUD操作用のカスタムフック
 export const useCrudState = () => {
     const [entity, setEntity] = useState<Entity>("tasks");
-    const [items, setItems] = useState<Entity[]>([]);
+    const [items, setItems] = useState<DataItem[]>([]);
     const [newId, setNewId] = useState("");
     const [newName, setNewName] = useState("");
     const [payloadJson, setPayloadJson] = useState<string>("");
@@ -25,3 +25,5 @@ export const useCrudState = () => {
         setSelectedId,
     };
 };
+
+export type CrudState = ReturnType<typeof useCrudState>;

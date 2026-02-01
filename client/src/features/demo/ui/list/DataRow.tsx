@@ -1,8 +1,8 @@
 import React from "react";
-import { Entity } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/demoConst";
 
 interface DataRowProps {
-    item: Record<string, Entity>;
+    item: DataItem;
     columns: string[];
     selected: boolean;
     onSelect: () => void;

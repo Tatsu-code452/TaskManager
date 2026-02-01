@@ -1,16 +1,18 @@
 import React from "react";
 import HeaderRow from "./HeaderRow";
 import DataRow from "./DataRow";
-import { Entity } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/demoConst";
 import { useDataList } from "../../hooks/crud/useDataList";
 import { useEntityEffects } from "../../hooks/crud/useEntityEffects";
 import { toNumberId } from "../../utils/utils";
 
 export interface DataListProps {
     entity: Entity;
-    items: Record<string, Entity>[];
+    items: DataItem[];
     selectedId: number | null;
-    setItems: React.Dispatch<React.SetStateAction<Entity[]>>;
+    setItems: React.Dispatch<
+        React.SetStateAction<Array<Record<string, unknown>>>
+    >;
     setSelectedId: (id: number) => void;
     setApiResult: React.Dispatch<React.SetStateAction<string | null>>;
     isFetching: React.RefObject<boolean>;

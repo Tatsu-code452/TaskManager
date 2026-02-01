@@ -18,3 +18,5 @@ export const useAuthState = () => {
         setLoginResult,
     };
 };
+
+export type AuthState = ReturnType<typeof useAuthState>;

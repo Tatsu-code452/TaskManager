@@ -1,5 +1,5 @@
 import React from "react";
-import { Entity } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/demoConst";
 import { useDataCreateForm } from "../../hooks/crud/useDataCreateForm";
 import { useEffectsSuccess } from "../../hooks/useEffectsSuccess";
 import { useRefreshList } from "../../hooks/crud/useRefreshList";
@@ -9,7 +9,7 @@ export interface DataCreateFormProps {
     newName: string;
     payloadJson: string;
     entity: Entity;
-    setItems: React.Dispatch<React.SetStateAction<any[]>>;
+    setItems: React.Dispatch<React.SetStateAction<DataItem[]>>;
     setSelectedId: React.Dispatch<React.SetStateAction<number | null>>;
     setApiResult: React.Dispatch<React.SetStateAction<string | null>>;
     isFetching: React.RefObject<boolean>;

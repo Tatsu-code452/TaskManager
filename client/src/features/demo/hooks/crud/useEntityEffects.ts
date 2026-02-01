@@ -1,6 +1,6 @@
 import { success as notifySuccess, error as notifyError } from "../../../../utils/notify";
 import { useEntityApi } from "../api/useEntityApi";
-import { Entity } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/demoConst";
 
 export const useEntityEffects = ({
     onItemsUpdated,
@@ -8,7 +8,7 @@ export const useEntityEffects = ({
     onClearSelection,
     isFetching,
 }: {
-    onItemsUpdated: (items: any[]) => void;
+    onItemsUpdated: (items: DataItem[]) => void;
     onResult: (json: string) => void;
     onClearSelection: () => void;
     isFetching: React.RefObject<boolean>;

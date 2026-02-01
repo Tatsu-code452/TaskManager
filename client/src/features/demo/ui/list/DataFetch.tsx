@@ -1,12 +1,12 @@
 import React from "react";
-import { useTableMaintenance } from "../../hooks/crud/useTableMaintenance";
+import { useDataFetch } from "../../hooks/crud/useDataFetch";
 import { useEntityEffects } from "../../hooks/crud/useEntityEffects";
-import { ENTITIES, Entity } from "../../const/demoConst";
+import { ENTITIES, Entity, DataItem } from "../../const/demoConst";
 
-export interface TableMaintenanceProps {
+export interface DataFetchProps {
     entity: Entity;
-    setEntity: (value: Entity) => void;
-    setItems: (items: Entity[]) => void;
+    setEntity: React.Dispatch<React.SetStateAction<Entity>>;
+    setItems: React.Dispatch<React.SetStateAction<DataItem[]>>;
     setSelectedId: React.Dispatch<React.SetStateAction<number | null>>;
     setPayloadJson: React.Dispatch<React.SetStateAction<string>>;
     setApiResult: React.Dispatch<React.SetStateAction<string | null>>;
@@ -14,7 +14,7 @@ export interface TableMaintenanceProps {
 }
 
 // テーブルメンテナンスコンポーネント
-const TableMaintenance = (props: TableMaintenanceProps) => {
+const DataFetch = (props: DataFetchProps) => {
     const {
         entity,
         setEntity,
@@ -32,7 +32,7 @@ const TableMaintenance = (props: TableMaintenanceProps) => {
         isFetching,
     });
 
-    const { handleFetch } = useTableMaintenance({
+    const { handleFetch } = useDataFetch({
         entity,
         effects,
     });
@@ -68,4 +68,4 @@ const TableMaintenance = (props: TableMaintenanceProps) => {
         </>
     );
 };
-export default React.memo(TableMaintenance);
+export default React.memo(DataFetch);

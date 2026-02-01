@@ -32,3 +32,7 @@ export type PayloadOf<E extends Entity> = EntityPayloadMap[E];
 
 export const TOKEN_API_URL = "/api/session";
 
+export type DataItem = {
+    id: string | number;
+} & Record<string, unknown>;
+

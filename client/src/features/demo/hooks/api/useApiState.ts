@@ -11,3 +11,5 @@ export const useApiState = () => {
         isFetching,
     };
 };
+
+export type ApiState = ReturnType<typeof useApiState>;
