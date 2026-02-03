@@ -1,5 +1,5 @@
 import { useEntityEffects } from "./useEntityEffects";
-import { Entity } from "../../const/demoConst";
+import { Entity } from "../../const/const";
 
 export const useDataFetch = ({
     entity,

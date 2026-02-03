@@ -1,6 +1,7 @@
 import React from "react";
-import { Entity } from "../../const/demoConst";
-import { defaultPayloadFor, SAMPLE_PRESETS } from "../../utils/utils";
+import { Entity } from "../../const/const";
+import { defaultPayloadFor } from "../../utils/payload/default";
+import { SAMPLE_PRESETS } from "../../utils/payload/preset";
 
 export interface DataCreatePresetProps {
     entity: Entity;

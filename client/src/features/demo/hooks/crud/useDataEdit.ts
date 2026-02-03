@@ -1,6 +1,7 @@
 import { error } from "../../../../utils/notify";
-import { parsePayload, defaultPayloadFor } from "../../utils/utils";
-import { Entity, PayloadOf } from "../../const/demoConst";
+import { parsePayload } from "../../utils/payload/payload";
+import { defaultPayloadFor } from "../../utils/payload/default";
+import { Entity, PayloadOf } from "../../const/const";
 import { useEntityApi } from "../api/useEntityApi";
 import { useEntityEffects } from "./useEntityEffects";
 

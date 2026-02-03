@@ -1,5 +1,5 @@
 import { error } from "../../../../utils/notify";
-import { Entity } from "../../const/demoConst";
+import { Entity } from "../../const/const";
 import { useEntityApi } from "../api/useEntityApi";
 import { useEntityEffects } from "./useEntityEffects";
 

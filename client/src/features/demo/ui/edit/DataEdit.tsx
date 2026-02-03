@@ -1,5 +1,5 @@
 import React from "react";
-import { Entity, DataItem } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/const";
 import { useDataEdit } from "../../hooks/crud/useDataEdit";
 import { useEntityEffects } from "../../hooks/crud/useEntityEffects";
 

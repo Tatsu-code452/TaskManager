@@ -1,5 +1,5 @@
 import { success as notifySuccess } from "../../../utils/notify";
-import { Entity } from "../const/demoConst";
+import { Entity } from "../const/const";
 
 export const useEffectsSuccess = ({
     onResult,

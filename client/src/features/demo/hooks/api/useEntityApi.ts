@@ -1,21 +1,31 @@
 import { useApi } from "./useApi";
-import { Entity, PayloadOf } from "../../const/demoConst";
+import { Entity, PayloadOf, DataItem } from "../../const/const";
 
-// エンティティ別APIカスタムフック
+/**
+ * エンティティ別API操作用カスタムフック
+ */
 export const useEntityApi = () => {
-    const { requestGet, requestPost, requestPut, requestDelete } = useApi();
+    const { get, post, put, del } = useApi();
 
     return {
-        fetchList: <E extends Entity>(entity: E) =>
-            requestGet(entity),
+        /**
+         * 一覧取得
+         */
+        fetchList: <E extends Entity>(entity: E) => get<{ data: DataItem[] }>(entity),
 
-        createItem: <E extends Entity>(entity: E, payload: PayloadOf<E>) =>
-            requestPost(entity, payload),
+        /**
+         * 新規作成
+         */
+        createItem: <E extends Entity>(entity: E, payload: PayloadOf<E>) => post(entity, payload),
 
-        updateItem: <E extends Entity>(entity: E, id: number, payload: PayloadOf<E>) =>
-            requestPut(entity, id, payload),
+        /**
+         * 更新
+         */
+        updateItem: <E extends Entity>(entity: E, id: number, payload: PayloadOf<E>) => put(entity, id, payload),
 
-        deleteItem: (entity: Entity, id: number) =>
-            requestDelete(entity, id),
+        /**
+         * 削除
+         */
+        deleteItem: (entity: Entity, id: number) => del(entity, id),
     };
 };

@@ -1,6 +1,11 @@
-import { Entity, PayloadOf } from "../const/demoConst";
+import { Entity, PayloadOf } from "../const/const";
 
 // ID を数値変換
+/**
+ * IDを数値型に変換する
+ * @param id 変換対象のID（string|number|null|undefined）
+ * @returns number型IDまたはundefined
+ */
 export const toNumberId = (id: string | number | null | undefined): number | undefined => {
     if (id == null || id === "") return undefined;
     const num = typeof id === "number" ? id : parseInt(String(id), 10);
@@ -8,6 +13,12 @@ export const toNumberId = (id: string | number | null | undefined): number | und
 };
 
 // 安全 JSON パース
+/**
+ * 安全にJSONパースする（例外時undefined返却）
+ * @param str JSON文字列
+ * @param onError エラー時コールバック
+ * @returns パース結果またはundefined
+ */
 export const parseJsonSafe = <T = any>(str: string, onError?: (msg: string) => void): T | undefined => {
     try {
         return JSON.parse(str) as T;
@@ -18,6 +29,10 @@ export const parseJsonSafe = <T = any>(str: string, onError?: (msg: string) => v
 };
 
 // ID の妥当性チェック
+/**
+ * IDの妥当性チェック
+ * @param v 任意値
+ */
 export const isValidId = (v: unknown): boolean => {
     const n = toNumberId(v as any);
     return typeof n === "number" && !Number.isNaN(n);
@@ -26,6 +41,14 @@ export const isValidId = (v: unknown): boolean => {
 // ===============================
 // 型安全 parsePayload
 // ===============================
+/**
+ * 型安全なPayload生成
+ * @param idStr ID文字列
+ * @param nameStr 名称文字列
+ * @param payloadJson JSON文字列
+ * @param entity Entity種別
+ * @returns PayloadOf<E>
+ */
 export const parsePayload = <E extends Entity>(
     idStr: string,
     nameStr: string,
@@ -55,6 +78,13 @@ export const parsePayload = <E extends Entity>(
 // ===============================
 // 型安全 defaultPayloadFor
 // ===============================
+/**
+ * Entity種別ごとのデフォルトPayload生成
+ * @param entityKey Entity種別
+ * @param id 任意ID
+ * @param name 任意名称
+ * @returns PayloadOf<E>
+ */
 export const defaultPayloadFor = <E extends Entity>(
     entityKey: E,
     id?: number | null,

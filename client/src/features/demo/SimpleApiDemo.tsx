@@ -2,19 +2,19 @@ import React from "react";
 
 import "./SimpleApiDemo.css";
 
-import { useStates } from "./hooks/useStates";
+import { useAuthState } from "./hooks/auth/useAuthState";
+import { useApiState } from "./hooks/api/useApiState";
+import { useCrudState } from "./hooks/crud/useCrudState";
 
-import Login from "./ui/Login";
-import Token from "./ui/Token";
+import Login, { createLoginProps } from "./ui/Login";
+import Token, { createTokenProps } from "./ui/Token";
 import DataFetch from "./ui/list/DataFetch";
 import DataCreatePreset from "./ui/edit/DataCreatePreset";
 import DataCreateFormInput from "./ui/edit/DataCreateFormInput";
 import DataCreateForm from "./ui/edit/DataCreateForm";
 import DataEdit from "./ui/edit/DataEdit";
 import DataList from "./ui/list/DataList";
-import ResponseApi from "./ui/ResponseApi";
-import { createLoginProps } from "./ui/propsCreators/createLoginProps";
-import { createTokenProps } from "./ui/propsCreators/createTokenProps";
+import ResponseApi, { createApiResultProps } from "./ui/ResponseApi";
 import { createDataFetchProps } from "./ui/propsCreators/createDataFetchProps";
 import {
     createDataCreateFormInputProps,
@@ -23,10 +23,12 @@ import {
 } from "./ui/propsCreators/createDataCreateProps";
 import { createDataEditProps } from "./ui/propsCreators/createDataEditProps";
 import { createDataListProps } from "./ui/propsCreators/createDataListProps";
-import { createApiResultProps } from "./ui/propsCreators/createApiResultProps";
 
 const SimpleApiDemo: React.FC = () => {
-    const { auth, api, crud } = useStates();
+    const auth = useAuthState();
+    const api = useApiState();
+    const crud = useCrudState();
+
     const dataCreateChildren = (
         <>
             <div className="form-row">

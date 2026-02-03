@@ -1,4 +1,7 @@
 import React from "react";
+import { Button } from "../../../components/Button";
+import { FormInput } from "../../../components/FormInput";
+import { AuthState } from "../hooks/auth/useAuthState";
 import { useLogin } from "../hooks/useLogin";
 
 export interface LoginProps {
@@ -11,6 +14,16 @@ export interface LoginProps {
     setLoginResult: (value: string | null) => void;
 }
 
+export const createLoginProps = (auth: AuthState): LoginProps => ({
+    username: auth.username,
+    password: auth.password,
+    loginResult: auth.loginResult,
+    setUsername: auth.setUsername,
+    setPassword: auth.setPassword,
+    setCsrfToken: auth.setCsrfToken,
+    setLoginResult: auth.setLoginResult,
+});
+
 // ログインコンポーネント
 const Login = (props: LoginProps) => {
     const {
@@ -22,43 +35,37 @@ const Login = (props: LoginProps) => {
         setCsrfToken,
         setLoginResult,
     } = props;
-    const { login } = useLogin({
+
+    const { handleLogin, loading } = useLogin({
+        username,
+        password,
         setCsrfToken,
         setLoginResult,
     });
-    const onSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        login(username, password);
-    };
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleLogin}>
             <div className="form-row">
-                <label htmlFor="username-input">ユーザー名: </label>
-                <input
+                <FormInput
                     id="username-input"
-                    className="input"
-                    type="text"
+                    label="ユーザー名:"
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    aria-label="username"
+                    onChange={setUsername}
                 />
             </div>
             <div className="form-row">
-                <label htmlFor="password-input">パスワード: </label>
-                <input
+                <FormInput
                     id="password-input"
-                    className="input"
+                    label="パスワード:"
                     type="password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    aria-label="password"
+                    onChange={setPassword}
                 />
             </div>
             <div className="controls">
-                <button type="submit" className="button primary">
+                <Button type="submit" variant="primary" loading={loading}>
                     ログイン
-                </button>
+                </Button>
             </div>
 
             {loginResult != null && (

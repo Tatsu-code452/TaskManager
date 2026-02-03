@@ -1,10 +1,10 @@
 import React from "react";
 import HeaderRow from "./HeaderRow";
 import DataRow from "./DataRow";
-import { Entity, DataItem } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/const";
 import { useDataList } from "../../hooks/crud/useDataList";
 import { useEntityEffects } from "../../hooks/crud/useEntityEffects";
-import { toNumberId } from "../../utils/utils";
+import { toNumberId } from "../../utils/id";
 
 export interface DataListProps {
     entity: Entity;

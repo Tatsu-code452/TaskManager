@@ -1,6 +1,8 @@
 import { error } from "../../../../utils/notify";
-import { parsePayload, defaultPayloadFor, toNumberId } from "../../utils/utils";
-import { Entity, PayloadOf } from "../../const/demoConst";
+import { toNumberId } from "../../utils/id";
+import { parsePayload } from "../../utils/payload/payload";
+import { defaultPayloadFor } from "../../utils/payload/default";
+import { Entity, PayloadOf } from "../../const/const";
 import { useEntityApi } from "../api/useEntityApi";
 import { useEffectsSuccess } from "../useEffectsSuccess";
 import { useRefreshList } from "./useRefreshList";

@@ -1,4 +1,12 @@
-// Simple notification utility. Replace its implementation later with a toast system when available.
+export const toErrorMessage = (err: unknown): string => {
+  if (err instanceof Error) return err.message;
+  if (typeof err === "string") return err;
+  try {
+    return JSON.stringify(err);
+  } catch {
+    return String(err);
+  }
+};
 
 export function info(message: string) {
   console.info(message);

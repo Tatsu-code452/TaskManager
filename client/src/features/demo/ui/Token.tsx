@@ -1,29 +1,32 @@
 import React from "react";
-import { useLogin } from "../hooks/useLogin";
+import { Button } from "../../../components/Button";
+import { AuthState } from "../hooks/auth/useAuthState";
+import { useToken } from "../hooks/useToken";
 
 export interface TokenProps {
     csrfToken: string;
     setCsrfToken: (value: string) => void;
-    setLoginResult: (value: string | null) => void;
 }
+
+export const createTokenProps = (auth: AuthState): TokenProps => ({
+    csrfToken: auth.csrfToken,
+    setCsrfToken: auth.setCsrfToken,
+});
 
 // トークン用コンポーネント
 const Token = (props: TokenProps) => {
-    const { csrfToken, setCsrfToken, setLoginResult } = props;
+    const { csrfToken, setCsrfToken } = props;
+    const { handleFetchToken, loading } = useToken({ setCsrfToken });
 
-    const { fetchCsrfToken } = useLogin({
-        setCsrfToken,
-        setLoginResult,
-    });
     return (
         <div className="form-row">
-            <button
-                type="button"
-                className="button secondary"
-                onClick={fetchCsrfToken}
+            <Button
+                variant="secondary"
+                onClick={handleFetchToken}
+                loading={loading}
             >
                 CSRFトークン取得
-            </button>
+            </Button>
             <span className="token-box">{csrfToken || "なし"}</span>
         </div>
     );

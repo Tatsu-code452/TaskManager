@@ -1,5 +1,5 @@
 import React from "react";
-import { Entity, DataItem } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/const";
 import { useDataCreateForm } from "../../hooks/crud/useDataCreateForm";
 import { useEffectsSuccess } from "../../hooks/useEffectsSuccess";
 import { useRefreshList } from "../../hooks/crud/useRefreshList";

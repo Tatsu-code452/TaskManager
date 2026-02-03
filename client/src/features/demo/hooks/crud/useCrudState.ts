@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Entity, DataItem } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/const";
 
 // CRUD操作用のカスタムフック
 export const useCrudState = () => {

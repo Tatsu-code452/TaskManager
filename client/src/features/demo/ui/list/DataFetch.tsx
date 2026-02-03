@@ -1,7 +1,7 @@
 import React from "react";
 import { useDataFetch } from "../../hooks/crud/useDataFetch";
 import { useEntityEffects } from "../../hooks/crud/useEntityEffects";
-import { ENTITIES, Entity, DataItem } from "../../const/demoConst";
+import { ENTITIES, Entity, DataItem } from "../../const/const";
 
 export interface DataFetchProps {
     entity: Entity;

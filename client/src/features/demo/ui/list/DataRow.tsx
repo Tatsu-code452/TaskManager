@@ -1,5 +1,5 @@
 import React from "react";
-import { Entity, DataItem } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/const";
 
 interface DataRowProps {
     item: DataItem;

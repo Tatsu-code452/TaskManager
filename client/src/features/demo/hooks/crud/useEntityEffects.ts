@@ -1,6 +1,6 @@
 import { success as notifySuccess, error as notifyError } from "../../../../utils/notify";
 import { useEntityApi } from "../api/useEntityApi";
-import { Entity, DataItem } from "../../const/demoConst";
+import { Entity, DataItem } from "../../const/const";
 
 export const useEntityEffects = ({
     onItemsUpdated,
