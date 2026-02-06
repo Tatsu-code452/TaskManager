@@ -1,11 +1,11 @@
-import { success, error } from "../../../utils/notify";
+import { error, success } from "../../../utils/notify";
 import { useAsync } from "../../../utils/useAsync";
-import { parsePayload } from "../utils/payload/payload";
-import { defaultPayloadFor } from "../utils/payload/default";
 import { Entity, PayloadOf } from "../const/const";
-import { useDataFetchHandler } from "../DataFetch/useDataFetchHandler";
-import { useDataListHandler } from "../DataList/useDataListHandler";
-import { useDataEditLogic } from "./useDataEditLogic";
+import { useDeleteHandler } from "../hooks/entity/useDeleteHandler";
+import { useEntityActions } from "../hooks/entity/useEntityAction";
+import { useFetchHandler } from "../hooks/entity/useFetchHandler";
+import { defaultPayloadFor } from "../utils/payload/default";
+import { parsePayload } from "../utils/payload/payload";
 
 export const useDataEditHandler = ({
     selectedId,
@@ -26,18 +26,15 @@ export const useDataEditHandler = ({
     payloadJson: string;
     entity: Entity;
 }) => {
-    const { onUpdate } = useDataEditLogic({
-        selectedId,
-        entity,
-    });
-    const { handleFetch } = useDataFetchHandler({
+    const { handleDelete } = useDeleteHandler({
         entity,
         isFetching,
         setSelectedId,
         setItems,
         setIsFetching,
     });
-    const { handleDelete } = useDataListHandler({
+    const { onUpdate } = useEntityActions();
+    const { handleFetch } = useFetchHandler({
         entity,
         isFetching,
         setSelectedId,
@@ -59,7 +56,7 @@ export const useDataEditHandler = ({
         if (isUpdate() === false) {
             return;
         }
-        const res = await executeUpdate(payload);
+        const res = await executeUpdate(entity, selectedId, payload);
         if (res.ok === false) {
             error(res.error);
         } else {

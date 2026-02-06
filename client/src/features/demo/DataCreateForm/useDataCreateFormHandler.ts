@@ -1,11 +1,11 @@
-import { success, error } from "../../../utils/notify";
+import { error, success } from "../../../utils/notify";
 import { useAsync } from "../../../utils/useAsync";
-import { toNumberId } from "../utils/id";
-import { parsePayload } from "../utils/payload/payload";
-import { defaultPayloadFor } from "../utils/payload/default";
 import { Entity, PayloadOf } from "../const/const";
-import { useDataFetchHandler } from "../DataFetch/useDataFetchHandler";
-import { useDataCreateFormLogic } from "./useDataCreateFormLogic";
+import { useEntityActions } from "../hooks/entity/useEntityAction";
+import { useFetchHandler } from "../hooks/entity/useFetchHandler";
+import { toNumberId } from "../utils/id";
+import { defaultPayloadFor } from "../utils/payload/default";
+import { parsePayload } from "../utils/payload/payload";
 
 // データ作成フォーム用カスタムフック
 export const useDataCreateFormHandler = ({
@@ -27,19 +27,19 @@ export const useDataCreateFormHandler = ({
     entity: Entity;
     setItems,
 }) => {
-    const { handleFetch } = useDataFetchHandler({
+    const { handleFetch } = useFetchHandler({
         entity,
         isFetching,
         setSelectedId,
         setItems,
         setIsFetching,
     });
-    const { onCreate } = useDataCreateFormLogic({ entity });
+    const { onCreate } = useEntityActions();
 
     const { execute, loading } = useAsync(onCreate);
 
     const createCommon = async (payload: PayloadOf<Entity>) => {
-        const res = await execute(payload);
+        const res = await execute(entity, payload);
         if (res.ok === false) {
             error(res.error);
         } else {

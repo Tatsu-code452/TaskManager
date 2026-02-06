@@ -1,6 +1,6 @@
-import { useFetch } from "./useFetch";
-import { Entity, DataItem } from "../../const/const";
 import { error } from "../../../../utils/notify";
+import { DataItem, Entity } from "../../const/const";
+import { useEntityActions } from "./useEntityAction";
 
 export const useFetchHandler = ({
     entity,
@@ -16,7 +16,7 @@ export const useFetchHandler = ({
     setIsFetching: (value: boolean) => void;
 }) => {
 
-    const { onFetch } = useFetch();
+    const { onFetch } = useEntityActions();
 
     const handleFetch = async () => {
         if (isFetching) return;
