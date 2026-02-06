@@ -16,12 +16,12 @@ export async function createPhase(data: Partial<Phase>): Promise<Phase> {
   return res.phase;
 }
 
-export async function updatePhase(id: number | string, data: Partial<Phase>): Promise<any> {
-  const res = await request<{ updated: any }>(`/phases/${id}`, { method: "PUT", body: { data } });
+export async function updatePhase(id: number | string, data: Partial<Phase>): Promise<Phase> {
+  const res = await request<{ updated: Phase }>(`/phases/${id}`, { method: "PUT", body: { data } });
   return res.updated;
 }
 
-export async function removePhase(id: number | string): Promise<any> {
-  const res = await request<{ deleted: any }>(`/phases/${id}`, { method: "DELETE" });
+export async function removePhase(id: number | string): Promise<Phase> {
+  const res = await request<{ deleted: Phase }>(`/phases/${id}`, { method: "DELETE" });
   return res.deleted;
 }

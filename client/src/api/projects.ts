@@ -16,12 +16,12 @@ export async function createProject(data: Partial<Project>): Promise<Project> {
   return res.project;
 }
 
-export async function updateProject(id: number | string, data: Partial<Project>): Promise<any> {
-  const res = await request<{ updated: any }>(`/projects/${id}`, { method: "PUT", body: { data } });
+export async function updateProject(id: number | string, data: Partial<Project>): Promise<Project> {
+  const res = await request<{ updated: Project }>(`/projects/${id}`, { method: "PUT", body: { data } });
   return res.updated;
 }
 
-export async function removeProject(id: number | string): Promise<any> {
-  const res = await request<{ deleted: any }>(`/projects/${id}`, { method: "DELETE" });
+export async function removeProject(id: number | string): Promise<Project> {
+  const res = await request<{ deleted: Project }>(`/projects/${id}`, { method: "DELETE" });
   return res.deleted;
 }

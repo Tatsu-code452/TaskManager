@@ -16,12 +16,12 @@ export async function createCategory(data: Partial<Category>): Promise<Category>
   return res.category;
 }
 
-export async function updateCategory(id: number | string, data: Partial<Category>): Promise<any> {
-  const res = await request<{ updated: any }>(`/categories/${id}`, { method: "PUT", body: { data } });
+export async function updateCategory(id: number | string, data: Partial<Category>): Promise<Category> {
+  const res = await request<{ updated: Category }>(`/categories/${id}`, { method: "PUT", body: { data } });
   return res.updated;
 }
 
-export async function removeCategory(id: number | string): Promise<any> {
-  const res = await request<{ deleted: any }>(`/categories/${id}`, { method: "DELETE" });
+export async function removeCategory(id: number | string): Promise<Category> {
+  const res = await request<{ deleted: Category }>(`/categories/${id}`, { method: "DELETE" });
   return res.deleted;
 }

@@ -1,13 +1,23 @@
 import { error as notifyError } from "../utils/notify";
 
-// Vite ではブラウザで `process` が存在しないため `import.meta.env` を使います。
-// 環境変数名は `VITE_API_BASE` として .env に定義してください。
-const API_BASE = (import.meta as any).env.VITE_API_BASE || "http://localhost:3000/api";
+// ==============================
+// API BASE
+// ==============================
+function getApiBase(): string {
+  const env = (import.meta as unknown as { env: Record<string, string> }).env;
+  return env.VITE_API_BASE || "http://localhost:3000/api";
+}
 
+export const API_BASE = getApiBase();
+
+// ==============================
+// ApiError
+// ==============================
 export class ApiError extends Error {
   status: number;
-  response: any;
-  constructor(message: string, status = 0, response: any = null) {
+  response: unknown;
+
+  constructor(message: string, status = 0, response: unknown = null) {
     super(message);
     this.name = "ApiError";
     this.status = status;
@@ -15,37 +25,95 @@ export class ApiError extends Error {
   }
 }
 
+// ==============================
+// Types
+// ==============================
 type RequestOptions = {
   method?: string;
-  body?: any;
+  body?: unknown;
   requireCsrf?: boolean;
-  autoNotifyOnError?: boolean; // if true, call notify.error with message
+  autoNotifyOnError?: boolean;
 };
 
-// CSRFトークンを取得
+type ErrorResponse = {
+  message?: string;
+  error?: string;
+};
+
+function isErrorResponse(x: unknown): x is ErrorResponse {
+  return (
+    typeof x === "object" &&
+    x !== null &&
+    ("message" in x || "error" in x)
+  );
+}
+
+// ==============================
+// CSRF
+// ==============================
 export async function getCsrfToken(): Promise<string | null> {
   const res = await fetch(`${API_BASE}/session`, { credentials: "include" });
   if (!res.ok) return null;
-  const json = await res.json();
-  return json?.csrfToken ?? null;
+
+  const json: unknown = await res.json();
+  if (typeof json === "object" && json !== null && "csrfToken" in json) {
+    return (json as { csrfToken?: string }).csrfToken ?? null;
+  }
+  return null;
 }
 
-// 汎用リクエストヘルパー
-export async function request<T = any>(
-  path: string,
-  { method = "GET", body, requireCsrf = method !== "GET" && method !== "HEAD", autoNotifyOnError = true }: RequestOptions = {}
-): Promise<T> {
+// ==============================
+// Header Builder
+// ==============================
+async function buildHeaders(
+  body: unknown,
+  requireCsrf: boolean
+): Promise<Record<string, string>> {
   const headers: Record<string, string> = {};
-  let csrfToken: string | null = null;
 
   if (body !== undefined) {
     headers["Content-Type"] = "application/json";
   }
 
   if (requireCsrf) {
-    csrfToken = await getCsrfToken();
-    if (csrfToken) headers["X-CSRF-Token"] = csrfToken;
+    const csrf = await getCsrfToken();
+    if (csrf) headers["X-CSRF-Token"] = csrf;
   }
+
+  return headers;
+}
+
+// ==============================
+// Response Parser
+// ==============================
+function parseJsonSafely(text: string, status: number): unknown {
+  try {
+    return text ? JSON.parse(text) : {};
+  } catch {
+    throw new ApiError(`Invalid JSON response: ${text}`, status, text);
+  }
+}
+
+function extractErrorMessage(json: unknown, fallback: string): string {
+  if (isErrorResponse(json)) {
+    return json.message ?? json.error ?? fallback;
+  }
+  return fallback;
+}
+
+// ==============================
+// Main request
+// ==============================
+export async function request<T>(
+  path: string,
+  {
+    method = "GET",
+    body,
+    requireCsrf = method !== "GET" && method !== "HEAD",
+    autoNotifyOnError = true,
+  }: RequestOptions = {}
+): Promise<T> {
+  const headers = await buildHeaders(body, requireCsrf);
 
   const res = await fetch(`${API_BASE}${path}`, {
     method,
@@ -55,17 +123,10 @@ export async function request<T = any>(
   });
 
   const text = await res.text();
-  let json: any = null;
-  try {
-    json = text ? JSON.parse(text) : {};
-  } catch (e) {
-    const err = new ApiError(`Invalid JSON response: ${text}`, res.status, text);
-    if (autoNotifyOnError) notifyError(err.message);
-    throw err;
-  }
+  const json = parseJsonSafely(text, res.status);
 
   if (!res.ok) {
-    const errMsg = json?.message || json?.error || res.statusText || "Request failed";
+    const errMsg = extractErrorMessage(json, res.statusText || "Request failed");
     const err = new ApiError(errMsg, res.status, json);
     if (autoNotifyOnError) notifyError(err.message);
     throw err;
@@ -73,5 +134,3 @@ export async function request<T = any>(
 
   return json as T;
 }
-
-export { API_BASE };

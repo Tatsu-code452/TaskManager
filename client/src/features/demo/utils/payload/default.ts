@@ -70,7 +70,7 @@ const defaultPayloadMap = {
     projects: defaultProjects,
     phases: defaultPhases,
     statuses: defaultStatuses,
-} satisfies Record<Entity, () => any>;
+} satisfies Record<Entity, () => unknown>;
 
 /**
  * Entity ごとのデフォルト Payload を生成

@@ -19,10 +19,10 @@ export const toNumberId = (id: string | number | null | undefined): number | und
  * @param onError エラー時コールバック
  * @returns パース結果またはundefined
  */
-export const parseJsonSafe = <T = any>(str: string, onError?: (msg: string) => void): T | undefined => {
+export const parseJsonSafe = <T>(str: string, onError?: (msg: string) => void): T | undefined => {
     try {
         return JSON.parse(str) as T;
-    } catch (e: any) {
+    } catch (e) {
         if (onError) onError(e?.message ?? String(e));
         return undefined;
     }
@@ -34,7 +34,10 @@ export const parseJsonSafe = <T = any>(str: string, onError?: (msg: string) => v
  * @param v 任意値
  */
 export const isValidId = (v: unknown): boolean => {
-    const n = toNumberId(v as any);
+    if (typeof v !== "string" && typeof v !== "number") {
+        return false;
+    }
+    const n = toNumberId(v);
     return typeof n === "number" && !Number.isNaN(n);
 };
 
@@ -61,10 +64,10 @@ export const parsePayload = <E extends Entity>(
     const base: PayloadOf<E> =
         payloadJson.trim()
             ? (() => {
-                  const parsed = parseJsonSafe<PayloadOf<E>>(payloadJson);
-                  if (!parsed) throw new Error("Invalid JSON payload");
-                  return parsed;
-              })()
+                const parsed = parseJsonSafe<PayloadOf<E>>(payloadJson);
+                if (!parsed) throw new Error("Invalid JSON payload");
+                return parsed;
+            })()
             : defaultPayloadFor(entity);
 
     // ② UI の入力で上書き（共通処理）
@@ -90,7 +93,7 @@ export const defaultPayloadFor = <E extends Entity>(
     id?: number | null,
     name?: string
 ): PayloadOf<E> => {
-    const idNum = toNumberId(id as any);
+    const idNum = toNumberId(id);
 
     switch (entityKey) {
         case "tasks":
@@ -110,7 +113,7 @@ export const defaultPayloadFor = <E extends Entity>(
                 priority: 1,
                 pre_task_id: null,
                 next_task_id: null,
-            } as PayloadOf<E>;
+            } as unknown as PayloadOf<E>;
 
         case "users":
             return {
@@ -120,13 +123,13 @@ export const defaultPayloadFor = <E extends Entity>(
                 role: "user",
                 created_at: "",
                 updated_at: "",
-            } as PayloadOf<E>;
+            } as unknown as PayloadOf<E>;
 
         case "categories":
             return {
                 id: idNum ?? Date.now() % 100000,
                 name: name || `category-${Date.now()}`,
-            } as PayloadOf<E>;
+            } as unknown as PayloadOf<E>;
 
         case "projects":
             return {
@@ -134,21 +137,21 @@ export const defaultPayloadFor = <E extends Entity>(
                 name: name || `project-${Date.now()}`,
                 start_date: new Date().toISOString().slice(0, 10),
                 end_date: new Date().toISOString().slice(0, 10),
-            } as PayloadOf<E>;
+            } as unknown as PayloadOf<E>;
 
         case "phases":
             return {
                 id: idNum ?? Date.now() % 100000,
                 name: name || `phase-${Date.now()}`,
                 sort_no: 0,
-            } as PayloadOf<E>;
+            } as unknown as PayloadOf<E>;
 
         case "statuses":
             return {
                 id: idNum ?? Date.now() % 100000,
                 name: name || `status-${Date.now()}`,
                 color: "#000000",
-            } as PayloadOf<E>;
+            } as unknown as PayloadOf<E>;
 
         default:
             return { id: idNum ?? undefined, name } as PayloadOf<E>;

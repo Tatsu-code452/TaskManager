@@ -1,15 +1,22 @@
 import { request } from "../../../../api";
 
+type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+
+interface ApiOptions {
+    id?: number;
+    payload?: unknown;
+}
+
+interface RequestOptions {
+    method: HttpMethod;
+    body?: unknown;
+}
+
+const buildUrl = (entity: string, id?: number): string =>
+    id != null ? `/${entity}/${id}` : `/${entity}`;
+
 // HTTPリクエスト用カスタムフック
 export const useApi = () => {
-    /**
-     * URLを生成
-     * @param entity エンティティ名
-     * @param id オプションID
-     */
-    const buildUrl = (entity: string, id?: number): string =>
-        id != null ? `/${entity}/${id}` : `/${entity}`;
-
     /**
      * 汎用APIリクエスト
      * @param entity エンティティ名
@@ -18,11 +25,11 @@ export const useApi = () => {
      */
     function apiRequest<T>(
         entity: string,
-        method: "GET" | "POST" | "PUT" | "DELETE",
-        options?: { id?: number; payload?: unknown }
+        method: HttpMethod,
+        options?: ApiOptions,
     ) {
         const url = buildUrl(entity, options?.id);
-        const reqOptions: { method: string; body?: unknown } = { method };
+        const reqOptions: RequestOptions = { method };
 
         if (options?.payload !== undefined) {
             reqOptions.body = { data: options.payload };

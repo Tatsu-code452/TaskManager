@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 // API結果、通信中フラグ用のカスタムフック
 export const useApiState = () => {
@@ -13,12 +13,13 @@ export const useApiState = () => {
 
     // TODO 以下は変更予定
     const [apiResult, setApiResult] = useState<string | null>(null);
-    const isFetching = useRef(false);
+    const [isFetching, setIsFetching] = useState(false);
 
     return {
         apiResult,
         setApiResult,
         isFetching,
+        setIsFetching,
         data,
         setData,
         error,
