@@ -1,27 +1,10 @@
 import React from "react";
-import { useDataFetchHandler } from "./useDataFetchHandler";
 import { ENTITIES, Entity } from "../const/const";
 import { DataFetchProps } from "./types";
 
 // テーブルメンテナンスコンポーネント
 const DataFetch = (props: DataFetchProps) => {
-    const {
-        entity,
-        setEntity,
-        setItems,
-        setSelectedId,
-        setPayloadJson,
-        isFetching,
-        setIsFetching,
-    } = props;
-
-    const { handleFetch } = useDataFetchHandler({
-        entity,
-        isFetching,
-        setSelectedId,
-        setItems,
-        setIsFetching,
-    });
+    const { entity, onChangeEntity, onReset, onFetch } = props;
 
     return (
         <>
@@ -31,10 +14,8 @@ const DataFetch = (props: DataFetchProps) => {
                     className="input"
                     value={entity}
                     onChange={(e) => {
-                        setEntity(e.target.value as Entity);
-                        setItems([]);
-                        setSelectedId(null);
-                        setPayloadJson("");
+                        onChangeEntity(e.target.value as Entity);
+                        onReset();
                     }}
                 >
                     {ENTITIES.map((ent) => (
@@ -46,7 +27,7 @@ const DataFetch = (props: DataFetchProps) => {
                 <button
                     type="button"
                     className="button secondary"
-                    onClick={handleFetch}
+                    onClick={onFetch}
                 >
                     一覧取得
                 </button>

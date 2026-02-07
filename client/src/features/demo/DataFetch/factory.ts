@@ -1,17 +1,12 @@
-import { ApiState } from "../hooks/api/useApiState";
 import { EntityState } from "../hooks/entity/useEntityState";
-import { DataFetchProps } from "./types";
+import { DataFetchHandler, DataFetchProps } from "./types";
 
 export const createDataFetchProps = (
-    api: ApiState,
     crud: EntityState,
+    dataFetchHandler: DataFetchHandler,
 ): DataFetchProps => ({
     entity: crud.entity,
-    setEntity: crud.setEntity,
-    setItems: crud.setItems,
-    setSelectedId: crud.setSelectedId,
-    setPayloadJson: crud.setPayloadJson,
-    setApiResult: api.setApiResult,
-    isFetching: api.isFetching,
-    setIsFetching: api.setIsFetching,
+    onChangeEntity: crud.setEntity,
+    onReset: dataFetchHandler.onReset,
+    onFetch: dataFetchHandler.onFetch,
 });

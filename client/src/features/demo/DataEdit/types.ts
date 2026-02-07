@@ -1,17 +1,11 @@
-import { Result } from "../utils/result";
-import { Entity, DataItem } from "../const/const";
+import { useDataEditHandler } from "./useDataEditHandler";
 
 export interface DataEditProps {
     selectedId: number | null;
-    setSelectedId: React.Dispatch<React.SetStateAction<number | null>>;
-    isFetching: boolean;
-    setIsFetching: (value: boolean) => void;
-    newName: string;
-    payloadJson: string;
-    entity: Entity;
-    setItems: React.Dispatch<React.SetStateAction<DataItem[]>>;
+    loading: boolean;
+    onDelete: (id: number) => void;
+    onUpdate: () => void;
+    onUpdateAuto: () => void;
 }
 
-export type DataEditResponse = string;
-
-export type DataEditResult = Result<DataEditResponse>;
+export type DataEditHandler = ReturnType<typeof useDataEditHandler>;

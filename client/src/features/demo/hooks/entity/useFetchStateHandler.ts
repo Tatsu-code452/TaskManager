@@ -2,18 +2,18 @@ import { error } from "../../../../utils/notify";
 import { DataItem, Entity } from "../../const/const";
 import { useEntityActions } from "./useEntityAction";
 
-export const useFetchHandler = ({
+export const useFetchStateHandler = ({
     entity,
     isFetching,
-    setSelectedId,
-    setItems,
-    setIsFetching,
+    onChangeSelectedId,
+    onChangeItems,
+    onChangeIsFetching,
 }: {
     entity: Entity;
     isFetching: boolean;
-    setItems: (items: DataItem[]) => void;
-    setSelectedId: (id: number | null) => void;
-    setIsFetching: (value: boolean) => void;
+    onChangeItems: (items: DataItem[]) => void;
+    onChangeSelectedId: (id: number | null) => void;
+    onChangeIsFetching: (value: boolean) => void;
 }) => {
 
     const { onFetch } = useEntityActions();
@@ -21,7 +21,7 @@ export const useFetchHandler = ({
     const handleFetch = async () => {
         if (isFetching) return;
 
-        setIsFetching(true);
+        onChangeIsFetching(true);
 
         try {
             const result = await onFetch(entity);
@@ -33,16 +33,16 @@ export const useFetchHandler = ({
 
             switch (result.kind) {
                 case "data":
-                    setItems(result.data);
+                    onChangeItems(result.data);
                     break;
                 case "empty":
-                    setItems([]);
+                    onChangeItems([]);
                     break;
             }
 
-            setSelectedId(null);
+            onChangeSelectedId(null);
         } finally {
-            setIsFetching(false);
+            onChangeIsFetching(false);
         }
     };
 

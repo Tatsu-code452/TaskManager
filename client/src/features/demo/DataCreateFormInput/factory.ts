@@ -6,6 +6,6 @@ export const createDataCreateFormInputProps = (
 ): DataCreateFormInputProps => ({
     newId: crud.newId,
     newName: crud.newName,
-    setNewId: crud.setNewId,
-    setNewName: crud.setNewName,
+    onChangeNewId: crud.setNewId,
+    onChangeNewName: crud.setNewName,
 });

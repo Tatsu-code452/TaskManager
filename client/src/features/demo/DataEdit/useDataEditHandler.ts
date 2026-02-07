@@ -1,46 +1,32 @@
 import { error, success } from "../../../utils/notify";
 import { useAsync } from "../../../utils/useAsync";
 import { Entity, PayloadOf } from "../const/const";
-import { useDeleteHandler } from "../hooks/entity/useDeleteHandler";
+import { useDeleteStateHandler } from "../hooks/entity/useDeleteStateHandler";
 import { useEntityActions } from "../hooks/entity/useEntityAction";
-import { useFetchHandler } from "../hooks/entity/useFetchHandler";
 import { defaultPayloadFor } from "../utils/payload/default";
 import { parsePayload } from "../utils/payload/payload";
 
 export const useDataEditHandler = ({
     selectedId,
-    setSelectedId,
-    isFetching,
-    setIsFetching,
     newName,
     payloadJson,
     entity,
-    setItems,
+    onChangeSelectedId,
+    onRefresh,
 }: {
     selectedId: number | null;
-    setSelectedId: (id: number) => void;
-    isFetching: boolean;
-    setIsFetching: (value: boolean) => void;
-    setItems,
     newName: string;
     payloadJson: string;
     entity: Entity;
+    onChangeSelectedId: (id: number) => void;
+    onRefresh: () => void;
 }) => {
-    const { handleDelete } = useDeleteHandler({
+    const { handleDelete } = useDeleteStateHandler({
         entity,
-        isFetching,
-        setSelectedId,
-        setItems,
-        setIsFetching,
+        onRefresh,
     });
+
     const { onUpdate } = useEntityActions();
-    const { handleFetch } = useFetchHandler({
-        entity,
-        isFetching,
-        setSelectedId,
-        setItems,
-        setIsFetching,
-    });
 
     const isUpdate = () => {
         if (selectedId == null) {
@@ -50,19 +36,19 @@ export const useDataEditHandler = ({
         return true;
     }
 
-    const { execute: executeUpdate, loading: loadingUpdate } = useAsync(onUpdate);
+    const { execute, loading } = useAsync(onUpdate);
     // 更新を行う
     const updateCommon = async (payload: PayloadOf<Entity>) => {
         if (isUpdate() === false) {
             return;
         }
-        const res = await executeUpdate(entity, selectedId, payload);
+        const res = await execute(entity, selectedId, payload);
         if (res.ok === false) {
             error(res.error);
         } else {
             success(`${entity} 更新成功`);
-            setSelectedId(null);
-            await handleFetch();
+            onChangeSelectedId(null);
+            await onRefresh();
         }
     };
 
@@ -86,6 +72,6 @@ export const useDataEditHandler = ({
         handleDelete,
         handleUpdate,
         handleUpdateAuto,
-        loadingUpdate,
+        loading,
     };
 }

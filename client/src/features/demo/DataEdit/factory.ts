@@ -1,17 +1,13 @@
-import { ApiState } from "../hooks/api/useApiState";
 import { EntityState } from "../hooks/entity/useEntityState";
-import { DataEditProps } from "./types";
+import { DataEditHandler, DataEditProps } from "./types";
 
 export const createDataEditProps = (
     crud: EntityState,
-    api: ApiState,
+    dataEditHandler: DataEditHandler
 ): DataEditProps => ({
     selectedId: crud.selectedId,
-    setSelectedId: crud.setSelectedId,
-    isFetching: api.isFetching,
-    setIsFetching: api.setIsFetching,
-    newName: crud.newName,
-    payloadJson: crud.payloadJson,
-    entity: crud.entity,
-    setItems: crud.setItems,
+    loading: dataEditHandler.loading,
+    onDelete: dataEditHandler.handleDelete,
+    onUpdate: dataEditHandler.handleUpdate,
+    onUpdateAuto: dataEditHandler.handleUpdateAuto
 });

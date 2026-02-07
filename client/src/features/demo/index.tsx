@@ -6,18 +6,19 @@ import { useApiState } from "./hooks/api/useApiState";
 import { useAuthState } from "./hooks/auth/useAuthState";
 import { useEntityState } from "./hooks/entity/useEntityState";
 
-import DataCreateForm from "./DataCreateForm";
-import { createDataCreateFormProps } from "./DataCreateForm/factory";
-import DataCreateFormInput from "./DataCreateFormInput";
-import { createDataCreateFormInputProps } from "./DataCreateFormInput/factory";
-import DataCreatePreset from "./DataCreatePreset";
-import { createDataCreatePresetProps } from "./DataCreatePreset/factory";
+import DataCreate from "./DataCreate";
+import { createDataCreateProps } from "./DataCreate/factory";
+import { useDataCreateFormHandler } from "./DataCreateForm/useDataCreateFormHandler";
 import DataEdit from "./DataEdit";
 import { createDataEditProps } from "./DataEdit/factory";
+import { useDataEditHandler } from "./DataEdit/useDataEditHandler";
 import DataFetch from "./DataFetch";
 import { createDataFetchProps } from "./DataFetch/factory";
+import { DataFetchHandler } from "./DataFetch/types";
 import DataList from "./DataList";
 import { createDataListProps } from "./DataList/factory";
+import { useDataListHandler } from "./DataList/useDataListHandler";
+import { useFetchStateHandler } from "./hooks/entity/useFetchStateHandler";
 import Login from "./Login";
 import { createLoginProps } from "./Login/factory";
 import { useLoginHandler } from "./Login/useLoginHandler";
@@ -32,23 +33,21 @@ const SimpleApiDemo: React.FC = () => {
     const api = useApiState();
     const crud = useEntityState();
 
-    const dataCreateChildren = (
-        <>
-            <div className="form-row">
-                <DataCreateFormInput
-                    {...createDataCreateFormInputProps(crud)}
-                />
-            </div>
+    const fetchHandler = useFetchStateHandler({
+        entity: crud.entity,
+        isFetching: api.isFetching,
+        onChangeSelectedId: crud.setSelectedId,
+        onChangeItems: crud.setItems,
+        onChangeIsFetching: api.setIsFetching,
+    });
 
-            <div className="form-row">
-                <DataCreatePreset {...createDataCreatePresetProps(crud)} />
-            </div>
-
-            <div className="form-row">
-                <DataCreateForm {...createDataCreateFormProps(crud, api)} />
-            </div>
-        </>
-    );
+    const dataCreateFormHandler = useDataCreateFormHandler({
+        newId: crud.newId,
+        newName: crud.newName,
+        payloadJson: crud.payloadJson,
+        entity: crud.entity,
+        onRefresh: fetchHandler.handleFetch,
+    });
 
     const tokenHandler = useTokenHandler({
         setCsrfToken: auth.setCsrfToken,
@@ -59,6 +58,32 @@ const SimpleApiDemo: React.FC = () => {
         password: auth.password,
         setLoginResult: auth.setLoginResult,
         onFetchToken: tokenHandler.onFetchToken,
+    });
+
+    const onReset = () => {
+        crud.setItems([]);
+        crud.setSelectedId(null);
+        crud.setPayloadJson("");
+    };
+
+    const dataFetchHandler: DataFetchHandler = {
+        onChangeEntity: crud.setEntity,
+        onReset: onReset,
+        onFetch: fetchHandler.handleFetch,
+    };
+
+    const dataListHandler = useDataListHandler({
+        entity: crud.entity,
+        onRefresh: fetchHandler.handleFetch,
+    });
+
+    const dataEditHandler = useDataEditHandler({
+        selectedId: crud.selectedId,
+        newName: crud.newName,
+        payloadJson: crud.payloadJson,
+        entity: crud.entity,
+        onChangeSelectedId: crud.setSelectedId,
+        onRefresh: fetchHandler.handleFetch,
     });
 
     return (
@@ -72,13 +97,15 @@ const SimpleApiDemo: React.FC = () => {
 
             <h3>汎用 CRUD デモ</h3>
 
-            <DataFetch {...createDataFetchProps(api, crud)} />
+            <DataFetch {...createDataFetchProps(crud, dataFetchHandler)} />
 
-            {dataCreateChildren}
+            <DataCreate
+                {...createDataCreateProps(crud, dataCreateFormHandler)}
+            />
 
-            <DataEdit {...createDataEditProps(crud, api)} />
+            <DataEdit {...createDataEditProps(crud, dataEditHandler)} />
 
-            <DataList {...createDataListProps(crud, api)} />
+            <DataList {...createDataListProps(crud, dataListHandler)} />
 
             <ResponseApi {...createApiResultProps(api)} />
         </div>

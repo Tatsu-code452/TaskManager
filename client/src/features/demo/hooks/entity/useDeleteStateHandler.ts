@@ -1,30 +1,16 @@
 import { error, success } from "../../../../utils/notify";
 import { useAsync } from "../../../../utils/useAsync";
-import { DataItem, Entity } from "../../const/const";
-import { useFetchHandler } from "../../hooks/entity/useFetchHandler";
+import { Entity } from "../../const/const";
 import { useEntityActions } from "./useEntityAction";
 
-export const useDeleteHandler = ({
+export const useDeleteStateHandler = ({
     entity,
-    isFetching,
-    setSelectedId,
-    setItems,
-    setIsFetching,
+    onRefresh,
 }: {
     entity: Entity;
-    isFetching: boolean;
-    setItems: (items: DataItem[]) => void;
-    setSelectedId: (id: number | null) => void;
-    setIsFetching: (value: boolean) => void;
+    onRefresh: () => void;
 }) => {
     const { onDelete } = useEntityActions();
-    const { handleFetch } = useFetchHandler({
-        entity,
-        isFetching,
-        setSelectedId,
-        setItems,
-        setIsFetching,
-    });
 
     const { execute, loading } = useAsync(onDelete);
 
@@ -42,8 +28,7 @@ export const useDeleteHandler = ({
         }
 
         success(`${entity} 削除成功`);
-        setSelectedId(null);
-        await handleFetch();
+        await onRefresh();
     };
 
     return {

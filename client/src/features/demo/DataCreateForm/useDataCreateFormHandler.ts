@@ -2,38 +2,24 @@ import { error, success } from "../../../utils/notify";
 import { useAsync } from "../../../utils/useAsync";
 import { Entity, PayloadOf } from "../const/const";
 import { useEntityActions } from "../hooks/entity/useEntityAction";
-import { useFetchHandler } from "../hooks/entity/useFetchHandler";
 import { toNumberId } from "../utils/id";
 import { defaultPayloadFor } from "../utils/payload/default";
 import { parsePayload } from "../utils/payload/payload";
 
 // データ作成フォーム用カスタムフック
 export const useDataCreateFormHandler = ({
-    setSelectedId,
-    isFetching,
-    setIsFetching,
     newId,
     newName,
     payloadJson,
     entity,
-    setItems,
+    onRefresh,
 }: {
-    setSelectedId: (id: number) => void;
-    isFetching: boolean;
-    setIsFetching: (value: boolean) => void;
     newId: string;
     newName: string;
     payloadJson: string;
     entity: Entity;
-    setItems,
+    onRefresh: () => void;
 }) => {
-    const { handleFetch } = useFetchHandler({
-        entity,
-        isFetching,
-        setSelectedId,
-        setItems,
-        setIsFetching,
-    });
     const { onCreate } = useEntityActions();
 
     const { execute, loading } = useAsync(onCreate);
@@ -44,7 +30,7 @@ export const useDataCreateFormHandler = ({
             error(res.error);
         } else {
             success(`${entity} 作成成功`);
-            await handleFetch();
+            await onRefresh();
         }
     };
 

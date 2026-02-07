@@ -1,25 +1,16 @@
-import { DataItem, Entity } from "../const/const";
-import { useDeleteHandler } from "../hooks/entity/useDeleteHandler";
+import { Entity } from "../const/const";
+import { useDeleteStateHandler } from "../hooks/entity/useDeleteStateHandler";
 
 export const useDataListHandler = ({
     entity,
-    isFetching,
-    setSelectedId,
-    setItems,
-    setIsFetching,
+    onRefresh,
 }: {
     entity: Entity;
-    isFetching: boolean;
-    setItems: (items: DataItem[]) => void;
-    setSelectedId: (id: number | null) => void;
-    setIsFetching: (value: boolean) => void;
+    onRefresh: () => void;
 }) => {
-    const { handleDelete } = useDeleteHandler({
+    const { handleDelete } = useDeleteStateHandler({
         entity,
-        isFetching,
-        setSelectedId,
-        setItems,
-        setIsFetching,
+        onRefresh,
     });
 
     return {

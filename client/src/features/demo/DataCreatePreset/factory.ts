@@ -6,5 +6,5 @@ export const createDataCreatePresetProps = (
 ): DataCreatePresetProps => ({
     entity: crud.entity,
     payloadJson: crud.payloadJson,
-    setPayloadJson: crud.setPayloadJson,
+    onChangePayloadJson: crud.setPayloadJson,
 });

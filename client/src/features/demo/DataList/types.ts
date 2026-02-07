@@ -1,16 +1,12 @@
-import { Result } from "../utils/result";
-import { Entity, DataItem } from "../const/const";
+import { DataItem, Entity } from "../const/const";
+import { useDataListHandler } from "./useDataListHandler";
 
 export interface DataListProps {
     entity: Entity;
     items: DataItem[];
     selectedId: number | null;
-    setItems: React.Dispatch<
-        React.SetStateAction<Array<Record<string, unknown>>>
-    >;
-    setSelectedId: (id: number) => void;
-    isFetching: boolean;
-    setIsFetching: (value: boolean) => void;
+    onSelectedId: (id: number) => void;
+    onDelete: (id: number) => void;
 }
 
 export interface HeaderRowProps {
@@ -25,6 +21,4 @@ export interface DataRowProps {
     onDelete: () => void;
 }
 
-export type DataListResponse = string;
-
-export type DataListResult = Result<DataListResponse>;
+export type DataListHandler = ReturnType<typeof useDataListHandler>;

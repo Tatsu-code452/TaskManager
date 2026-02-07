@@ -5,17 +5,17 @@ import { DataCreatePresetProps } from "./types";
 
 // データ作成プリセットコンポーネント
 const DataCreatePreset = (props: DataCreatePresetProps) => {
-    const { entity, payloadJson, setPayloadJson } = props;
+    const { entity, payloadJson, onChangePayloadJson } = props;
     const [presetIndex, setPresetIndex] = React.useState(0);
     const presets = SAMPLE_PRESETS[entity] || [];
     const loadPreset = () => {
         if (presetIndex === 0) {
-            setPayloadJson("");
+            onChangePayloadJson("");
             return;
         }
         const preset = presets[presetIndex - 1];
         if (preset) {
-            setPayloadJson(JSON.stringify(preset.payload, null, 2));
+            onChangePayloadJson(JSON.stringify(preset.payload, null, 2));
         }
     };
 
@@ -45,7 +45,7 @@ const DataCreatePreset = (props: DataCreatePresetProps) => {
                 <button
                     type="button"
                     onClick={() =>
-                        setPayloadJson(
+                        onChangePayloadJson(
                             JSON.stringify(defaultPayloadFor(entity), null, 2),
                         )
                     }

@@ -1,44 +1,23 @@
 import React from "react";
-import { useDataCreateFormHandler } from "./useDataCreateFormHandler";
 import { DataCreateFormProps } from "./types";
 
 // データ作成フォームコンポーネント
 const DataCreateForm = (props: DataCreateFormProps) => {
-    const {
-        newId,
-        newName,
-        payloadJson,
-        entity,
-        setItems,
-        setSelectedId,
-        isFetching,
-        setIsFetching,
-    } = props;
-
-    const { handleCreate, handleCreateAuto } = useDataCreateFormHandler({
-        setSelectedId,
-        isFetching,
-        setIsFetching,
-        newId,
-        newName,
-        payloadJson,
-        entity,
-        setItems,
-    });
+    const { loading, onCreate, onCreateAuto } = props;
 
     return (
         <>
             <button
                 className="button primary"
-                disabled={isFetching}
-                onClick={handleCreate}
+                disabled={loading}
+                onClick={onCreate}
             >
                 作成
             </button>
             <button
                 className="button secondary"
-                disabled={isFetching}
-                onClick={handleCreateAuto}
+                disabled={loading}
+                onClick={onCreateAuto}
             >
                 自動作成
             </button>

@@ -1,16 +1,14 @@
-import { ApiState } from "../hooks/api/useApiState"
-import { EntityState } from "../hooks/entity/useEntityState"
-import { DataListProps } from "./types";
+import { EntityState } from "../hooks/entity/useEntityState";
+import { DataListHandler, DataListProps } from "./types";
 
 export const createDataListProps = (
     crud: EntityState,
-    api: ApiState
+    dataListHandler: DataListHandler
 ): DataListProps => ({
     entity: crud.entity,
     items: crud.items,
     selectedId: crud.selectedId,
-    setItems: crud.setItems,
-    setSelectedId: crud.setSelectedId,
-    isFetching: api.isFetching,
-    setIsFetching: api.setIsFetching
+    onSelectedId: crud.setSelectedId,
+    onDelete: dataListHandler.handleDelete
 });
+
