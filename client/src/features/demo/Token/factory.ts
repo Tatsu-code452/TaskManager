@@ -1,7 +1,8 @@
 import { AuthState } from "../hooks/auth/useAuthState";
-import { TokenProps } from "./types";
+import { TokenHandler, TokenProps } from "./types";
 
-export const createTokenProps = (auth: AuthState): TokenProps => ({
+export const createTokenProps = (auth: AuthState, tokenHandler: TokenHandler): TokenProps => ({
     csrfToken: auth.csrfToken,
-    setCsrfToken: auth.setCsrfToken,
+    loading: tokenHandler.loading,
+    getCsrfToken: tokenHandler.onFetchToken,
 });

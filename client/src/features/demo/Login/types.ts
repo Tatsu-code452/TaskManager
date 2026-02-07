@@ -1,15 +1,13 @@
-import { Result } from "../utils/result";
+import { useLoginHandler } from "./useLoginHandler";
 
 export interface LoginProps {
     username: string;
     password: string;
     loginResult: string | null;
-    setUsername: (value: string) => void;
-    setPassword: (value: string) => void;
-    setCsrfToken: (value: string) => void;
-    setLoginResult: (value: string | null) => void;
+    loading: boolean
+    onChangeUsername: (value: string) => void;
+    onChangePassword: (value: string) => void;
+    onSubmit: (e: React.FormEvent) => Promise<void>;
 }
 
-export type LoginResponse = string;
-
-export type LoginResult = Result<LoginResponse>;
+export type LoginHandler = ReturnType<typeof useLoginHandler>;

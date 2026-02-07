@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "../../../components/Button";
 import { FormInput } from "../../../components/FormInput";
-import { useLoginHandler } from "./useLoginHandler";
 import { LoginProps } from "./types";
 
 // ログインコンポーネント
@@ -10,27 +9,20 @@ const Login = (props: LoginProps) => {
         username,
         password,
         loginResult,
-        setUsername,
-        setPassword,
-        setCsrfToken,
-        setLoginResult,
+        loading,
+        onChangeUsername,
+        onChangePassword,
+        onSubmit,
     } = props;
 
-    const { handleLogin, loading } = useLoginHandler({
-        username,
-        password,
-        setCsrfToken,
-        setLoginResult,
-    });
-
     return (
-        <form onSubmit={handleLogin}>
+        <form onSubmit={onSubmit}>
             <div className="form-row">
                 <FormInput
                     id="username-input"
                     label="ユーザー名:"
                     value={username}
-                    onChange={setUsername}
+                    onChange={onChangeUsername}
                 />
             </div>
             <div className="form-row">
@@ -39,7 +31,7 @@ const Login = (props: LoginProps) => {
                     label="パスワード:"
                     type="password"
                     value={password}
-                    onChange={setPassword}
+                    onChange={onChangePassword}
                 />
             </div>
             <div className="controls">

@@ -1,22 +1,22 @@
-import { success, error } from "../../../utils/notify";
+import { error, success } from "../../../utils/notify";
 import { useAsync } from "../../../utils/useAsync";
 import { useLoginLogic } from "./useLoginLogic";
 
 export const useLoginHandler = ({
     username,
     password,
-    setCsrfToken,
-    setLoginResult
+    setLoginResult,
+    onFetchToken,
 }: {
     username: string;
     password: string;
-    setCsrfToken: (value: string) => void;
     setLoginResult: (value: string | null) => void;
+    onFetchToken: () => void;
 }) => {
     const { onLogin } = useLoginLogic({
         username,
         password,
-        setCsrfToken,
+        onFetchToken,
     });
     const { execute, loading } = useAsync(onLogin);
 

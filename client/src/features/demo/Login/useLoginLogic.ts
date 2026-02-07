@@ -1,22 +1,19 @@
-import { toErrorMessage } from "../../../utils/notify";
 import { login } from "../../../api/auth";
-import { useTokenHandler } from "../Token/useTokenHandler";
-import { LoginResult } from "./types";
+import { toErrorMessage } from "../../../utils/notify";
+import { Result } from "../utils/result";
 
 export const useLoginLogic = ({
     username,
     password,
-    setCsrfToken,
+    onFetchToken,
 }: {
     username: string;
     password: string;
-    setCsrfToken: (value: string) => void;
+    onFetchToken: () => void;
 }) => {
-    const { onFetchToken } = useTokenHandler({ setCsrfToken });
-
-    const onLogin = async (): Promise<LoginResult> => {
-        await onFetchToken();
+    const onLogin = async (): Promise<Result<string>> => {
         try {
+            await onFetchToken();
             const res = await login(username, password);
             await onFetchToken();
             return { ok: true, kind: "data", data: res } as const

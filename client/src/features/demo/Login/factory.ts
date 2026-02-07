@@ -1,12 +1,12 @@
 import { AuthState } from "../hooks/auth/useAuthState";
-import { LoginProps } from "./types";
+import { LoginHandler, LoginProps } from "./types";
 
-export const createLoginProps = (auth: AuthState): LoginProps => ({
+export const createLoginProps = (auth: AuthState, loginHandler: LoginHandler): LoginProps => ({
     username: auth.username,
     password: auth.password,
     loginResult: auth.loginResult,
-    setUsername: auth.setUsername,
-    setPassword: auth.setPassword,
-    setCsrfToken: auth.setCsrfToken,
-    setLoginResult: auth.setLoginResult,
+    loading: loginHandler.loading,
+    onChangeUsername: auth.setUsername,
+    onChangePassword: auth.setPassword,
+    onSubmit: loginHandler.handleLogin,
 });

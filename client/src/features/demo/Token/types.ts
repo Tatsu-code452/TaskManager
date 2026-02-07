@@ -1,9 +1,13 @@
 import { Result } from "../utils/result";
+import { useTokenHandler } from "./useTokenHandler";
 
 export interface TokenProps {
     csrfToken: string;
-    setCsrfToken: (value: string) => void;
+    loading: boolean;
+    getCsrfToken: () => void;
 }
+
+export type TokenHandler = ReturnType<typeof useTokenHandler>;
 
 export type TokenResponse = {
     token: string

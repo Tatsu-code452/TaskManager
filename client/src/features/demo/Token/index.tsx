@@ -1,18 +1,16 @@
 import React from "react";
 import { Button } from "../../../components/Button";
 import { TokenProps } from "./types";
-import { useTokenHandler } from "./useTokenHandler";
 
 // トークン用コンポーネント
 const Token = (props: TokenProps) => {
-    const { csrfToken, setCsrfToken } = props;
-    const { handleFetchToken, loading } = useTokenHandler({ setCsrfToken });
+    const { csrfToken, loading, getCsrfToken } = props;
 
     return (
         <div className="form-row">
             <Button
                 variant="secondary"
-                onClick={handleFetchToken}
+                onClick={getCsrfToken}
                 loading={loading}
             >
                 CSRFトークン取得
