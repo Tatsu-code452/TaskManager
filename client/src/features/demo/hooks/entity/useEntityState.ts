@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Entity, DataItem } from "../../const/const";
+import { DataItem, Entity } from "../../const/const";
 
 // CRUD操作用のカスタムフック
 export const useEntityState = () => {
@@ -9,6 +9,11 @@ export const useEntityState = () => {
     const [newName, setNewName] = useState("");
     const [payloadJson, setPayloadJson] = useState<string>("");
     const [selectedId, setSelectedId] = useState<number | null>(null);
+    const onReset = () => {
+        setItems([]);
+        setSelectedId(null);
+        setPayloadJson("");
+    };
 
     return {
         entity,
@@ -23,6 +28,7 @@ export const useEntityState = () => {
         setPayloadJson,
         selectedId,
         setSelectedId,
+        onReset,
     };
 };
 
