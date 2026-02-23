@@ -16,7 +16,7 @@ export const useLoginLogic = ({
             await onFetchToken();
             const res = await login(username, password);
             await onFetchToken();
-            return { ok: true, kind: "data", data: res } as const
+            return { ok: true, kind: "data", data: res.message } as const
         } catch (err) {
             return { ok: false, kind: "error", error: toErrorMessage(err) } as const;
         }

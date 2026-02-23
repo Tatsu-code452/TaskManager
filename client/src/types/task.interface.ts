@@ -5,17 +5,17 @@ export default interface Task {
     phase_id: number;
     category_id: number;
     user_id: number;
-    planned_start_date: string;
-    planned_end_date: string;
+    planned_start_date: string | null;
+    planned_end_date: string | null;
     planned_effort: number;
-    actual_start_date: string;
-    actual_end_date: string;
+    actual_start_date: string | null;
+    actual_end_date: string | null;
     actual_effort: number;
     status_id: number;
     progress_rate: number;
     priority: number;
     pre_task_id: number | null;
     next_task_id: number | null;
-    created_at: string;
-    updated_at: string;
+    created_at: string | null;
+    updated_at: string | null;
 }

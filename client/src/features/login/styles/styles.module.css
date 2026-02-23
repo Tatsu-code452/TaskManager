@@ -1,0 +1,45 @@
+/* 画面全体のセンタリング */
+.login-container {
+    min-height: 87vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 20px;
+    background: linear-gradient(135deg, #f5f7fa, #e9ecf3);
+}
+
+/* カード風のボックス */
+.login-box {
+    width: 100%;
+    max-width: 360px;
+    background: #fff;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* タイトル */
+.login-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 24px;
+    color: #333;
+}
+
+/* フォーム内の要素間の余白を統一 */
+.login-box form>*+* {
+    margin-top: 16px;
+}
+
+/* エラー表示 */
+.error {
+    color: #d9534f;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* ボタンを幅いっぱいに */
+.login-box button {
+    width: 100%;
+}

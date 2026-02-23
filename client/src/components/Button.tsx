@@ -1,7 +1,9 @@
+import styles from "./Button.module.css";
+
 interface ButtonProps {
     children: React.ReactNode;
     type?: "button" | "submit";
-    variant?: "primary" | "secondary";
+    variant?: "primary" | "secondary" | "danger";
     loading?: boolean;
     disabled?: boolean;
     onClick?: () => void;
@@ -18,11 +20,17 @@ export const Button = ({
     return (
         <button
             type={type}
-            className={`button ${variant}`}
+            className={`${styles.button} ${styles[variant]}`}
             onClick={onClick}
             disabled={disabled || loading}
         >
-            {loading ? "処理中..." : children}
+            {loading ? (
+                <span className={styles.spinner}>
+                    <span className={styles["spinner-inner"]} />
+                </span>
+            ) : (
+                children
+            )}
         </button>
     );
 };

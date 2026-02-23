@@ -1,0 +1,82 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    min-height: 36px;
+    min-width: 120px;
+    position: relative;
+    transition: background 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.button.primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(11, 92, 255, 0.12);
+}
+
+.button.primary:hover:not(:disabled) {
+    background: #0a53e6; /* #0b5cff を少し濃くした色 */
+}
+
+.button.secondary {
+    background: #f3f7ff;
+    color: var(--primary);
+    border: 1px solid #dbe9ff;
+}
+
+.button.secondary:hover:not(:disabled) {
+    background: #e8f0ff;
+}
+
+.button.danger {
+    background: #ff4d4f;
+    color: #fff;
+}
+
+.button.danger:hover:not(:disabled) {
+    background: #e04445;
+}
+
+/* スピナー外側：中央固定のみ担当 */
+.spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+
+    width: 18px;
+    height: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* スピナー内側：回転のみ担当 */
+.spinner-inner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    box-sizing: border-box;
+    /* ← 楕円防止 */
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -2,8 +2,11 @@ import "./App.css";
 // import { LoginPage } from "./features/auth";
 // import { MenuPage } from "./features/menu";
 import SimpleApiDemo from "./features/demo";
+import { Login } from "./features/login/";
+// import Tasks from "./features/task/";
+import { TaskPage } from "./features/tasks";
 // import TaskDemo from "./features/task/components/TaskDemo";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 function App() {
     return (
@@ -11,6 +14,9 @@ function App() {
             <Routes>
                 {/* <Route path="/task-demo" element={<TaskDemo />} /> */}
                 <Route path="/simple-api-demo" element={<SimpleApiDemo />} />
+                <Route path="/" element={<Login />} />
+                <Route path="/tasks" element={<TaskPage />} />
+                {/* <Route path="/tasks" element={<Tasks />} /> */}
             </Routes>
         </Router>
     );
