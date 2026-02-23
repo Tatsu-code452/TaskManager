@@ -1,6 +1,6 @@
 import request from "supertest";
-import app from "../../src/server";
 import pool from "../../src/dao/pool";
+import app from "../../src/server";
 
 const userId = 100;
 const testUser = { id: 100, password: "testpass", name: "テストユーザ", role: "1" };

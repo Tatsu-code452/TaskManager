@@ -1,6 +1,6 @@
 import express from "express";
-import taskDao from "../dao/task.dao";
 import * as alarm from "../common/alarm";
+import taskDao from "../dao/task.dao";
 
 const router = express.Router();
 
@@ -32,8 +32,8 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
     try {
         const { data } = req.body;
-        if (!data || !data.id) {
-            return alarm.createBadRequestResponse(res, "必須フィールドが不足しています");
+        if (!data || data.id == null) {
+            return alarm.createBadRequestResponse(res, "必須フィールドが不足しています:ID");
         }
         // トランザクションで登録
         const ret = await taskDao.transaction(async (client) => {

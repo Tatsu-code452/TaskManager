@@ -1,6 +1,6 @@
 
-import pool, { PoolClient } from "./pool";
 import env from "../common/env";
+import pool, { PoolClient } from "./pool";
 
 const DB_SCHEMA = env.DB_SCHEMA;
 
@@ -60,8 +60,8 @@ export default class GenericDao<T extends Record<string, any>> {
         const now = new Date().toISOString();
         const insertData = {
             ...(data as Record<string, any>),
-            created_at: (data as any).created_at ?? now,
-            updated_at: (data as any).updated_at ?? now,
+            created_at: now,
+            updated_at: now,
         } as Record<string, any>;
 
         const keys = Object.keys(insertData);
@@ -84,9 +84,19 @@ export default class GenericDao<T extends Record<string, any>> {
         const params = entries.map(([, v]) => v);
 
         // updated_at を自動更新
-        setClauses.push(`"updated_at" = $${params.length + 1}`);
-        params.push(new Date().toISOString());
+        const updatedIdx = setClauses.findIndex(c => c.startsWith(`"updated_at"`));
 
+        if (updatedIdx >= 0) {
+            // "updated_at" = $3 の「3」を取り出す
+            const match = setClauses[updatedIdx].match(/\$(\d+)/);
+            if (match) {
+                const paramIndex = Number(match[1]) - 1; // params の index
+                params[paramIndex] = new Date().toISOString();
+            }
+        } else {
+            setClauses.push(`"updated_at" = $${params.length + 1}`);
+            params.push(new Date().toISOString());
+        }
         // id パラメータ
         params.push(id);
 

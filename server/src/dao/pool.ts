@@ -1,6 +1,14 @@
 import pkg from "pg";
 import env from "../common/env";
 
+// date型(タイムゾーンなし日付)をpgがUTC 00:00と変換する仕様
+// DB(date) → pg が UTC Date に変換 → クライアントで JSTに自動的に変わる(9時間マイナス) → 送信時に UTC → DB(date)
+// 上記のループにより、徐々にデータの時間が戻っていく
+//
+// date型(OID指定)をそのまま返却して対策
+// DB(date) → "YYYY-MM-DD" → クライアント → "YYYY-MM-DDT00:00:00Z" → DB(date)
+pkg.types.setTypeParser(1082, (value) => value);
+
 const { Pool } = pkg;
 
 // pg.Pool に監視用プロパティを追加した型を定義
