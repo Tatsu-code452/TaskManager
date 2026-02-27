@@ -1,4 +1,16 @@
 /**
+ * タスク一覧取得 API のパラメータ
+ * - 表示範囲（from〜to）をクエリとして渡す
+ */
+export interface TaskApiRequest {
+    /** 表示開始日（YYYY-MM-DD） */
+    from: string;
+
+    /** 表示終了日（YYYY-MM-DD） */
+    to: string;
+}
+
+/**
  * タスクAPIレスポンス
  * - DB の TaskRow + 計画セル + 実績セル をまとめた構造
  * - 画面側で TaskModel に変換し、自動算出を行う
