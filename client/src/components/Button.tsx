@@ -6,7 +6,7 @@ interface ButtonProps {
     variant?: "primary" | "secondary" | "danger";
     loading?: boolean;
     disabled?: boolean;
-    onClick?: () => void;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export const Button = ({

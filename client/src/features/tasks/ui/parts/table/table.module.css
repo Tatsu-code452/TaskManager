@@ -1,0 +1,112 @@
+/* ================================
+   基本設定（CSS変数）
+================================ */
+:root {
+  --color-bg: #fff;
+  --color-border: #ddd;
+  --color-border-light: #eee;
+  --color-header-bg: #f5f5f5;
+
+  --priority-1: #ffdddd;
+  --priority-2: #ffe7cc;
+  --priority-3: #fff7cc;
+  --priority-4: #e0f0ff;
+  --priority-5: #f2f2f2;
+
+  --cell-padding: 8px;
+  --cell-font-size: 14px;
+
+  --action-btn-size: 60px;
+  --action-btn-font: 14px;
+}
+
+/* ================================
+   テーブル本体
+================================ */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-bg);
+  font-size: var(--cell-font-size);
+}
+
+/* 共通セルスタイル */
+.table th,
+.table td {
+  padding: var(--cell-padding);
+  border-bottom: 1px solid var(--color-border-light);
+  vertical-align: middle;
+}
+
+/* ヘッダー */
+.table th {
+  background: var(--color-header-bg);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  font-weight: bold;
+}
+
+.table tr:hover td {
+  background: #f9f9f9;
+}
+
+.table td:last-child {
+  text-align: right;
+}
+
+.table td button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  width: var(--action-btn-size);
+  min-width: var(--action-btn-size);
+  height: 20px;
+  padding: 0;
+
+  font-size: var(--action-btn-font);
+  line-height: 1;
+
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.table td button:hover {
+  background: var(--color-border-light);
+}
+
+.rowActions {
+  display: flex;
+  gap: 4px;
+}
+
+.editRow input {
+  width: 100%;
+  padding: 4px;
+  font-size: var(--cell-font-size);
+}
+
+/* ================================
+   優先度（セル単位で色付け）
+================================ */
+.table__row--priority-1 td {
+  background: var(--priority-1);
+}
+
+.table__row--priority-2 td {
+  background: var(--priority-2);
+}
+
+.table__row--priority-3 td {
+  background: var(--priority-3);
+}
+
+.table__row--priority-4 td {
+  background: var(--priority-4);
+}
+
+.table__row--priority-5 td {
+  background: var(--priority-5);
+}

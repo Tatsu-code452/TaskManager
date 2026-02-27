@@ -1,0 +1,79 @@
+/* ================================
+   基本設定（CSS変数）
+================================ */
+:root {
+    --border-color: #ddd;
+    --border-light: #eee;
+
+    --btn-size: 60px;
+    --btn-font: 14px;
+}
+
+/* パネル共通 */
+.detailPanel,
+.detailPanelEmpty {
+    width: 300px;
+    border-left: 1px solid #ddd;
+    padding-left: 16px;
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+    height: 100%;
+}
+
+/* 空表示だけ色を変える */
+.detailPanelEmpty {
+    color: #888;
+    display: flex;
+    align-items: center;
+}
+
+/* 見出し */
+.detailHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+/* 項目 */
+.detailItem {
+    margin-bottom: 12px;
+}
+
+.detailItem label {
+    font-size: 12px;
+    color: #666;
+    display: block;
+}
+
+.detailItem span,
+.detailItem input {
+    font-size: 14px;
+}
+
+
+
+.detailPanel button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    width: var(--btn-size);
+    min-width: var(--btn-size);
+    height: 20px;
+    padding: 0;
+
+    font-size: var(--btn-font);
+    line-height: 1;
+
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+
+    margin: 5px;
+}
+
+.detailPanel button:hover {
+    background: var(--border-light);
+}

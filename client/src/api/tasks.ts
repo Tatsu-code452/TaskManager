@@ -15,6 +15,10 @@ export async function createTask(data: Partial<Task>): Promise<Task> {
   const res = await request<{ task: Task }>("/tasks", { method: "POST", body: { data } });
   return res.task;
 }
+export async function createTasks(data: Partial<Task>[]): Promise<Task[]> {
+  const res = await request<{ tasks: Task[] }>("/tasks", { method: "POST", body: { data } });
+  return res.tasks;
+}
 
 export async function updateTask(id: number | string, data: Partial<Task>): Promise<Task> {
   const res = await request<{ updated: Task }>(`/tasks/${id}`, { method: "PUT", body: { data } });

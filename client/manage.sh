@@ -89,6 +89,8 @@ while true; do
   echo "6: プレビュー起動 (start)"
   echo "7: 型チェック (type-check)"
   echo "8: Lint (lint)"
+  echo "10: テスト (vitest)"
+  echo "11: テストカバレッジ取得 (vitest)"
   echo "q: 終了"
   read -p "番号を選択してください: " choice
 
@@ -101,6 +103,8 @@ while true; do
     6) npm run start ;;
     7) npm run type-check ;;
     8) npm run lint ;;
+    10) npm test ;;
+    11) npm run clean:test:coverage ;;
     q) echo "終了します"; exit 0 ;;
     *) echo "無効な選択です" ;;
   esac
