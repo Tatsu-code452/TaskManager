@@ -1,7 +1,8 @@
-import { TaskApiResponse } from "../../types/api";
+import { TaskApiRequest, TaskApiResponse } from "../../types/api";
 import { mockActualCells, mockPlanCells, mockTaskRows } from "./mockDb";
 
-export const mockFetchTasks = (from: string, to: string): TaskApiResponse[] => {
+export const fetchTasks = (params: TaskApiRequest): TaskApiResponse[] => {
+    const { from, to } = params;
     return mockTaskRows.map(task => {
         const planCells = mockPlanCells
             .filter(c => c.task_id === task.id && c.date >= from && c.date <= to)
