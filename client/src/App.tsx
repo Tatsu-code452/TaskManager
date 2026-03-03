@@ -4,6 +4,7 @@ import "./App.css";
 import SimpleApiDemo from "./features/demo";
 import { Login } from "./features/login/";
 // import Tasks from "./features/task/";
+import { ProgressPage } from "./features/task-manage";
 import { TaskPage } from "./features/tasks";
 // import TaskDemo from "./features/task/components/TaskDemo";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
@@ -16,6 +17,7 @@ function App() {
                 <Route path="/simple-api-demo" element={<SimpleApiDemo />} />
                 <Route path="/" element={<Login />} />
                 <Route path="/tasks" element={<TaskPage />} />
+                <Route path="/task-manage" element={<ProgressPage />} />
                 {/* <Route path="/tasks" element={<Tasks />} /> */}
             </Routes>
         </Router>

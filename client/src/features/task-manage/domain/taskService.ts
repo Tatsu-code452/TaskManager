@@ -1,15 +1,14 @@
-import { fetchTasks as mockFetchTasks } from "./mock/mockApi";
-import { fetchTasks } from "./taskApi";
+import { taskApi as mockTaskApi } from "./mock/mockApi";
+import { taskApi } from "./taskApi";
 
 const isTest = true;
-const _fetchTasks = isTest ? mockFetchTasks : fetchTasks;
+const _taskApi = (isTest ? mockTaskApi : taskApi);
 
 export const taskService = () => {
+    const api = _taskApi();
     return {
-        fetchTasks: (params) => {
-            const res = _fetchTasks(params);
-            console.log(res);
-            return res;
-        },
+        fetchTasks: api.fetchTasks,
+        updateTask: api.updateTask,
+        updateCell: api.updateCell,
     }
 }

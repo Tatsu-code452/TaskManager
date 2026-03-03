@@ -1,0 +1,11 @@
+.task_manage_wrapper {
+    padding: 5px;
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+}
+
+.input_area_wrapper {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 16px;
+}

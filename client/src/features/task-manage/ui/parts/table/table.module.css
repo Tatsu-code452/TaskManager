@@ -1,0 +1,36 @@
+.table {
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.table th {
+    border: 1px solid #ccc;
+    padding: 4px;
+}
+
+.table td {
+    border: 1px solid #ccc;
+    padding: 4px;
+    white-space: nowrap;
+}
+
+.start_date {
+    background-color: #f7f7f7;
+}
+
+.target_date {
+    background-color: rgba(255, 230, 200, 0.8);
+}
+
+.matrix_cell {
+    border: 1px solid #ccc;
+    padding: 2px;
+    text-align: center;
+    min-width: 40px;
+    cursor: default;
+}
+
+.input_cell {
+    width: "100%";
+    box-sizing: "border-box";
+}

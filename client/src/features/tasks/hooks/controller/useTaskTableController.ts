@@ -17,7 +17,11 @@ export const useTaskTableController = () => {
         openCsv, closeCsv, toggleCsv,
     } = useTaskEditStates();
 
-    const taskService = useTaskService();
+    const { listTasks,
+        createTask,
+        updateTask,
+        deleteTask,
+    } = useTaskService();
 
     const isEditing = (id: number) => {
         return mode.type === "edit" && mode.id === id;
@@ -28,23 +32,23 @@ export const useTaskTableController = () => {
     useEffect(() => {
         if (!isFetching.current) {
             isFetching.current = true;
-            taskService.listTasks().then(res => {
+            listTasks().then(res => {
                 if (res.success && res.type === "list") {
                     initTasks(res.tasks);
                 }
             });
         }
-    }, []);
+    }, [initTasks, listTasks]);
 
     // 登録、更新処理
     const save = async (task: Partial<Task>) => {
         if (mode.type === "new") {
-            const res = await taskService.createTask(task);
+            const res = await createTask(task);
             if (res.success && res.type === "create") {
                 addTask(res.task)
             }
         } else if (mode.type === "edit") {
-            const res = await taskService.updateTask(mode.id, task);
+            const res = await updateTask(mode.id, task);
             if (res.success && res.type === "update") {
                 replaceTask(res.task);
             }
@@ -54,7 +58,7 @@ export const useTaskTableController = () => {
 
     // 削除処理
     const remove = async (id: number) => {
-        const res = await taskService.deleteTask(id);
+        const res = await deleteTask(id);
         if (res.success && res.type === "delete") {
             removeTask(id);
             setView();
