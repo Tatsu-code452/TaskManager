@@ -29,11 +29,19 @@
             "console": "integratedTerminal"
         },
         {
-            "type": "chrome",
+            "type": "msedge",
             "request": "launch",
             "name": "Vite Attach",
             "url": "http://localhost:3001",
             "webRoot": "${workspaceFolder}/client/src"
+        },
+        {
+            "name": "Tauri React Debug",
+            "type": "msedge",
+            "request": "launch",
+            "url": "http://localhost:3001",
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMaps": true
         }
     ],
     "compounds": [

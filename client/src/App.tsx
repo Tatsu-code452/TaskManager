@@ -15,9 +15,9 @@ function App() {
             <Routes>
                 {/* <Route path="/task-demo" element={<TaskDemo />} /> */}
                 <Route path="/simple-api-demo" element={<SimpleApiDemo />} />
-                <Route path="/" element={<Login />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="/tasks" element={<TaskPage />} />
-                <Route path="/task-manage" element={<ProgressPage />} />
+                <Route path="/" element={<ProgressPage />} />
                 {/* <Route path="/tasks" element={<Tasks />} /> */}
             </Routes>
         </Router>

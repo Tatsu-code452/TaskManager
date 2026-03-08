@@ -25,11 +25,17 @@ export interface TaskApiResponse {
     /** タスク名 */
     name: string;
 
+    /** 日付（YYYY-MM-DD） */
+    planned_start: string;
+
+    /** 日付（YYYY-MM-DD） */
+    planned_end: string;
+
     /** 実績進捗率（手入力） */
     actual_progress: number;
 
     /** 計画セル一覧（表示範囲内のみ） */
-    planCells: {
+    plan_cells: {
         /** 日付（YYYY-MM-DD） */
         date: string;
 
@@ -38,7 +44,7 @@ export interface TaskApiResponse {
     }[];
 
     /** 実績セル一覧（表示範囲内のみ） */
-    actualCells: {
+    actual_cells: {
         /** 日付（YYYY-MM-DD） */
         date: string;
 
@@ -75,6 +81,29 @@ export interface UpdateTaskRequest {
     /** タスク名 */
     name: string;
 
+    /** 日付（YYYY-MM-DD） */
+    planned_start?: string;
+
+    /** 日付（YYYY-MM-DD） */
+    planned_end?: string;
+
     /** 実績進捗率（手入力） */
-    actual_progress: number;
+    actual_progress?: number;
+}
+
+export interface CreateTaskRequest {
+    /** フェーズ名 */
+    phase: string;
+
+    /** タスク名 */
+    name: string;
+
+    /** 日付（YYYY-MM-DD） */
+    planned_start: string;
+
+    /** 日付（YYYY-MM-DD） */
+    planned_end: string;
+
+    /** 実績進捗率（手入力） */
+    actual_progress?: number;
 }

@@ -33,12 +33,9 @@ export const recalcPlan = (plan: TaskPlan, baseDate: string): TaskPlan => {
     const totalUntilBase = sum(cellsUntilBase.map(c => c.value));
 
     const progress = total === 0 ? 0 : Math.round((totalUntilBase / total) * 100);
-    const { start, end } = calcStartEnd(plan.cells);
 
     return {
         ...plan,
-        start: start,
-        end: end,
         totalHours: total,
         progress: progress,
     };

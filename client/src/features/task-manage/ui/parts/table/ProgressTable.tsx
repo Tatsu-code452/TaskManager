@@ -24,7 +24,7 @@ export const ProgressTable = ({
     cancelEdit,
 }: ProgressTableProps) => {
     return (
-        <table className={styles.table}>
+        <table className={styles.scroll_table}>
             <TableHeader dates={dates} baseDate={pageState.baseDate} />
             <TableBody
                 dates={dates}

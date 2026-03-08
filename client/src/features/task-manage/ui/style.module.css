@@ -1,11 +1,25 @@
+:root {
+    --space-xs: 0.25rem; /* 約4px */
+    --space-sm: 0.5rem; /* 約8px */
+    --space-md: 1rem; /* 約16px */
+    --font-base: 0.875rem; /* 14px 相当 */
+}
+
 .task_manage_wrapper {
-    padding: 5px;
+    padding: var(--space-sm);
     font-family: system-ui, sans-serif;
-    font-size: 14px;
+    font-size: var(--font-base);
 }
 
 .input_area_wrapper {
-    margin-bottom: 16px;
+    margin-bottom: var(--space-md);
     display: flex;
-    gap: 16px;
+    gap: var(--space-md);
+}
+
+.table_wrapper {
+    width: 95vw;
+    height: 80vh;
+    overflow: auto;
+    box-sizing: border-box;
 }

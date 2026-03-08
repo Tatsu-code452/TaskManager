@@ -1,4 +1,5 @@
 import { TaskApiRequest, TaskApiResponse, UpdateTaskRequest } from "../types/api";
+import { TaskRow } from "../types/db";
 import { updateCell } from "./taskCellApi";
 
 export const taskApi = () => {
@@ -46,7 +47,11 @@ export const taskApi = () => {
         if (!res.ok) throw new Error("Failed to update task");
     };
 
+    const createTasks = async (tasks: TaskRow[]): Promise<void> => {
+        console.log(tasks);
+    }
+
     return {
-        fetchTasks, updateTask, updateCell
+        fetchTasks, createTasks, updateTask, updateCell
     }
 }

@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
+import { AllocationResult } from "../../domain/allocate";
+import { TaskMatrixValue } from "../../types/model";
 import { EditTarget } from "../../types/types";
 import { useCellKeyboardNavigation } from "../handler/useCellKeyboardNavigation";
+import { useTaskAllocate } from "../handler/useTaskAllocate";
 import { useTaskCalc } from "../handler/useTaskCalc";
 import { useTaskService } from "../handler/useTaskService";
 import { useProgressStates } from "../state/useProgressStates";
@@ -11,9 +14,10 @@ export const useProgressPageController = () => {
         dispatch,
         setEditTarget,
     } = useProgressStates();
-    const { fetchTasks, updateTask, updateCell } = useTaskService();
+    const { fetchTasks, createTasks, updateTask, updateCell } = useTaskService();
     const { calcDates } = useTaskCalc();
     const { isStartEdit, getNextCell } = useCellKeyboardNavigation();
+    const { allocatePlannedHours } = useTaskAllocate();
 
     // 初期表示(StrictMode回避)
     const isFetching = useRef(false);
@@ -98,11 +102,81 @@ export const useProgressPageController = () => {
         }
     };
 
+    const handleAllocate = () => {
+        pageState.tasks.forEach(task => {
+            // [date: string]: number;
+            const allocated: AllocationResult = allocatePlannedHours(
+                task.plan.start,
+                task.plan.end,
+                task.plan.totalHours,
+            );
+            const newCells: TaskMatrixValue[] = [];
+            Object.entries(allocated).map(([date, value]) => {
+                newCells.push({ date, value });
+            })
+            task.plan.cells = newCells;
+        });
+        dispatch.setTasks(pageState.tasks);
+    }
+
+    const handleCreateTasks = async (value: string) => {
+        const lines = value
+            .split("\n")
+            .map(line => line.trim())
+            .filter(Boolean);
+
+        const tasks = [];
+
+        for (const [index, line] of lines.entries()) {
+            const values = line.split(",").map(v => v.trim());
+
+            // --- カラム数チェック ---
+            if (values.length !== 5) {
+                throw new Error(
+                    `行 ${index + 1} のカラム数が不正です（${values.length}）。5 カラム必要です。\n内容: ${line}`
+                );
+            }
+
+            const [phase, name, planned_start, planned_end, progress] = values;
+
+            // --- 日付バリデーション ---
+            if (!isValidDate(planned_start)) {
+                throw new Error(`行 ${index + 1}: planned_start が不正な日付です → ${planned_start}`);
+            }
+            if (!isValidDate(planned_end)) {
+                throw new Error(`行 ${index + 1}: planned_end が不正な日付です → ${planned_end}`);
+            }
+
+            // --- 数値バリデーション ---
+            const actual_progress = Number(progress);
+            if (Number.isNaN(actual_progress)) {
+                throw new Error(`行 ${index + 1}: actual_progress が数値ではありません → ${progress}`);
+            }
+
+            tasks.push({
+                phase,
+                name,
+                planned_start,
+                planned_end,
+                actual_progress,
+            });
+        }
+
+        await createTasks(tasks);
+    };
+
+    // --- 日付バリデーション関数 ---
+    const isValidDate = (str: string) => {
+        const d = new Date(str);
+        return !Number.isNaN(d.getTime());
+    };
+
     return {
         pageState, editTarget,
         dispatch,
         dates,
         startEdit, cancelEdit,
         handleChangeCell, handleKeyDownCell,
+        handleAllocate, handleCreateTasks,
     }
 }

@@ -13,6 +13,12 @@ export interface TaskRow {
     /** タスク名（例：画面イメージ作成） */
     name: string;
 
+    /** 日付（YYYY-MM-DD） */
+    planned_start: string;
+
+    /** 日付（YYYY-MM-DD） */
+    planned_end: string;
+
     /** 実績進捗率（NUMERIC → number）。手入力で DB に保存される唯一の進捗値 */
     actual_progress: number;
 

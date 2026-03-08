@@ -10,11 +10,20 @@ export const useProgressPageState = () => {
     * 基準日の月に対応する、開始・終了日を返す
     */
     const getMonthRange = useCallback((baseDate: string): DisplayRange => {
-        const firstDate = baseDate.slice(0, 8) + "01";
+        const baseDay = new Date(baseDate);
+        baseDay.setMonth(baseDay.getMonth() - 1);
+        baseDay.setDate(1);
+        const firstDate = formatDate(baseDay);
         const firstDay = new Date(firstDate);
-        firstDay.setMonth(firstDay.getMonth() + 1);
+        firstDay.setMonth(firstDay.getMonth() + 3);
         firstDay.setDate(0);
         const lastDate = formatDate(firstDay);
+
+        // const firstDate = baseDate.slice(0, 8) + "01";
+        // const firstDay = new Date(firstDate);
+        // firstDay.setMonth(firstDay.getMonth() + 1);
+        // firstDay.setDate(0);
+        // const lastDate = formatDate(firstDay);
         return { from: firstDate, to: lastDate };
     }, []);
 

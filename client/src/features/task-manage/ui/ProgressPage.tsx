@@ -1,4 +1,7 @@
+import { useState } from "react";
+import { Button } from "../../../components/Button";
 import { useProgressPageController } from "../hooks/controller/useProgressPageController";
+import CsvImportDialog from "./parts/CsvImportDialog";
 import InputDateArea from "./parts/InputDateArea";
 import { ProgressTable } from "./parts/table/ProgressTable";
 import styles from "./style.module.css";
@@ -12,7 +15,10 @@ export const ProgressPage = () => {
         cancelEdit,
         handleChangeCell,
         handleKeyDownCell,
+        handleAllocate,
+        handleCreateTasks,
     } = useProgressPageController();
+    const [open, setOpen] = useState(false);
 
     return (
         <div className={styles.task_manage_wrapper}>
@@ -27,11 +33,19 @@ export const ProgressPage = () => {
                     setFrom={dispatch.setFrom}
                     setTo={dispatch.setTo}
                     setBaseDate={dispatch.setBaseDate}
+                    onClick={handleAllocate}
+                />
+                <Button onClick={() => setOpen(true)}>CSV読み込み</Button>
+
+                <CsvImportDialog
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    onSubmit={handleCreateTasks}
                 />
             </div>
 
             {/* タスク + 日付マトリックス */}
-            <div style={{ overflowX: "auto" }}>
+            <div className={styles.table_wrapper}>
                 <ProgressTable
                     dates={dates}
                     pageState={pageState}

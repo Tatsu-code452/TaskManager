@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "../../../../components/Button";
 import styles from "../style.module.css";
 import InputDate from "./InputDate";
 
@@ -9,6 +10,7 @@ interface InputDateAreaProps {
     setFrom: (value: string) => void;
     setTo: (value: string) => void;
     setBaseDate: (value: string) => void;
+    onClick: () => void;
 }
 
 export const InputDateArea = ({
@@ -18,6 +20,7 @@ export const InputDateArea = ({
     setFrom,
     setTo,
     setBaseDate,
+    onClick,
 }: InputDateAreaProps) => {
     return (
         <div className={styles.input_area_wrapper}>
@@ -27,6 +30,12 @@ export const InputDateArea = ({
                 label="基準日:"
                 value={baseDate}
                 onChange={setBaseDate}
+            />
+            <Button
+                children="計画割付"
+                type="button"
+                variant="primary"
+                onClick={onClick}
             />
         </div>
     );
