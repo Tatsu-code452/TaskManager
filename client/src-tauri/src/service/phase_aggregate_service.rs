@@ -3,8 +3,8 @@ use crate::db::database::Database;
 pub struct PhaseAggregateService;
 
 impl PhaseAggregateService {
-    pub fn calculate_phase_progress(db: &Database, phase_id: &str) -> f64 {
-        let tasks = db.read_all_tasks_by_phase(phase_id);
+    pub fn calculate_phase_progress(db: &mut Database, phase_id: &str) -> f64 {
+        let tasks = db.find_task_by_phase(phase_id);
 
         if tasks.is_empty() {
             return 0.0;

@@ -1,0 +1,61 @@
+{{#each testImports}}
+{{{this}}}
+{{/each}}
+import { renderHook } from "@testing-library/react";
+import { {{controllerName}} } from "./{{fileName}}";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+
+describe("Controller: {{controllerName}}", () => {
+  {{#each testVars}}
+  {{{this}}}
+  {{/each}}
+
+  let ctrl: ReturnType<typeof {{controllerName}}>;
+
+  beforeEach(() => {
+    const { result } = renderHook(() => {{controllerName}}());
+    ctrl = result.current;
+  });
+
+  {{!-- ---------------------------------------------- --}}
+  {{!-- Controller のメソッドテスト --}}
+  {{!-- ---------------------------------------------- --}}
+  {{#each methods}}
+  describe("{{name}}", () => {
+
+    it("正常系: 正しく実行される", async () => {
+      {{#if async}}
+      await expect(ctrl.{{name}}(
+        {{#each params}}
+        {{this}},
+        {{/each}}
+      )).resolves.not.toThrow();
+      {{else}}
+      expect(() => ctrl.{{name}}(
+        {{#each params}}
+        {{this}},
+        {{/each}}
+      )).not.toThrow();
+      {{/if}}
+    });
+
+    it("異常系: 例外発生時に正しくハンドリングされる", async () => {
+      vi.spyOn(ctrl, "{{name}}").mockRejectedValue(new Error("test error"));
+      {{#if async}}
+      await expect(ctrl.{{name}}(
+        {{#each params}}
+        {{this}},
+        {{/each}}
+      )).rejects.toThrow("test error");
+      {{else}}
+      expect(() => ctrl.{{name}}(
+        {{#each params}}
+        {{this}},
+        {{/each}}
+      )).rejects.toThrow("test error");
+      {{/if}}
+    });
+
+  });
+  {{/each}}
+});

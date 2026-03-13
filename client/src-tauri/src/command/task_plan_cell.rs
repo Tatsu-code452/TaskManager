@@ -1,26 +1,12 @@
 use crate::command::state::AppState;
-use crate::model::task_plan_cell::TaskPlanCell;
+use crate::model::task_plan_cell::{TaskPlanCell, TaskPlanCellRequest};
 use crate::service::task_plan_cell_service::TaskPlanCellService;
 use tauri::State;
-
-#[derive(serde::Deserialize)]
-pub struct CreatePlanCellRequest {
-    pub task_id: String,
-    pub date: String,
-    pub hours: f64,
-}
-
-#[derive(serde::Deserialize)]
-pub struct UpdatePlanCellRequest {
-    pub task_id: String,
-    pub date: String,
-    pub hours: Option<f64>,
-}
 
 #[tauri::command]
 pub fn create_plan_cell(
     state: State<AppState>,
-    payload: CreatePlanCellRequest,
+    payload: TaskPlanCellRequest,
 ) -> Result<TaskPlanCell, String> {
     let mut db = state.db.lock().map_err(|_| "lock error".to_string())?;
 
@@ -39,11 +25,11 @@ pub fn get_plan_cells(
 #[tauri::command]
 pub fn update_plan_cell(
     state: State<AppState>,
-    payload: UpdatePlanCellRequest,
+    payload: TaskPlanCellRequest,
 ) -> Result<TaskPlanCell, String> {
     let mut db = state.db.lock().map_err(|_| "lock error".to_string())?;
 
-    TaskPlanCellService::update(&mut db, payload.task_id, payload.date, payload.hours)
+    TaskPlanCellService::update(&mut db, payload.task_id, payload.date, Some(payload.hours))
 }
 
 #[tauri::command]

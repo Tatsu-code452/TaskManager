@@ -1,0 +1,79 @@
+{{!-- ---------------------------------------------- --}}
+{{!-- @test-import を挿入 --}}
+{{!-- ---------------------------------------------- --}}
+{{#each testImports}}
+{{{this}}}
+{{/each}}
+import { describe, expect, it, vi, Mock } from "vitest";
+import * as api from "./{{fileName}}";
+
+describe("API: {{fileName}}", () => {
+
+  {{!-- ---------------------------------------------- --}}
+  {{!-- @test-var / @test-var-block を挿入 --}}
+  {{!-- ---------------------------------------------- --}}
+  {{#each testVars}}
+  {{{this}}}
+  {{/each}}
+
+  {{!-- ---------------------------------------------- --}}
+  {{!-- API メソッドの正常系・異常系テスト --}}
+  {{!-- ---------------------------------------------- --}}
+  {{#each functions}}
+  describe("{{name}}", () => {
+
+    it("正常系: 正しい引数で呼ばれる", async () => {
+      vi.spyOn(api.{{../exportName}}, "{{name}}").mockResolvedValue(
+        {{{lookup ../testReturns name}}}
+      );
+      const result = await api.{{../exportName}}.{{name}}(
+        {{#each params}}
+        {{this}},
+        {{/each}}
+      );
+      expect(result).toBe({{{lookup ../testReturns name}}});
+    });
+
+    it("異常系: 例外を投げる", async () => {
+      vi.spyOn(api.{{../exportName}}, "{{name}}").mockRejectedValue(new Error("test error"));
+      await expect(api.{{../exportName}}.{{name}}(
+        {{#each params}}
+        {{this}},
+        {{/each}}
+      )).rejects.toThrow("test error");
+    });
+
+  });
+  {{/each}}
+
+  {{!-- ---------------------------------------------- --}}
+  {{!-- invoke 呼び出しテスト --}}
+  {{!-- ---------------------------------------------- --}}
+  {{#each invokes}}
+  it("invoke 呼び出し: {{invokeName}} が実行される", async () => {
+    const spy = invoke as Mock;
+
+    try {
+      await api.{{../exportName}}.{{method}}(
+        {{#each ../functions}}
+          {{#if (eq name ../method)}}
+            {{#each params}}
+            {{this}},
+            {{/each}}
+          {{/if}}
+        {{/each}}
+      );
+    } catch {/** */ }
+
+    expect(spy).toHaveBeenCalledWith(
+      "{{invokeName}}",
+      {
+        {{#each payload}}
+        {{@key}}: {{this}},
+        {{/each}}
+      }
+    );
+  });
+  {{/each}}
+
+});

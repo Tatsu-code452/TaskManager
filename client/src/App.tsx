@@ -1,24 +1,16 @@
-import "./App.css";
-// import { LoginPage } from "./features/auth";
-// import { MenuPage } from "./features/menu";
-import SimpleApiDemo from "./features/demo";
-import { Login } from "./features/login/";
-// import Tasks from "./features/task/";
-import { ProgressPage } from "./features/task-manage";
-import { TaskPage } from "./features/tasks";
-// import TaskDemo from "./features/task/components/TaskDemo";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import "./App.css";
+import { ProjectDetail } from "./features/ProjectDetail/ui/ProjectDetail";
+import { ProjectListPage } from "./features/ProjectList";
+import { ProjectProgressPage } from "./features/ProjectProgress/ui/ProjectProgressPage";
 
 function App() {
     return (
         <Router>
             <Routes>
-                {/* <Route path="/task-demo" element={<TaskDemo />} /> */}
-                <Route path="/simple-api-demo" element={<SimpleApiDemo />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/tasks" element={<TaskPage />} />
-                <Route path="/" element={<ProgressPage />} />
-                {/* <Route path="/tasks" element={<Tasks />} /> */}
+                <Route path="/progress/:id" element={<ProjectProgressPage />} />
+                <Route path="/" element={<ProjectListPage />} />
+                <Route path="/projects/:id" element={<ProjectDetail />} />
             </Routes>
         </Router>
     );

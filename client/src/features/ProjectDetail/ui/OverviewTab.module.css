@@ -1,0 +1,30 @@
+.container {
+  padding: 16px;
+}
+
+.cards {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.card {
+  flex: 1;
+  background: #fafafa;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.recent {
+  margin-top: 24px;
+}
+
+.empty {
+  color: #888;
+  padding: 8px 0;
+}

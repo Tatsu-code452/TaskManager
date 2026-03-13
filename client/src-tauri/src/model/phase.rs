@@ -12,11 +12,21 @@ pub struct Phase {
     pub timestamps: Timestamps,
 }
 
-impl Default for Phase {
-    fn default() -> Self {
+#[derive(serde::Deserialize)]
+pub struct PhaseRequest {
+    pub id: String,
+    pub project_id: String,
+    pub name: Option<String>,
+    pub order: Option<u32>,
+    pub inputs: Option<Vec<String>>,
+    pub outputs: Option<Vec<String>>,
+}
+
+impl Phase {
+    pub fn new(id: String, project_id: String) -> Self {
         Self {
-            id: "".into(),
-            project_id: "".into(),
+            id,
+            project_id,
             name: "".into(),
             order: 1,
             inputs: vec![],
@@ -26,12 +36,14 @@ impl Default for Phase {
     }
 }
 
-impl Phase {
-    pub fn new(id: String, project_id: String) -> Self {
-        Self {
-            id,
-            project_id,
-            ..Default::default()
-        }
-    }
-}
+pub const PHASE_TEMPLATE: &[(&str, usize)] = &[
+    ("要件定義", 1),
+    ("基本設計", 2),
+    ("詳細設計", 3),
+    ("製造", 4),
+    ("単体テスト", 5),
+    ("結合テスト", 6),
+    ("システムテスト", 7),
+    ("受入テスト", 8),
+    ("納品", 9),
+];

@@ -1,0 +1,150 @@
+/* 画面全体 */
+.container {
+    padding: 1rem;
+    background: #f3f4f6; /* ← 淡いグレーで階層が生まれる */
+    min-height: 100vh;
+}
+
+/* 新規作成ボタン（右上） */
+.header_actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+/* 検索エリア（白カード） */
+.search_area {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* ← カード感 */
+}
+
+/* 入力行 */
+.search_row {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 入力行 */
+.detail_row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.detail_label {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: #333;
+}
+
+.detail_input,
+.detail_select {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #d0d7de;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background: #ffffff;
+}
+
+/* 検索ボタン */
+.search_button_group {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.2rem;
+}
+
+/* ボタン行 */
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.button_primary {
+    background: #0078d4;
+    color: white;
+}
+
+.button_primary:hover {
+    background: #006cc0;
+}
+
+.button_secondary {
+    background: #e5e7eb;
+    color: #333;
+}
+
+.button_secondary:hover {
+    background: #d4d6da;
+}
+
+.button_danger {
+    background: #d92c2c;
+    color: white;
+}
+
+.button_danger:hover {
+    background: #b82323;
+}
+
+.button_success {
+    background: #2e8b57;
+    color: white;
+}
+
+.button_success:hover {
+    background: #27764a;
+}
+
+/* テーブル */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.table th {
+    background: #e8f3fc; /* ← 淡いブルーグレー */
+    font-weight: 600;
+    color: #333;
+}
+
+.table td {
+    background: white;
+}
+
+/* 編集アイコン */
+.icon_button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0.25rem;
+    color: #0078d4;
+}

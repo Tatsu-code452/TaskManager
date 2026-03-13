@@ -4,9 +4,9 @@ use tauri::State;
 
 #[tauri::command]
 pub fn get_project_progress(state: State<AppState>, project_id: String) -> Result<f64, String> {
-    let db = state.db.lock().map_err(|_| "lock error".to_string())?;
+    let mut db = state.db.lock().map_err(|_| "lock error".to_string())?;
     Ok(ProjectAggregateService::calculate_project_progress(
-        &db,
+        &mut db,
         &project_id,
     ))
 }

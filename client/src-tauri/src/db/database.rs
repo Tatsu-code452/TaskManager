@@ -8,11 +8,10 @@ use crate::model::{
     defect::Defect, issue::Issue, milestone::Milestone, phase::Phase, project::Project, task::Task,
     task_actual_cell::TaskActualCell, task_plan_cell::TaskPlanCell,
 };
-
-const DB_DIR: &str = "data";
-const DB_PATH: &str = "data/db.json";
-const DB_TMP_PATH: &str = "data/db.json.tmp";
-const DB_BACKUP_PATH: &str = "data/db_backup.json";
+const DB_DIR: &str = "../data";
+const DB_PATH: &str = "../data/db.json";
+const DB_TMP_PATH: &str = "../data/db.json.tmp";
+const DB_BACKUP_PATH: &str = "../data/db_backup.json";
 
 const CURRENT_SCHEMA_VERSION: u32 = 1;
 

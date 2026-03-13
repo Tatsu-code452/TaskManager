@@ -1,40 +1,25 @@
 use crate::db::database::Database;
-use crate::model::task::{Task, TaskStatus};
-use crate::model::time_stamps::Timestamps;
-use crate::util::id::generate_uuid;
+use crate::model::task::{Task, TaskRequest};
 
 pub struct TaskService;
 
 impl TaskService {
-    pub fn create(
-        db: &mut Database,
-        project_id: String,
-        phase_id: String,
-        name: String,
-        planned_start: String,
-        planned_end: String,
-        actual_start: Option<String>,
-        actual_end: Option<String>,
-        planned_hours: f64,
-        actual_hours: f64,
-        progress_rate: f64,
-        status: TaskStatus,
-    ) -> Result<Task, String> {
-        let task = Task {
-            id: generate_uuid(),
-            project_id,
-            phase_id,
-            name,
-            planned_start,
-            planned_end,
-            actual_start,
-            actual_end,
-            planned_hours,
-            actual_hours,
-            progress_rate,
-            status,
-            timestamps: Timestamps::new(),
-        };
+    pub fn create(db: &mut Database, payload: TaskRequest) -> Result<Task, String> {
+        let mut task = Task::new();
+
+        task.id = payload.id;
+        task.project_id = payload.project_id;
+
+        payload.phase_id.map(|v| task.phase_id = v);
+        payload.name.map(|v| task.name = v);
+        payload.planned_start.map(|v| task.planned_start = v);
+        payload.planned_end.map(|v| task.planned_end = v);
+        payload.actual_start.map(|v| task.actual_start = v);
+        payload.actual_end.map(|v| task.actual_end = v);
+        payload.planned_hours.map(|v| task.planned_hours = v);
+        payload.actual_hours.map(|v| task.actual_hours = v);
+        payload.progress_rate.map(|v| task.progress_rate = v);
+        payload.status.map(|v| task.status = v);
 
         db.add_task(task.clone());
         db.save_atomic()?;
@@ -42,63 +27,32 @@ impl TaskService {
         Ok(task)
     }
 
-    pub fn update(
-        db: &mut Database,
-        id: String,
-        project_id: Option<String>,
-        phase_id: Option<String>,
-        name: Option<String>,
-        planned_start: Option<String>,
-        planned_end: Option<String>,
-        actual_start: Option<String>,
-        actual_end: Option<String>,
-        planned_hours: Option<f64>,
-        actual_hours: Option<f64>,
-        progress_rate: Option<f64>,
-        status: Option<TaskStatus>,
-    ) -> Result<Task, String> {
+    pub fn update(db: &mut Database, payload: TaskRequest) -> Result<Task, String> {
         {
-            let task = db.find_task_mut(&id).ok_or("Task not found")?;
+            let task = db
+                .find_task_mut_by_id_and_project(&payload.id, &payload.project_id)
+                .ok_or_else(|| "Phase not found".to_string())?;
 
-            if let Some(v) = project_id {
-                task.project_id = v;
-            }
-            if let Some(v) = phase_id {
-                task.phase_id = v;
-            }
-            if let Some(v) = name {
-                task.name = v;
-            }
-            if let Some(v) = planned_start {
-                task.planned_start = v;
-            }
-            if let Some(v) = planned_end {
-                task.planned_end = v;
-            }
-            if let Some(v) = actual_start {
-                task.actual_start = Some(v);
-            }
-            if let Some(v) = actual_end {
-                task.actual_end = Some(v);
-            }
-            if let Some(v) = planned_hours {
-                task.planned_hours = v;
-            }
-            if let Some(v) = actual_hours {
-                task.actual_hours = v;
-            }
-            if let Some(v) = progress_rate {
-                task.progress_rate = v;
-            }
-            if let Some(v) = status {
-                task.status = v;
-            }
+            payload.phase_id.map(|v| task.phase_id = v);
+            payload.name.map(|v| task.name = v);
+            payload.planned_start.map(|v| task.planned_start = v);
+            payload.planned_end.map(|v| task.planned_end = v);
+            payload.actual_start.map(|v| task.actual_start = v);
+            payload.actual_end.map(|v| task.actual_end = v);
+            payload.planned_hours.map(|v| task.planned_hours = v);
+            payload.actual_hours.map(|v| task.actual_hours = v);
+            payload.progress_rate.map(|v| task.progress_rate = v);
+            payload.status.map(|v| task.status = v);
 
             task.timestamps.touch();
         }
 
         db.save_atomic()?;
-        Ok(db.find_task(&id).unwrap().clone())
+
+        Ok(db
+            .find_task_by_id_and_project(&payload.id, &payload.project_id)
+            .unwrap()
+            .clone())
     }
 
     pub fn delete(db: &mut Database, id: String) -> Result<(), String> {

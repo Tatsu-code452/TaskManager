@@ -3,8 +3,8 @@ use crate::db::database::Database;
 pub struct ProjectAggregateService;
 
 impl ProjectAggregateService {
-    pub fn calculate_project_progress(db: &Database, project_id: &str) -> f64 {
-        let phases = db.read_all_phases_by_project(project_id);
+    pub fn calculate_project_progress(db: &mut Database, project_id: &str) -> f64 {
+        let phases = db.find_phase_by_project(project_id);
 
         if phases.is_empty() {
             return 0.0;

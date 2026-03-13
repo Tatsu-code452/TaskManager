@@ -7,6 +7,13 @@ pub struct TaskPlanCell {
     pub hours: f64,
 }
 
+#[derive(serde::Deserialize)]
+pub struct TaskPlanCellRequest {
+    pub task_id: String,
+    pub date: String,
+    pub hours: f64,
+}
+
 impl Default for TaskPlanCell {
     fn default() -> Self {
         Self {

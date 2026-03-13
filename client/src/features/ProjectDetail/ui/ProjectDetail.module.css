@@ -1,0 +1,30 @@
+.container {
+  padding: 16px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tabs button {
+  padding: 8px 16px;
+  border: none;
+  background: #eee;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.tabs button:hover {
+  background: #ddd;
+}
+
+.active {
+  background: #4287f5;
+  color: white;
+}
+
+.content {
+  margin-top: 16px;
+}

@@ -18,6 +18,7 @@ fn main() {
             command::project::get_project,
             command::project::update_project,
             command::project::delete_project,
+            command::project::search_projects,
             // Phase
             command::phase::create_phase,
             command::phase::get_phase,
@@ -25,7 +26,7 @@ fn main() {
             command::phase::delete_phase,
             // Milestone
             command::milestone::create_milestone,
-            command::milestone::get_milestone,
+            command::milestone::list_milestones,
             command::milestone::update_milestone,
             command::milestone::delete_milestone,
             // Task

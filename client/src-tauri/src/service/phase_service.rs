@@ -1,28 +1,30 @@
 use crate::db::database::Database;
-use crate::model::phase::Phase;
-use crate::model::time_stamps::Timestamps;
+use crate::model::phase::{Phase, PhaseRequest};
 
 pub struct PhaseService;
 
 impl PhaseService {
-    pub fn create(
-        db: &mut Database,
-        id: String,
-        project_id: String,
-        name: String,
-        order: u32,
-        inputs: Vec<String>,
-        outputs: Vec<String>,
-    ) -> Result<Phase, String> {
-        let phase = Phase {
-            id,
-            project_id,
-            name,
-            order,
-            inputs,
-            outputs,
-            timestamps: Timestamps::new(),
-        };
+    pub fn list(db: &mut Database, project_id: String) -> Result<Vec<Phase>, String> {
+        let result = db.find_phase_by_project(&project_id);
+        Ok(result)
+    }
+
+    pub fn create(db: &mut Database, payload: PhaseRequest) -> Result<Phase, String> {
+        // 複合キーで重複チェック
+        if db
+            .find_phase_by_id_and_project(&payload.id, &payload.project_id)
+            .is_some()
+        {
+            return Err("Phase already exists".into());
+        }
+
+        // 新規作成
+        let mut phase = Phase::new(payload.id, payload.project_id);
+
+        payload.name.map(|v| phase.name = v);
+        payload.order.map(|v| phase.order = v);
+        payload.inputs.map(|v| phase.inputs = v);
+        payload.outputs.map(|v| phase.outputs = v);
 
         db.add_phase(phase.clone());
         db.save_atomic()?;
@@ -30,43 +32,32 @@ impl PhaseService {
         Ok(phase)
     }
 
-    pub fn update(
-        db: &mut Database,
-        id: String,
-        project_id: Option<String>,
-        name: Option<String>,
-        order: Option<u32>,
-        inputs: Option<Vec<String>>,
-        outputs: Option<Vec<String>>,
-    ) -> Result<Phase, String> {
+    pub fn update(db: &mut Database, payload: PhaseRequest) -> Result<Phase, String> {
         {
-            let phase = db.find_phase_mut(&id).ok_or("Phase not found")?;
+            let phase = db
+                .find_phase_mut_by_id_and_project(&payload.id, &payload.project_id)
+                .ok_or_else(|| "Phase not found".to_string())?;
 
-            if let Some(v) = project_id {
-                phase.project_id = v;
-            }
-            if let Some(v) = name {
-                phase.name = v;
-            }
-            if let Some(v) = order {
-                phase.order = v;
-            }
-            if let Some(v) = inputs {
-                phase.inputs = v;
-            }
-            if let Some(v) = outputs {
-                phase.outputs = v;
-            }
+            payload.name.map(|v| phase.name = v);
+            payload.order.map(|v| phase.order = v);
+            payload.inputs.map(|v| phase.inputs = v);
+            payload.outputs.map(|v| phase.outputs = v);
 
             phase.timestamps.touch();
         }
 
         db.save_atomic()?;
-        Ok(db.find_phase(&id).unwrap().clone())
+
+        Ok(db
+            .find_phase_by_id_and_project(&payload.id, &payload.project_id)
+            .unwrap()
+            .clone())
     }
 
-    pub fn delete(db: &mut Database, id: String) -> Result<(), String> {
-        db.delete_phase(&id);
+    pub fn delete(db: &mut Database, id: String, project_id: String) -> Result<(), String> {
+        db.delete_phase_by_id_and_project(&id, &project_id)
+            .ok_or_else(|| "Phase not found".to_string())?;
+
         db.save_atomic()?;
         Ok(())
     }
