@@ -30,6 +30,7 @@
  * @end-test-var-block
  */
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Modal } from "../../components/Modal";
 import { ProjectStatus } from "../../types/db/project";
 import { useProjectListController } from "./hooks/controller/useProjectListController";
@@ -58,6 +59,8 @@ export const ProjectListPage = () => {
     useEffect(() => {
         loadProjects();
     }, [loadProjects]);
+
+    const navigation = useNavigate();
 
     return (
         <div className={styles.container}>
@@ -150,7 +153,10 @@ export const ProjectListPage = () => {
 
                 <tbody>
                     {projects.map((p) => (
-                        <tr key={p.id}>
+                        <tr
+                            key={p.id}
+                            onClick={() => navigation(`/projects/${p.id}`)}
+                        >
                             <td>{p.id}</td>
                             <td>{p.name}</td>
                             <td>{p.client}</td>

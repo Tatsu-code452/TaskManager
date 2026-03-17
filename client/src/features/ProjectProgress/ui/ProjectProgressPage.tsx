@@ -1,13 +1,15 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { useProjectProgressController } from "../hooks/controller/useProjectProgressController";
 import styles from "./index.module.css";
 import { ProjectProgressTable } from "./table/ProjectProgressTable";
 
-export const ProjectProgressPage = () => {
-    const { id } = useParams<{ id: string }>();
-    const projectId = id;
+interface ProjectProgressPageProps {
+    projectId: string;
+}
 
+export const ProjectProgressPage = ({
+    projectId,
+}: ProjectProgressPageProps) => {
     const {
         pageState,
         dates,

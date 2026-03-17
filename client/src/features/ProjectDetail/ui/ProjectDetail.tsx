@@ -1,9 +1,23 @@
 import { useParams, useSearchParams } from "react-router-dom";
+import { ProjectProgressPage } from "../../ProjectProgress/ui/ProjectProgressPage";
+import { useDefectStates } from "../hooks/state/useDefectStates";
+import { useIssueStates } from "../hooks/state/useIssueStates";
 import { useMilestoneStates } from "../hooks/state/useMilestoneStates";
+import { useTaskStates } from "../hooks/state/useTaskStates";
 import styles from "./ProjectDetail.module.css";
+import { DefectTab } from "./defect/DefectTab";
+import { IssueTab } from "./issue/IssueTab";
 import { MilestoneTab } from "./milestone/MilestoneTab";
+import { TaskTab } from "./task/TaskTab";
 
-const TABS = ["overview", "milestone", "wbs", "issue", "defect"] as const;
+const TABS = [
+    "overview",
+    "milestone",
+    "wbs",
+    "issue",
+    "defect",
+    "gantt",
+] as const;
 type Tab = (typeof TABS)[number];
 
 export const ProjectDetail = () => {
@@ -17,6 +31,9 @@ export const ProjectDetail = () => {
     };
 
     const milestoneStates = useMilestoneStates();
+    const taskStates = useTaskStates();
+    const issueStates = useIssueStates();
+    const defectStates = useDefectStates();
 
     return (
         <div>
@@ -40,9 +57,18 @@ export const ProjectDetail = () => {
                         states={milestoneStates}
                     />
                 )}
-                {/* {tab === "wbs" && <WbsTab />}
-                {tab === "issue" && <IssueTab />}
-                {tab === "defect" && <DefectTab />} */}
+                {tab === "wbs" && (
+                    <TaskTab projectId={projectId} states={taskStates} />
+                )}
+                {tab === "issue" && (
+                    <IssueTab projectId={projectId} states={issueStates} />
+                )}
+                {tab === "defect" && (
+                    <DefectTab projectId={projectId} states={defectStates} />
+                )}
+                {tab === "gantt" && (
+                    <ProjectProgressPage projectId={projectId} />
+                )}
             </div>
         </div>
     );
@@ -54,4 +80,5 @@ const TAB_LABELS: Record<Tab, string> = {
     wbs: "フェーズ & WBS",
     issue: "課題",
     defect: "欠陥",
+    gantt: "ガントチャート",
 };

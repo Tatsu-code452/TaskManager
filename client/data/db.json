@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "project": {
+    "id": "2026-03-01-001",
+    "name": "プロジェクト管理システム",
+    "client": "自社",
+    "status": "Active",
+    "start_date": "2026-03-01",
+    "end_date": "",
+    "timestamps": {
+      "created_at": "2026-03-01T16:36:00",
+      "updated_at": "2026-03-31T16:36:00"
+    }
+  },
+  "issues": [
+    {
+      "id": "ISSUE-002",
+      "project_id": "2026-03-01-001",
+      "task_id": null,
+      "title": "データ構造全体の見直し",
+      "description": "Project / Issue / Defect / Task / Phase / Milestone の構造を整理し、拡張性の高い形に統一する",
+      "status": "Open",
+      "priority": "Medium",
+      "owner": "Me",
+      "timestamps": {
+        "created_at": "2026-03-17T16:50:00",
+        "updated_at": "2026-03-17T16:50:00"
+      }
+    }
+  ],
+  "defects": [
+    {
+      "id": "DEFECT-001",
+      "project_id": "2026-03-01-001",
+      "task_id": null,
+      "title": "UI:マイルストーンタブのスタイルが反映されない",
+      "description": "タイトル通り",
+      "severity": "Major",
+      "status": "Open",
+      "timestamps": {
+        "created_at": "2026-03-17T16:40:00",
+        "updated_at": "2026-03-17T16:40:00"
+      }
+    },
+    {
+      "id": "DEFECT-002",
+      "project_id": "2026-03-01-001",
+      "task_id": null,
+      "title": "データ登録の仕様不備",
+      "description": "IDはプロジェクト単位で重複しない形で自動採番する必要がある",
+      "severity": "Major",
+      "status": "Open",
+      "timestamps": {
+        "created_at": "2026-03-17T16:40:00",
+        "updated_at": "2026-03-17T16:40:00"
+      }
+    }
+  ]
+}

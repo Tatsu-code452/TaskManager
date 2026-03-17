@@ -27,19 +27,15 @@ pub struct Defect {
     pub timestamps: Timestamps,
 }
 
-impl Default for Defect {
-    fn default() -> Self {
-        Self {
-            id: "".into(),
-            project_id: "".into(),
-            task_id: Some("".into()),
-            title: "".into(),
-            description: "".into(),
-            severity: DefectSeverity::Minor,
-            status: DefectStatus::Open,
-            timestamps: Timestamps::new(),
-        }
-    }
+#[derive(Deserialize)]
+pub struct DefectRequest {
+    pub id: String,
+    pub project_id: String,
+    pub task_id: Option<String>,
+    pub title: Option<String>,
+    pub description: Option<String>,
+    pub severity: Option<DefectSeverity>,
+    pub status: Option<DefectStatus>,
 }
 
 impl Defect {
@@ -47,7 +43,12 @@ impl Defect {
         Self {
             id,
             project_id,
-            ..Default::default()
+            task_id: Some("".into()),
+            title: "".into(),
+            description: "".into(),
+            severity: DefectSeverity::Minor,
+            status: DefectStatus::Open,
+            timestamps: Timestamps::new(),
         }
     }
 }

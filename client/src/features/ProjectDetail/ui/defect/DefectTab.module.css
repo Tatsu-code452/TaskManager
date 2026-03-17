@@ -1,0 +1,184 @@
+.page_container {
+    padding: 1rem;
+}
+
+.section_card {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+}
+
+.section_title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.button_primary {
+    background: #0078d4;
+    color: white;
+}
+
+.button_secondary {
+    background: #e5e5e5;
+}
+
+.project_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.project_table th,
+.project_table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #eee;
+}
+
+.project_table th {
+    background: #f5f5f5;
+    font-weight: 600;
+}
+
+.icon_button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0.25rem;
+}
+
+/* ステータス表示 */
+.status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+}
+
+.status_Open {
+    background: #0078d4;
+}
+
+.status_InProgress {
+    background: #ff9800;
+}
+
+.status_Resolved {
+    background: #4caf50;
+}
+
+.status_Closed {
+    background: #9e9e9e;
+}
+
+.status_Low {
+    background: #4caf50;
+}
+
+.status_Medium {
+    background: #ff9800;
+}
+
+.status_High {
+    background: #f44336;
+}
+
+.status_Minor {
+    background: #4caf50;
+}
+
+.status_Major {
+    background: #ff9800;
+}
+
+.status_Critical {
+    background: #f44336;
+}
+
+/* モーダル */
+.modal_overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.2s ease-out;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modal_content {
+    background: white;
+    padding: clamp(1rem, 2vw, 2rem);
+    border-radius: 0.75rem;
+    width: min(90%, 40rem);
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease-out;
+}
+
+.detail_row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.detail_label {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.detail_input,
+.detail_select,
+.detail_textarea {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+.detail_textarea {
+    min-height: 6rem;
+}
+
+.detail_buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+/* アニメーション */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

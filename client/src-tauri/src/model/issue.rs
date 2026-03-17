@@ -29,20 +29,16 @@ pub struct Issue {
     pub timestamps: Timestamps,
 }
 
-impl Default for Issue {
-    fn default() -> Self {
-        Self {
-            id: "".into(),
-            project_id: "".into(),
-            task_id: Some("".into()),
-            title: "".into(),
-            description: "".into(),
-            status: IssueStatus::Open,
-            priority: IssuePriority::Low,
-            owner: "".into(),
-            timestamps: Timestamps::new(),
-        }
-    }
+#[derive(Deserialize)]
+pub struct IssueRequest {
+    pub id: String,
+    pub project_id: String,
+    pub task_id: Option<String>,
+    pub title: Option<String>,
+    pub description: Option<String>,
+    pub status: Option<IssueStatus>,
+    pub priority: Option<IssuePriority>,
+    pub owner: Option<String>,
 }
 
 impl Issue {
@@ -50,7 +46,13 @@ impl Issue {
         Self {
             id,
             project_id,
-            ..Default::default()
+            task_id: Some("".into()),
+            title: "".into(),
+            description: "".into(),
+            status: IssueStatus::Open,
+            priority: IssuePriority::Low,
+            owner: "".into(),
+            timestamps: Timestamps::new(),
         }
     }
 }

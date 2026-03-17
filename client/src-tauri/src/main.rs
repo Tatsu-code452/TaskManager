@@ -36,12 +36,12 @@ fn main() {
             command::task::delete_task,
             // Issue
             command::issue::create_issue,
-            command::issue::get_issue,
+            command::issue::list_issues,
             command::issue::update_issue,
             command::issue::delete_issue,
             // Defect
             command::defect::create_defect,
-            command::defect::get_defect,
+            command::defect::list_defects,
             command::defect::update_defect,
             command::defect::delete_defect,
             // TaskPlanCell

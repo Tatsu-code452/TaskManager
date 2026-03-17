@@ -1,32 +1,29 @@
 use crate::db::database::Database;
-use crate::model::issue::{Issue, IssuePriority, IssueStatus};
-use crate::model::time_stamps::Timestamps;
+use crate::model::issue::{Issue, IssueRequest};
 
 pub struct IssueService;
 
 impl IssueService {
-    pub fn create(
-        db: &mut Database,
-        id: String,
-        project_id: String,
-        task_id: Option<String>,
-        title: String,
-        description: String,
-        status: IssueStatus,
-        priority: IssuePriority,
-        owner: String,
-    ) -> Result<Issue, String> {
-        let issue = Issue {
-            id,
-            project_id,
-            task_id,
-            title,
-            description,
-            status,
-            priority,
-            owner,
-            timestamps: Timestamps::new(),
-        };
+    pub fn list(db: &mut Database, project_id: String) -> Result<Vec<Issue>, String> {
+        Ok(db.find_issue_by_project(&project_id))
+    }
+
+    pub fn create(db: &mut Database, payload: IssueRequest) -> Result<Issue, String> {
+        if db
+            .find_issue_by_id_and_project(&payload.id, &payload.project_id)
+            .is_some()
+        {
+            return Err("Issue already exists".into());
+        }
+
+        let mut issue = Issue::new(payload.id, payload.project_id);
+
+        payload.task_id.map(|v| issue.task_id = Some(v));
+        payload.title.map(|v| issue.title = v);
+        payload.description.map(|v| issue.description = v);
+        payload.status.map(|v| issue.status = v);
+        payload.priority.map(|v| issue.priority = v);
+        payload.owner.map(|v| issue.owner = v);
 
         db.add_issue(issue.clone());
         db.save_atomic()?;
@@ -34,43 +31,34 @@ impl IssueService {
         Ok(issue)
     }
 
-    pub fn update(
-        db: &mut Database,
-        id: String,
-        title: Option<String>,
-        description: Option<String>,
-        status: Option<IssueStatus>,
-        priority: Option<IssuePriority>,
-        owner: Option<String>,
-    ) -> Result<Issue, String> {
+    pub fn update(db: &mut Database, payload: IssueRequest) -> Result<Issue, String> {
         {
-            let issue = db.find_issue_mut(&id).ok_or("Issue not found")?;
+            let issue = db
+                .find_issue_mut_by_id_and_project(&payload.id, &payload.project_id)
+                .ok_or_else(|| "Issue not found".to_string())?;
 
-            if let Some(v) = title {
-                issue.title = v;
-            }
-            if let Some(v) = description {
-                issue.description = v;
-            }
-            if let Some(v) = status {
-                issue.status = v;
-            }
-            if let Some(v) = priority {
-                issue.priority = v;
-            }
-            if let Some(v) = owner {
-                issue.owner = v;
-            }
+            payload.task_id.map(|v| issue.task_id = Some(v));
+            payload.title.map(|v| issue.title = v);
+            payload.description.map(|v| issue.description = v);
+            payload.status.map(|v| issue.status = v);
+            payload.priority.map(|v| issue.priority = v);
+            payload.owner.map(|v| issue.owner = v);
 
             issue.timestamps.touch();
         }
 
         db.save_atomic()?;
-        Ok(db.find_issue(&id).unwrap().clone())
+
+        Ok(db
+            .find_issue_mut_by_id_and_project(&payload.id, &payload.project_id)
+            .unwrap()
+            .clone())
     }
 
-    pub fn delete(db: &mut Database, id: String) -> Result<(), String> {
-        db.delete_issue(&id);
+    pub fn delete(db: &mut Database, id: String, project_id: String) -> Result<(), String> {
+        db.delete_issue_by_id_and_project(&id, &project_id)
+            .ok_or_else(|| "Issue not found".to_string())?;
+
         db.save_atomic()?;
         Ok(())
     }
