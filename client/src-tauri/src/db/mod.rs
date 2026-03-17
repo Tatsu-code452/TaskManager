@@ -1,5 +1,6 @@
 pub mod crud_macro;
 pub mod database;
+pub mod db_macro;
 pub mod defect_crud;
 pub mod delete_basic;
 pub mod issue_crud;

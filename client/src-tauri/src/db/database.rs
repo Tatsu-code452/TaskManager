@@ -13,7 +13,7 @@ const DB_PATH: &str = "../data/db.json";
 const DB_TMP_PATH: &str = "../data/db.json.tmp";
 const DB_BACKUP_PATH: &str = "../data/db_backup.json";
 
-const CURRENT_SCHEMA_VERSION: u32 = 1;
+const CURRENT_SCHEMA_VERSION: u32 = 2;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Database {
@@ -37,9 +37,9 @@ pub struct Database {
     #[serde(skip)]
     pub task_index: HashMap<String, usize>,
     #[serde(skip)]
-    pub issue_index: HashMap<String, usize>,
+    pub issue_index: HashMap<(String, String), usize>,
     #[serde(skip)]
-    pub defect_index: HashMap<String, usize>,
+    pub defect_index: HashMap<(String, String), usize>,
 }
 
 impl Default for Database {
@@ -61,7 +61,6 @@ impl Default for Database {
             issue_index: HashMap::new(),
             defect_index: HashMap::new(),
         };
-        db.rebuild_indexes();
         db
     }
 }
@@ -69,37 +68,6 @@ impl Default for Database {
 impl Database {
     pub fn empty() -> Self {
         Self::default()
-    }
-
-    // -------------------------
-    // Index rebuild
-    // -------------------------
-    pub fn rebuild_indexes(&mut self) {
-        self.project_index.clear();
-        self.phase_index.clear();
-        self.milestone_index.clear();
-        self.task_index.clear();
-        self.issue_index.clear();
-        self.defect_index.clear();
-
-        for (i, p) in self.projects.iter().enumerate() {
-            self.project_index.insert(p.id.clone(), i);
-        }
-        for (i, ph) in self.phases.iter().enumerate() {
-            self.phase_index.insert(ph.id.clone(), i);
-        }
-        for (i, m) in self.milestones.iter().enumerate() {
-            self.milestone_index.insert(m.id.clone(), i);
-        }
-        for (i, t) in self.tasks.iter().enumerate() {
-            self.task_index.insert(t.id.clone(), i);
-        }
-        for (i, is) in self.issues.iter().enumerate() {
-            self.issue_index.insert(is.id.clone(), i);
-        }
-        for (i, d) in self.defects.iter().enumerate() {
-            self.defect_index.insert(d.id.clone(), i);
-        }
     }
 
     // -------------------------
@@ -115,7 +83,14 @@ impl Database {
                     db = db.migrate()?;
                 }
 
-                db.rebuild_indexes();
+                // テーブルごとの index を再構築
+                db.rebuild_project_index();
+                db.rebuild_phase_index();
+                db.rebuild_milestone_index();
+                db.rebuild_task_index();
+                db.rebuild_issue_index();
+                db.rebuild_defect_index();
+
                 Ok(db)
             }
             Err(_) => Ok(Self::empty()),

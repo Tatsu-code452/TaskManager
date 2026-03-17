@@ -8,3 +8,4 @@ pub mod task_plan_cell_service;
 pub mod task_actual_cell_service;
 pub mod phase_aggregate_service;
 pub mod project_aggregate_service;
+pub mod service_macro;

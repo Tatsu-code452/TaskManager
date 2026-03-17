@@ -7,3 +7,4 @@ pub mod task;
 pub mod task_actual_cell;
 pub mod task_plan_cell;
 pub mod time_stamps;
+pub mod tag;
