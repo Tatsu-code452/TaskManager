@@ -16,11 +16,11 @@ define_model!(
     TaskRequest,
     TaskRequest,
     {
+        id: String,
         project_id: String,
-        phase_id: String,
     },
     {
-        id: String,
+        phase_id: String,
         name: String,
         planned_start: Option<String>,
         planned_end: Option<String>,
@@ -32,7 +32,7 @@ define_model!(
         status: TaskStatus,
     },
     {
-        id: generate_uuid(),
+        phase_id: "".into(),
         name: "".into(),
         planned_start: None,
         planned_end: None,
@@ -44,3 +44,12 @@ define_model!(
         status: TaskStatus::NotStarted,
     }
 );
+
+pub fn set_keys(task: Task, project_id: String, phase_id: String) -> Task {
+    Task {
+        id: generate_uuid(),
+        project_id,
+        phase_id,
+        ..task
+    }
+}
