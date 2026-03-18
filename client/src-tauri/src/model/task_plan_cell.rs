@@ -1,35 +1,19 @@
-use serde::{Deserialize, Serialize};
+use crate::define_model;
+use crate::model::time_stamps::Timestamps;
+use serde::Deserialize;
 
-#[derive(Serialize, Deserialize, Clone)]
-pub struct TaskPlanCell {
-    pub task_id: String,
-    pub date: String,
-    pub hours: f64,
-}
-
-#[derive(serde::Deserialize)]
-pub struct TaskPlanCellRequest {
-    pub task_id: String,
-    pub date: String,
-    pub hours: f64,
-}
-
-impl Default for TaskPlanCell {
-    fn default() -> Self {
-        Self {
-            task_id: "".into(),
-            date: "".into(),
-            hours: 0.0,
-        }
+define_model!(
+    TaskPlanCell,
+    TaskPlanCellRequest,
+    TaskPlanCellRequest,
+    {
+        task_id: String,
+        date: String,
+    },
+    {
+        hours: f64,
+    },
+    {
+        hours: 0.0,
     }
-}
-
-impl TaskPlanCell {
-    pub fn new(task_id: String, date: String) -> Self {
-        Self {
-            task_id,
-            date,
-            ..Default::default()
-        }
-    }
-}
+);

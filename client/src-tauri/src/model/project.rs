@@ -1,46 +1,38 @@
+use crate::define_model;
 use crate::model::time_stamps::Timestamps;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "PascalCase")]
 pub enum ProjectStatus {
-    All,
-    Planned,
-    Active,
-    Closed,
+    Planned,   // 計画中
+    Active,    // 進行中
+    OnHold,    // 一時停止
+    Completed, // 完了
+    Archived,  // アーカイブ
 }
 
-#[derive(Serialize, Deserialize, Clone)]
-pub struct Project {
-    pub id: String,
-    pub name: String,
-    pub client: String,
-    pub status: ProjectStatus,
-    pub start_date: String,
-    pub end_date: String,
-    pub timestamps: Timestamps,
-}
-
-#[derive(serde::Deserialize)]
-pub struct ProjectRequest {
-    pub id: String,
-    pub name: Option<String>,
-    pub client: Option<String>,
-    pub status: Option<ProjectStatus>,
-    pub start_date: Option<String>,
-    pub end_date: Option<String>,
-}
-
-impl Project {
-    pub fn new(id: String) -> Self {
-        Self {
-            id,
-            name: "".into(),
-            client: "".into(),
-            status: ProjectStatus::Planned,
-            start_date: "".into(),
-            end_date: "".into(),
-            timestamps: Timestamps::new(),
-        }
+define_model!(
+    Project,
+    ProjectRequest,
+    ProjectRequest,
+    { id: String },
+    {
+        name: String,
+        client: String,
+        description: String,
+        status: ProjectStatus,
+        start_date: Option<String>,
+        end_date: Option<String>,
+        owner: String,
+    },
+    {
+        name: "".into(),
+        client: "".into(),
+        description: "".into(),
+        status: ProjectStatus::Planned,
+        start_date: None,
+        end_date: None,
+        owner: "".into(),
     }
-}
+);
