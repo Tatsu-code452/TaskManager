@@ -31,11 +31,11 @@ pub struct Database {
     #[serde(skip)]
     pub project_index: HashMap<String, usize>,
     #[serde(skip)]
-    pub phase_index: HashMap<String, usize>,
+    pub phase_index: HashMap<(String, String), usize>,
     #[serde(skip)]
-    pub milestone_index: HashMap<String, usize>,
+    pub milestone_index: HashMap<(String, String), usize>,
     #[serde(skip)]
-    pub task_index: HashMap<String, usize>,
+    pub task_index: HashMap<(String, String), usize>,
     #[serde(skip)]
     pub issue_index: HashMap<(String, String), usize>,
     #[serde(skip)]
@@ -44,7 +44,7 @@ pub struct Database {
 
 impl Default for Database {
     fn default() -> Self {
-        let mut db = Self {
+        Self {
             schema_version: CURRENT_SCHEMA_VERSION,
             projects: vec![],
             phases: vec![],
@@ -60,8 +60,7 @@ impl Default for Database {
             task_index: HashMap::new(),
             issue_index: HashMap::new(),
             defect_index: HashMap::new(),
-        };
-        db
+        }
     }
 }
 
