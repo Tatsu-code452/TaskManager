@@ -5,6 +5,7 @@ macro_rules! define_crud_composite {
         $find_fn:ident,
         $find_mut_fn:ident,
         $find_all_fn:ident,
+        $update_fn:ident,
         $delete_fn:ident,
 
         $field:ident,
@@ -16,6 +17,7 @@ macro_rules! define_crud_composite {
         $crate::crud_composite_find!($find_fn, $field, $ty, $first_key, $( $rest_keys ),*);
         $crate::crud_composite_find_mut!($find_mut_fn, $field, $ty, $first_key, $( $rest_keys ),*);
         $crate::crud_composite_find_all!($find_all_fn, $field, $ty, $first_key);
+        $crate::crud_composite_update!($update_fn, $field, $ty, $first_key, $( $rest_keys ),*);
         $crate::crud_composite_delete!($delete_fn, $field, $ty, $first_key, $( $rest_keys ),*);
     };
 }
@@ -75,6 +77,21 @@ macro_rules! crud_composite_find_all {
 }
 
 #[macro_export]
+macro_rules! crud_composite_update {
+    ($update_fn:ident, $field:ident, $ty:ty, $first_key:ident, $( $rest_keys:ident ),*) => {
+        pub fn $update_fn(&mut self, item: $ty) -> Option<$ty> {
+            let pos = self.$field.iter().position(|v|
+                v.$first_key == item.$first_key
+                $( && v.$rest_keys == item.$rest_keys )*
+            )?;
+
+            self.$field[pos] = item.clone();
+            Some(item)
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! crud_composite_delete {
     ($delete_fn:ident, $field:ident, $ty:ty, $first_key:ident, $( $rest_keys:ident ),*) => {
         pub fn $delete_fn(&mut self, $first_key: &str, $( $rest_keys: &str ),* ) -> Option<$ty> {
@@ -82,7 +99,8 @@ macro_rules! crud_composite_delete {
                 v.$first_key == $first_key
                 $( && v.$rest_keys == $rest_keys )*
             )?;
-            Some(self.$field.remove(pos))
+            let removed = self.$field.remove(pos);
+            Some(removed)
         }
     };
 }

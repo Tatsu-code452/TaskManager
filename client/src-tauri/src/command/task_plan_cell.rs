@@ -1,44 +1,28 @@
 use crate::command::state::AppState;
+use crate::db::database::Database;
 use crate::model::task_plan_cell::{TaskPlanCell, TaskPlanCellRequest};
 use crate::service::task_plan_cell_service::TaskPlanCellService;
-use tauri::State;
+use crate::{define_command_composite_impl, define_tauri_commands_composite};
 
-#[tauri::command]
-pub fn create_plan_cell(
-    state: State<AppState>,
-    payload: TaskPlanCellRequest,
-) -> Result<TaskPlanCell, String> {
-    let mut db = state.db.lock().map_err(|_| "lock error".to_string())?;
+define_command_composite_impl!(
+    TaskPlanCellCommand,
+    TaskPlanCellService,
+    TaskPlanCellRequest,
+    TaskPlanCell,
+    list,
+    create,
+    update,
+    delete,
+    { date }
+);
 
-    TaskPlanCellService::create(&mut db, payload.task_id, payload.date, payload.hours)
-}
-
-#[tauri::command]
-pub fn get_plan_cells(
-    state: State<AppState>,
-    task_id: String,
-) -> Result<Vec<TaskPlanCell>, String> {
-    let db = state.db.lock().map_err(|_| "lock error".to_string())?;
-    Ok(TaskPlanCellService::read_all(&db, task_id))
-}
-
-#[tauri::command]
-pub fn update_plan_cell(
-    state: State<AppState>,
-    payload: TaskPlanCellRequest,
-) -> Result<TaskPlanCell, String> {
-    let mut db = state.db.lock().map_err(|_| "lock error".to_string())?;
-
-    TaskPlanCellService::update(&mut db, payload.task_id, payload.date, Some(payload.hours))
-}
-
-#[tauri::command]
-pub fn delete_plan_cell(
-    state: State<AppState>,
-    task_id: String,
-    date: String,
-) -> Result<(), String> {
-    let mut db = state.db.lock().map_err(|_| "lock error".to_string())?;
-
-    TaskPlanCellService::delete(&mut db, task_id, date)
-}
+define_tauri_commands_composite!(
+    TaskPlanCellCommand,
+    TaskPlanCellRequest,
+    TaskPlanCell,
+    list_task_plan_cells,
+    create_task_plan_cell,
+    update_task_plan_cell,
+    delete_task_plan_cell,
+    { date }
+);

@@ -6,6 +6,7 @@ impl Database {
         find_task_plan_cell,
         find_task_plan_cell_mut,
         find_all_task_plan_cell,
+        update_task_plan_cell,
         delete_task_plan_cell,
         task_plan_cells, // ← フィールド名
         TaskPlanCell,    // ← 型名

@@ -7,6 +7,7 @@ impl Database {
         add_project,
         find_project,
         find_project_mut,
+        find_all_project,
         update_project,
         delete_project,
         rebuild_project_index,
@@ -15,7 +16,7 @@ impl Database {
         Project
     );
 
-    pub fn delete_project_and_relate_data(&mut self, id: &str) {
+    pub fn delete_project_and_relation_data(&mut self, id: &str) {
         self.delete_project(id);
 
         // Project 直下のデータ削除

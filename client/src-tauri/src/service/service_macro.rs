@@ -1,80 +1,150 @@
 #[macro_export]
-macro_rules! define_service_multiple_id {
+macro_rules! service_list {
+    ($list_fn:ident, $find_all_fn:ident, $table_type:ty) => {
+        pub fn $list_fn(db: &Database, key1_val: String) -> Result<Vec<$table_type>, String> {
+            db.$find_all_fn(&key1_val)
+                .ok_or_else(|| "Not found".to_string())
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! service_create_with_next_id {
     (
-        $service_name:ident,
+        $create_fn:ident,
         $table_type:ty,
         $request_type:ty,
-
-        $list_fn:ident,
-        $create_fn:ident,
-        $update_fn:ident,
-        $delete_fn:ident,
-
-        $find_by_project_fn:ident,
         $find_fn:ident,
-        $find_mut_fn:ident,
         $add_fn:ident,
-        $delete_db_fn:ident,
-
+        $next_id_fn:ident,
         $key1:ident,   // project_id
         $key2:ident    // id
     ) => {
-        pub struct $service_name;
+        pub fn $create_fn(
+            db: &mut Database,
+            payload: $request_type,
+        ) -> Result<$table_type, String> {
+            // next_id を使う場合、payload.$key2 は無視して採番する
+            let new_id = db.$next_id_fn(&payload.$key1);
 
-        impl $service_name {
-            pub fn $list_fn(
-                db: &mut Database,
-                key1_val: String,
-            ) -> Result<Vec<$table_type>, String> {
-                Ok(db.$find_by_project_fn(&key1_val))
+            // new(id, project_id)
+            let mut item = <$table_type>::new(new_id.clone(), payload.$key1.clone());
+
+            item.apply_request(&payload);
+
+            db.$add_fn(item.clone())
+                .ok_or_else(|| "Failed to add".to_string())?;
+
+            db.save_atomic()?;
+            Ok(item)
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! service_create {
+    (
+        $create_fn:ident,
+        $table_type:ty,
+        $request_type:ty,
+        $find_fn:ident,
+        $add_fn:ident,
+        $( $keys:ident ),*
+    ) => {
+        pub fn $create_fn(
+            db: &mut Database,
+            payload: $request_type,
+        ) -> Result<$table_type, String> {
+
+            if db.$find_fn($( &payload.$keys ),*).is_some() {
+                return Err("Already exists".into());
             }
 
-            pub fn $create_fn(
-                db: &mut Database,
-                payload: $request_type,
-            ) -> Result<$table_type, String> {
-                if db.$find_fn(&payload.$key1, &payload.$key2).is_some() {
-                    return Err("Already exists".into());
-                }
+            let mut item = <$table_type>::new($( payload.$keys.clone() ),*);
 
-                let mut item = <$table_type>::new(payload.$key2.clone(), payload.$key1.clone());
-                item.apply_request(&payload);
+            item.apply_request(&payload);
 
-                db.$add_fn(item.clone());
-                db.save_atomic()?;
+            db.$add_fn(item.clone())
+                .ok_or_else(|| "Failed to add".to_string())?;
 
-                Ok(item)
-            }
+            db.save_atomic()?;
+            Ok(item)
+        }
+    };
+}
 
-            pub fn $update_fn(
-                db: &mut Database,
-                payload: $request_type,
-            ) -> Result<$table_type, String> {
-                {
-                    let item = db
-                        .$find_mut_fn(&payload.$key1, &payload.$key2)
-                        .ok_or_else(|| "Not found".to_string())?;
+#[macro_export]
+macro_rules! service_update {
+    (
+        $update_fn:ident,
+        $table_type:ty,
+        $request_type:ty,
+        $find_fn:ident,
+        $find_mut_fn:ident,
+        $( $keys:ident ),*
+    ) => {
+        pub fn $update_fn(
+            db: &mut Database,
+            payload: $request_type,
+        ) -> Result<$table_type, String> {
 
-                    item.apply_request(&payload);
-                    item.timestamps.touch();
-                }
-
-                db.save_atomic()?;
-
-                Ok(db.$find_fn(&payload.$key1, &payload.$key2).unwrap().clone())
-            }
-
-            pub fn $delete_fn(
-                db: &mut Database,
-                key2_val: String,
-                key1_val: String,
-            ) -> Result<(), String> {
-                db.$delete_db_fn(&key1_val, &key2_val)
+            {
+                let item = db.$find_mut_fn($( &payload.$keys ),*)
                     .ok_or_else(|| "Not found".to_string())?;
 
-                db.save_atomic()?;
-                Ok(())
+                item.apply_request(&payload);
+                item.timestamps.touch();
             }
+
+            db.save_atomic()?;
+
+            Ok(
+                db.$find_fn($( &payload.$keys ),*)
+                    .unwrap()
+                    .clone()
+            )
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! service_delete {
+    (
+        $delete_fn:ident,
+        $delete_db_fn:ident,
+        $( $keys:ident ),*
+    ) => {
+        pub fn $delete_fn(
+            db: &mut Database,
+            $( $keys: String ),*
+        ) -> Result<(), String> {
+
+            db.$delete_db_fn($( &$keys ),*)
+                .ok_or_else(|| "Not found".to_string())?;
+
+            db.save_atomic()?;
+            Ok(())
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! service_next_id {
+    ($next_id_fn:ident, $table:ident, $key1:ident, $key2:ident, $prefix:expr) => {
+        pub fn $next_id_fn(db: &Database, key1_val: &str) -> String {
+            let mut max_num = 0;
+
+            for item in &db.$table {
+                if item.$key1 == key1_val {
+                    if let Some(num_str) = item.$key2.strip_prefix($prefix) {
+                        if let Ok(num) = num_str.parse::<u32>() {
+                            max_num = max_num.max(num);
+                        }
+                    }
+                }
+            }
+
+            format!("{}{}", $prefix, max_num + 1)
         }
     };
 }

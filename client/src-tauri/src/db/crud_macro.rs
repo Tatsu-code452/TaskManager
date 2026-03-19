@@ -4,6 +4,7 @@ macro_rules! define_crud {
         $add_fn:ident,
         $find_fn:ident,
         $find_mut_fn:ident,
+        $find_all_fn:ident,
         $update_fn:ident,
         $delete_fn:ident,
         $rebuild_fn:ident,
@@ -15,6 +16,7 @@ macro_rules! define_crud {
         $crate::crud_add!($add_fn, $field, $index, $type);
         $crate::crud_find!($find_fn, $field, $index, $type);
         $crate::crud_find_mut!($find_mut_fn, $field, $index, $type);
+        $crate::crud_find_all!($find_all_fn, $field, $type);
         $crate::crud_update!($update_fn, $field, $index, $type);
         $crate::crud_delete!($delete_fn, $field, $index, $rebuild_fn, $type);
         $crate::crud_rebuild!($rebuild_fn, $field, $index, $type);
@@ -53,6 +55,21 @@ macro_rules! crud_find_mut {
     ($find_mut_fn:ident, $field:ident, $index:ident, $type:ty) => {
         pub fn $find_mut_fn(&mut self, id: &str) -> Option<&mut $type> {
             self.$index.get(id).and_then(|&i| self.$field.get_mut(i))
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! crud_find_all {
+    ($find_all_fn:ident, $field:ident, $type:ty) => {
+        pub fn $find_all_fn(&self) -> Option<Vec<$type>> {
+            let list: Vec<$type> = self.$field.iter().cloned().collect();
+
+            if list.is_empty() {
+                None
+            } else {
+                Some(list)
+            }
         }
     };
 }

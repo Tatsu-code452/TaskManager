@@ -14,24 +14,23 @@ fn main() {
         .manage(AppState::new())
         .invoke_handler(tauri::generate_handler![
             // Project
+            command::project::list_projects,
             command::project::create_project,
-            command::project::get_project,
             command::project::update_project,
             command::project::delete_project,
-            command::project::search_projects,
             // Phase
+            command::phase::list_phases,
             command::phase::create_phase,
-            command::phase::get_phase,
             command::phase::update_phase,
             command::phase::delete_phase,
             // Milestone
-            command::milestone::create_milestone,
             command::milestone::list_milestones,
+            command::milestone::create_milestone,
             command::milestone::update_milestone,
             command::milestone::delete_milestone,
             // Task
+            command::task::list_tasks,
             command::task::create_task,
-            command::task::get_task,
             command::task::update_task,
             command::task::delete_task,
             // Issue
@@ -45,15 +44,15 @@ fn main() {
             command::defect::update_defect,
             command::defect::delete_defect,
             // TaskPlanCell
-            command::task_plan_cell::create_plan_cell,
-            command::task_plan_cell::update_plan_cell,
-            command::task_plan_cell::delete_plan_cell,
-            command::task_plan_cell::get_plan_cells,
+            command::task_plan_cell::list_task_plan_cells,
+            command::task_plan_cell::create_task_plan_cell,
+            command::task_plan_cell::update_task_plan_cell,
+            command::task_plan_cell::delete_task_plan_cell,
             // TaskActualCell
-            command::task_actual_cell::create_actual_cell,
-            command::task_actual_cell::update_actual_cell,
-            command::task_actual_cell::delete_actual_cell,
-            command::task_actual_cell::get_actual_cells,
+            command::task_actual_cell::list_task_actual_cells,
+            command::task_actual_cell::create_task_actual_cell,
+            command::task_actual_cell::update_task_actual_cell,
+            command::task_actual_cell::delete_task_actual_cell,
             // Phase 集計
             command::phase_aggregate::get_phase_progress,
             // Project 集計
