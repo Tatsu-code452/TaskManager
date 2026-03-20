@@ -4,22 +4,18 @@ node_modules/
 # build outputs
 client/build/
 client/coverage/
-
-# public outputs (if generated)
 client/public/
+client/target/
+client/src-tauri/gen/
+client/src-tauri/target/
 
-# server outputs
 server/dist/
 server/build/
 server/tests/coverage/
 
-# tool outputs
 test-generator/dist/
 
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+*.log*
 
 # OS
 .DS_Store
@@ -27,6 +23,3 @@ Thumbs.db
 
 # VSCode
 .vscode/
-
-# old
-document/old/
