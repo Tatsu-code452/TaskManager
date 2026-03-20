@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "PascalCase")]
-enum DefectSeverity {
+pub enum DefectSeverity {
     Minor,    // 軽微
     Major,    // 重要
     Critical, // 致命的
@@ -14,7 +14,7 @@ enum DefectSeverity {
 
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "PascalCase")]
-enum DefectStatus {
+pub enum DefectStatus {
     Open,       // 登録
     InProgress, // 修正中
     Fixed,      // 修正完了

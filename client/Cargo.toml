@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "src-tauri",
+    "src-tauri/tool/cargo-testgen",
+]

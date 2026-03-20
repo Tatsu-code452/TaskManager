@@ -2,7 +2,7 @@ use crate::define_model;
 use crate::model::time_stamps::Timestamps;
 use serde::{Deserialize, Serialize};
 
-const PHASE_TEMPLATE: &[(&str, u32)] = &[
+pub const PHASE_TEMPLATE: &[(&str, u32)] = &[
     ("要件定義", 1),
     ("基本設計", 2),
     ("詳細設計", 3),
@@ -16,7 +16,7 @@ const PHASE_TEMPLATE: &[(&str, u32)] = &[
 
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "PascalCase")]
-enum PhaseStatus {
+pub enum PhaseStatus {
     NotStarted,
     InProgress,
     Completed,

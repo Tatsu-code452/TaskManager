@@ -1,13 +1,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 extern crate app_lib;
 
-mod command;
-mod db;
-mod model;
-mod service;
-mod util;
-
-use crate::command::state::AppState;
+use app_lib::command;
+use app_lib::command::state::AppState;
 
 fn main() {
     tauri::Builder::default()

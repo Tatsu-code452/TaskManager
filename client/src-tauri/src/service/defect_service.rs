@@ -1,7 +1,6 @@
 use crate::db::database::Database;
 use crate::define_service_multiple_id;
 use crate::model::defect::{Defect, DefectRequest};
-use crate::command::state::AppState;
 
 define_service_multiple_id!(
     DefectService,

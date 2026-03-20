@@ -2,7 +2,7 @@ use crate::define_model;
 use crate::model::time_stamps::Timestamps;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Clone, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "PascalCase")]
 pub enum ProjectStatus {
     Planned,   // 計画中

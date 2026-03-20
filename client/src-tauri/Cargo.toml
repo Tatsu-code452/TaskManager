@@ -7,12 +7,6 @@ authors = ["you"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[workspace]
-members = [
-    ".",
-    "tool/cargo-testgen",
-]
-
 [lib]
 name = "app_lib"
 path = "src/lib.rs"

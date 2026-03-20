@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "PascalCase")]
-enum IssueStatus {
+pub enum IssueStatus {
     Open,       // 登録しただけ
     InProgress, // 対応中
     Review,     // レビュー待ち
@@ -15,7 +15,7 @@ enum IssueStatus {
 
 #[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "PascalCase")]
-enum IssuePriority {
+pub enum IssuePriority {
     Low,
     Medium,
     High,
