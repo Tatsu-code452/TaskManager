@@ -1,4 +1,5 @@
 mod generator;
+mod analyzer;
 
 use std::path::Path;
 
@@ -19,5 +20,5 @@ fn main() {
     // ★ src-tauri の Cargo.toml がある場所を基準にする
     let app_root = Path::new("../../"); // cargo-testgen から見た src-tauri
 
-    generator::generate(app_root, mode, dir);
+    generator::runner::run(app_root, mode, dir);
 }

@@ -3,6 +3,9 @@
     "app_lib::model::project::{Project, ProjectRequest, ProjectStatus}",
     "serde::Deserialize"
   ],
+  "keys": [
+    "id"
+  ],
   "tests": [
     {
       "data_path": "tests/data/model/project.json",

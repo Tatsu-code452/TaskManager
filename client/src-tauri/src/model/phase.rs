@@ -14,7 +14,7 @@ pub const PHASE_TEMPLATE: &[(&str, u32)] = &[
     ("納品", 9),
 ];
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "PascalCase")]
 pub enum PhaseStatus {
     NotStarted,

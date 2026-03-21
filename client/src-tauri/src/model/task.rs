@@ -3,7 +3,7 @@ use crate::model::time_stamps::Timestamps;
 use crate::util::id::generate_uuid;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "PascalCase")]
 pub enum TaskStatus {
     NotStarted,

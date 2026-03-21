@@ -101,6 +101,70 @@
         "created_at": "2026-03-17T16:40:00",
         "updated_at": "2026-03-17T16:40:00"
       }
+    },
+    {
+      "id": "DEFECT-003",
+      "project_id": "2026-03-01-001",
+      "task_id": null,
+      "title": "テストツール生成ツールの不備",
+      "description": "メソッドの可変引数への対応",
+      "severity": "Major",
+      "status": "Open",
+      "owner": "Me",
+      "reviewer": "Me",
+      "due_date": "2026-03-22",
+      "fixed_date": null,
+      "verified_date": null,
+      "tags": [
+        {
+          "tag_type": "Domain",
+          "value": "Backend"
+        },
+        {
+          "tag_type": "Area",
+          "value": "製造/UT"
+        },
+        {
+          "tag_type": "Topic",
+          "value": "テストツール"
+        }
+      ],
+      "timestamps": {
+        "created_at": "2026-03-17T16:40:00",
+        "updated_at": "2026-03-17T16:40:00"
+      }
+    },
+    {
+      "id": "DEFECT-004",
+      "project_id": "2026-03-01-001",
+      "task_id": null,
+      "title": "テスト用ソースコード",
+      "description": "enumへのDebug,PartialEqの付与が必須",
+      "severity": "Major",
+      "status": "Open",
+      "owner": "Me",
+      "reviewer": "Me",
+      "due_date": "2026-03-22",
+      "fixed_date": null,
+      "verified_date": null,
+      "tags": [
+        {
+          "tag_type": "Domain",
+          "value": "Backend"
+        },
+        {
+          "tag_type": "Area",
+          "value": "製造/UT"
+        },
+        {
+          "tag_type": "Topic",
+          "value": "コーディングルール"
+        }
+      ],
+      "timestamps": {
+        "created_at": "2026-03-17T16:40:00",
+        "updated_at": "2026-03-17T16:40:00"
+      }
     }
   ]
 }

@@ -16,7 +16,6 @@ fn walk(root: &Path, current: &Path, result: &mut Vec<PathBuf>) {
         if path.is_dir() {
             walk(root, &path, result);
         } else if path.extension().map(|e| e == "rs").unwrap_or(false) {
-            // root からの相対パスを保存
             let rel = path.strip_prefix(root).unwrap().to_path_buf();
             result.push(rel);
         }

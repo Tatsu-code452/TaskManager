@@ -4,6 +4,7 @@ use serde_json::Value;
 #[derive(Deserialize)]
 pub struct TestJson {
     pub r#use: Vec<String>,
+    pub keys: Vec<String>,
     pub tests: Vec<TestCase>,
 }
 

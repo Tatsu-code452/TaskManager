@@ -14,7 +14,7 @@ pub const MILESTONE_TEMPLATE: &[(&str, usize)] = &[
     ("納品", 8),
 ];
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "PascalCase")]
 pub enum MilestoneStatus {
     Open,       // 作成

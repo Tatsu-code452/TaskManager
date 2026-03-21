@@ -3,7 +3,7 @@ use crate::model::tag::Tag;
 use crate::model::time_stamps::Timestamps;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "PascalCase")]
 pub enum IssueStatus {
     Open,       // 登録しただけ
@@ -13,7 +13,7 @@ pub enum IssueStatus {
     Closed,     // 完全クローズ
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "PascalCase")]
 pub enum IssuePriority {
     Low,
