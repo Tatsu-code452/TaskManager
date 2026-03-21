@@ -1,5 +1,6 @@
 pub mod generator;
 pub mod analyzer;
+pub mod json_generator;
 
 use std::path::Path;
 

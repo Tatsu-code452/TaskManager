@@ -1,9 +1,4 @@
-use std::path::Path;
-
-use crate::{
-    analyzer::new_args::extract_new_args,
-    generator::model::{assert, json_parser::TestCase},
-};
+use crate::generator::model::{assert, json_parser::TestCase};
 
 pub fn build_common(t: &TestCase) -> String {
     format!(
@@ -59,10 +54,7 @@ fn test_{test_name}() {{
     )
 }
 
-pub fn build_new_call(
-    model_name: &str,
-    json_keys: &[String],
-) -> String {
+pub fn build_new_call(model_name: &str, json_keys: &[String]) -> String {
     // ② JSON の keys に含まれるものだけ使う
     let args_code = json_keys
         .iter()

@@ -1,7 +1,12 @@
-mod generator;
 mod analyzer;
+mod generator;
+mod json_generator;
 
-use std::path::Path;
+use std::{fs, path::Path};
+
+use syn::File;
+
+use crate::json_generator::model::{parser::parse_model_info, structs::ModelInfo};
 
 // cargo testgen model \src\model
 // cd tool/cargo-testgen
@@ -20,5 +25,9 @@ fn main() {
     // ★ src-tauri の Cargo.toml がある場所を基準にする
     let app_root = Path::new("../../"); // cargo-testgen から見た src-tauri
 
-    generator::runner::run(app_root, mode, dir);
+    if (mode == "json") {
+        json_generator::runner::run(app_root, mode, dir);
+    } else {
+        generator::runner::run(app_root, mode, dir);
+    }
 }
