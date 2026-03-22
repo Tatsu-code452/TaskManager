@@ -1,0 +1,266 @@
+# 単体テスト仕様書（cargo-testgen / Tauri ツール）
+
+## 1. 対象
+
+- Rust ツール: `cargo-testgen`
+- 主な対象モジュール
+  - `analyzer::model`
+  - `analyzer::enums`
+  - `json_generator::model::parser`
+  - `json_generator::model::builder`（想定）
+  - `json_generator::writer`（想定）
+
+---
+
+## 2. テスト観点
+
+- define_model! マクロ解析の正しさ
+- enum 抽出の正しさ
+- Type → FieldType 変換の正しさ
+- Expr → DefaultKind 変換の正しさ
+- ModelInfo → JSON 変換の正しさ
+- ファイル出力パスの生成ロジックの正しさ
+
+---
+
+## 3. テストケース一覧
+
+### 3.1 `analyzer::model::find_define_model_macros`
+
+**目的:**  
+`define_model!` マクロから `DefineModelArgs` を正しく抽出できること。
+
+**前提:**
+- 入力ファイルに `define_model!` が 1 つ存在する。
+
+**ケース:**
+
+1. **正常系：基本形**
+
+   - 入力:
+     ```rust
+     define_model!(
+         Project,
+         ProjectRequest,
+         ProjectRequest,
+         { id: String },
+         { name: String },
+         { name: "".into() }
+     );
+     ```
+   - 期待値:
+     - `model_name` = `"Project"`
+     - `request_name` = `"ProjectRequest"`
+     - `keys` = `[("id", "String")]`
+     - `fields` = `[("name", "String")]`
+     - `defaults` = `[("name", Expr::MethodCall("".into()))]`
+
+2. **異常系：define_model! が存在しない**
+
+   - 入力: `define_model!` を含まないファイル
+   - 期待値:
+     - `find_define_model_macros` が `panic!("define_model! not found")` を発生させる
+
+---
+
+### 3.2 `analyzer::enums::find_enums`
+
+**目的:**  
+ファイル内の enum 定義を `EnumInfo` として抽出できること。
+
+**ケース:**
+
+1. **単純な enum**
+
+   - 入力:
+     ```rust
+     enum Status {
+         Planned,
+         Active,
+         Done,
+     }
+     ```
+   - 期待値:
+     - `EnumInfo { name: "Status", variants: ["Planned", "Active", "Done"] }`
+
+2. **複数 enum**
+
+   - 入力:
+     ```rust
+     enum Status { Planned, Active }
+     enum Priority { Low, High }
+     ```
+   - 期待値:
+     - `EnumInfo` が 2 つ返る
+
+---
+
+### 3.3 `json_generator::model::parser::convert_type`
+
+**目的:**  
+`syn::Type` を `FieldType` に正しく変換できること。
+
+**ケース:**
+
+1. **プリミティブ型**
+
+   - 入力 / 期待値:
+     - `String` → `FieldType::String`
+     - `i64` → `FieldType::Integer`
+     - `bool` → `FieldType::Boolean`
+
+2. **Option<T>**
+
+   - 入力:
+     - `Option<String>`
+   - 期待値:
+     - `FieldType::Option(Box::new(FieldType::String))`
+
+3. **Vec<T>**
+
+   - 入力:
+     - `Vec<i64>`
+   - 期待値:
+     - `FieldType::Vec(Box::new(FieldType::Integer))`
+
+4. **Enum 型**
+
+   - 前提:
+     - `enums = [EnumInfo { name: "Status", variants: [...] }]`
+   - 入力:
+     - `Status`
+   - 期待値:
+     - `FieldType::Enum("Status")`
+
+5. **Custom 型**
+
+   - 前提:
+     - `enums` に存在しない型名
+   - 入力:
+     - `Uuid`
+   - 期待値:
+     - `FieldType::Custom("Uuid")`
+
+---
+
+### 3.4 `json_generator::model::parser::convert_default_expr`
+
+**目的:**  
+`syn::Expr` を `DefaultKind` に正しく変換できること。
+
+**ケース:**
+
+1. **文字列リテラル**
+
+   - 入力: `"abc"`
+   - 期待値: `DefaultKind::String("abc".into())`
+
+2. **数値リテラル**
+
+   - 入力: `0`
+   - 期待値: `DefaultKind::Integer(0)`
+
+3. **bool リテラル**
+
+   - 入力: `false`
+   - 期待値: `DefaultKind::Boolean(false)`
+
+4. **`"".into()`**
+
+   - 入力: `"".into()`
+   - 期待値: `DefaultKind::String("".into())`
+
+5. **`None`**
+
+   - 入力: `None`
+   - 期待値: `DefaultKind::Null`
+
+6. **Enum variant**
+
+   - 入力: `Status::Planned`
+   - 期待値:
+     - `DefaultKind::EnumVariant { enum_name: "Status", variant: "Planned" }`
+
+7. **空配列 `[]`**
+
+   - 入力: `[]`
+   - 期待値: `DefaultKind::EmptyArray`
+
+8. **`vec![]`**
+
+   - 入力: `vec![]`
+   - 期待値: `DefaultKind::EmptyArray`
+
+9. **サポート外の式**
+
+   - 入力: `1 + 2`
+   - 期待値: `panic!("Unsupported default expression: ...")`
+
+---
+
+### 3.5 `json_generator::model::parser::parse_model_info`
+
+**目的:**  
+1 ファイルから `ModelInfo` を構築できること。
+
+**ケース:**
+
+1. **基本的な define_model! + enum**
+
+   - 入力:
+     ```rust
+     enum Status {
+         Planned,
+         Active,
+     }
+
+     define_model!(
+         Project,
+         ProjectRequest,
+         ProjectRequest,
+         { id: String },
+         { name: String, status: Status },
+         { name: "".into(), status: Status::Planned }
+     );
+     ```
+   - 期待値:
+     - `model_name = "Project"`
+     - `request_name = "ProjectRequest"`
+     - `keys[0].name = "id"`
+     - `fields` に `"name"`, `"status"`
+     - `defaults` に `"name"`, `"status"`
+     - `enums` に `Status` が含まれる
+
+---
+
+### 3.6 `json_generator::writer::write` / `output_path`
+
+**目的:**  
+出力パスと JSON 書き込みが正しく行われること。
+
+**ケース:**
+
+1. **パス生成**
+
+   - 入力:
+     - `app_root = /app`
+     - `mode = "unit"`
+     - `rel = src/model/project.rs`
+   - 期待値:
+     - `/app/tests/unit/project.json`（OS に応じた区切り）
+
+2. **ディレクトリ自動生成**
+
+   - 前提:
+     - `/app/tests/unit` が存在しない
+   - 期待値:
+     - ディレクトリが作成される
+     - ファイルが書き込まれる
+
+3. **JSON 内容**
+
+   - 入力:
+     - `json = serde_json::json!({ "name": "Project" })`
+   - 期待値:
+     - ファイル内容が `{"name":"Project"}` であること
+

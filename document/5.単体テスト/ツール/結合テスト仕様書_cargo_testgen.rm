@@ -1,0 +1,174 @@
+# 結合テスト仕様書（cargo-testgen / Tauri ツール）
+
+## 1. 対象
+
+- Tauri アプリ（React + Rust）
+- 内部ツール: `cargo-testgen`
+- フロー全体:
+  1. モデル定義ファイル（Rust）を選択
+  2. `cargo-testgen` が解析
+  3. JSON を生成・保存
+  4. テストコード生成（将来拡張）
+
+---
+
+## 2. テスト観点
+
+- UI からの操作で、期待通りに JSON が生成されるか
+- モデル定義の変更が JSON に正しく反映されるか
+- エラー時の挙動（define_model! 不足、解析不能など）
+- 複数モデルファイルを扱う場合の挙動
+- mode（例: `unit`, `integration`）ごとの出力先切り替え
+
+---
+
+## 3. 前提条件
+
+- Tauri アプリがビルド済み
+- `cargo-testgen` が Tauri コマンドとして組み込まれている
+- モデル定義ファイル例:
+  - `src/model/project.rs`
+  - `src/model/client.rs`
+
+---
+
+## 4. テストケース一覧
+
+### 4.1 基本フロー：1 モデルファイルから JSON を生成
+
+**目的:**  
+UI から 1 ファイルを指定して JSON が生成されること。
+
+- 手順:
+  1. アプリを起動
+  2. 「モデルファイル選択」から `src/model/project.rs` を選択
+  3. mode に `unit` を指定
+  4. 「生成」ボタンを押下
+- 期待値:
+  - コンソール or UI に「Generated: ...」のログが表示される
+  - `tests/unit/project.json` が生成されている
+  - JSON の中身が `ModelInfo` に対応した構造になっている
+
+---
+
+### 4.2 複数モデルファイルの連続生成
+
+**目的:**  
+複数ファイルを連続して処理しても問題なく動作すること。
+
+- 手順:
+  1. `project.rs` で JSON 生成
+  2. 続けて `client.rs` を選択し JSON 生成
+- 期待値:
+  - `tests/unit/project.json`
+  - `tests/unit/client.json`
+  - 両方が正しく生成される
+
+---
+
+### 4.3 mode 切り替えによる出力先変更
+
+**目的:**  
+mode に応じて出力パスが変わること。
+
+- 手順:
+  1. mode=`unit` で `project.rs` を生成
+  2. mode=`integration` で同じ `project.rs` を生成
+- 期待値:
+  - `tests/unit/project.json`
+  - `tests/integration/project.json`
+  - 両方が存在し、内容は同じ（mode による中身の差がない場合）
+
+---
+
+### 4.4 define_model! が存在しないファイルを指定
+
+**目的:**  
+解析不能なファイルを指定したときのエラー挙動を確認する。
+
+- 手順:
+  1. `src/model/empty.rs`（define_model! を含まない）を選択
+  2. 生成ボタン押下
+- 期待値:
+  - UI or ログに「define_model! not found」相当のエラーが表示される
+  - JSON ファイルは生成されない
+
+---
+
+### 4.5 enum を含むモデルの JSON 生成
+
+**目的:**  
+enum を含むモデルが正しく解析され、JSON に反映されること。
+
+- 手順:
+  1. `Status` enum と `Project` モデルを含むファイルを選択
+  2. JSON を生成
+- 期待値:
+  - JSON に `enums` セクションが含まれる
+  - `Status` の `variants` が正しく列挙されている
+  - `fields` の中で `status` の型が enum として扱われている
+
+---
+
+### 4.6 default 値の反映確認
+
+**目的:**  
+define_model! の default 値が JSON に正しく反映されること。
+
+- 手順:
+  1. 以下のようなモデルを用意:
+     ```rust
+     enum Status { Planned, Active }
+
+     define_model!(
+         Project,
+         ProjectRequest,
+         ProjectRequest,
+         { id: String },
+         { name: String, status: Status, tags: Vec<String> },
+         {
+             name: "".into(),
+             status: Status::Planned,
+             tags: vec![]
+         }
+     );
+     ```
+  2. JSON を生成
+- 期待値:
+  - `defaults` に以下が含まれる:
+    - `name` → `String("")`
+    - `status` → `EnumVariant { enum_name: "Status", variant: "Planned" }`
+    - `tags` → `EmptyArray`
+
+---
+
+### 4.7 Tauri コマンド連携の確認
+
+**目的:**  
+フロントエンド（React）から Tauri コマンドを呼び出し、  
+`cargo-testgen` が期待通りに動作すること。
+
+- 手順:
+  1. フロントエンドから `invoke("generate_model_json", { path, mode })` を実行
+  2. path に `src/model/project.rs` を指定
+- 期待値:
+  - コマンドがエラーなく完了する
+  - JSON ファイルが生成される
+  - UI に成功メッセージが表示される
+
+---
+
+### 4.8 エラー時の UI 表示
+
+**目的:**  
+内部で panic / エラーが発生した場合に、  
+ユーザーに分かる形でエラーが表示されること。
+
+- 手順:
+  1. 意図的に壊れたモデルファイル（構文エラー）を指定
+  2. 生成ボタン押下
+- 期待値:
+  - UI に「解析に失敗しました」などのメッセージ
+  - 詳細はログに出力される
+  - JSON は生成されない
+
