@@ -24,8 +24,7 @@ fn load_json<T: serde::de::DeserializeOwned>() -> T {
 
 
 
-#[test]
-fn test_milestone_apply_request_0() {
+pub fn test_milestone_apply_request_0() {
     let parsed: TestJson = load_json();
     let data = &parsed.tests[0];
 
@@ -45,8 +44,7 @@ fn test_milestone_apply_request_0() {
 }
 
 
-#[test]
-fn test_milestone_apply_request_1() {
+pub fn test_milestone_apply_request_1() {
     let parsed: TestJson = load_json();
     let data = &parsed.tests[1];
 
@@ -66,8 +64,7 @@ fn test_milestone_apply_request_1() {
 }
 
 
-#[test]
-fn test_milestone_apply_request_2() {
+pub fn test_milestone_apply_request_2() {
     let parsed: TestJson = load_json();
     let data = &parsed.tests[2];
 
