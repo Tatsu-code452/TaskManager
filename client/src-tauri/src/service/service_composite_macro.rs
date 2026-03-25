@@ -22,7 +22,7 @@ macro_rules! define_service_composite {
         pub struct $service_name;
 
         impl $service_name {
-            $crate::service_list!($list_fn, $find_all_fn, $table_type);
+            $crate::service_list_by_key!($list_fn, $find_all_fn, $table_type);
 
             $crate::service_create!(
                 $create_fn,

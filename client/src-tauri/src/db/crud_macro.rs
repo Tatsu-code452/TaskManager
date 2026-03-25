@@ -81,6 +81,7 @@ macro_rules! crud_update {
             let id = item.id.clone();
             let index = *self.$index.get(&id)?;
             self.$field[index] = item.clone();
+            println!("crud OK");
             Some(item)
         }
     };

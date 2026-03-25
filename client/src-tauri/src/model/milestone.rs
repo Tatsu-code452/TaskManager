@@ -1,4 +1,4 @@
-use crate::define_model;
+use crate::define_model_all;
 use crate::model::tag::Tag;
 use crate::model::time_stamps::Timestamps;
 use serde::{Deserialize, Serialize};
@@ -23,7 +23,7 @@ pub enum MilestoneStatus {
     Archived,   // アーカイブ
 }
 
-define_model!(
+define_model_all!(
     Milestone,
     MilestoneRequest,
     MilestoneRequest,
@@ -32,27 +32,13 @@ define_model!(
         project_id: String,
     },
     {
-        title: String,
-        description: String,
-        // 状態管理
-        status: MilestoneStatus,
-        progress: u8, // 0〜100%
-        // スケジュール
-        start_date: Option<String>,
-        end_date: Option<String>,
-        // 担当者
-        owner: String,
-        // タグ
-        tags: Vec<Tag>,
-    },
-    {
-        title: "".into(),
-        description: "".into(),
-        status: MilestoneStatus::Open,
-        progress: 0,
-        start_date: None,
-        end_date: None,
-        owner: "".into(),
-        tags: vec![],
+        title: String => "".into(),
+        description: String => "".into(),
+        status: MilestoneStatus => MilestoneStatus::Open,
+        progress: u8 => 0,
+        start_date: Option<String> => None,
+        end_date: Option<String> => None,
+        owner: String => "".into(),
+        tags: Vec<Tag> => vec![],
     }
 );

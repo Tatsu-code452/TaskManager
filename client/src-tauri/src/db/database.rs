@@ -17,6 +17,9 @@ const CURRENT_SCHEMA_VERSION: u32 = 2;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Database {
+    #[serde(skip)]
+    pub is_test: bool,
+
     pub schema_version: u32,
 
     pub projects: Vec<Project>,
@@ -45,6 +48,7 @@ pub struct Database {
 impl Default for Database {
     fn default() -> Self {
         Self {
+            is_test: false,
             schema_version: CURRENT_SCHEMA_VERSION,
             projects: vec![],
             phases: vec![],
@@ -106,6 +110,10 @@ impl Database {
     // Atomic save + backup
     // -------------------------
     pub fn save_atomic(&self) -> Result<(), String> {
+        if self.is_test {
+            return Ok(());
+        }
+
         // 保存先
         let path = Path::new(DB_PATH);
         let backup_path = Path::new(DB_BACKUP_PATH);

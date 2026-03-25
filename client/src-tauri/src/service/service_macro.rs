@@ -9,6 +9,20 @@ macro_rules! service_list {
 }
 
 #[macro_export]
+macro_rules! service_list_by_key {
+    ($list_fn:ident, $find_all_fn:ident, $table_type:ty) => {
+        pub fn $list_fn(db: &Database, key1_val: String) -> Result<Vec<$table_type>, String> {
+            if key1_val.trim().is_empty() {
+                return Err("Key is empty".into());
+            }
+
+            db.$find_all_fn(&key1_val)
+                .ok_or_else(|| "Not found".to_string())
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! service_create_with_next_id {
     (
         $create_fn:ident,
@@ -24,6 +38,10 @@ macro_rules! service_create_with_next_id {
             db: &mut Database,
             payload: $request_type,
         ) -> Result<$table_type, String> {
+            if payload.$key1.trim().is_empty() {
+                return Err("Key is empty".into());
+            }
+
             // next_id を使う場合、payload.$key2 は無視して採番する
             let new_id = db.$next_id_fn(&payload.$key1);
 
@@ -55,6 +73,12 @@ macro_rules! service_create {
             db: &mut Database,
             payload: $request_type,
         ) -> Result<$table_type, String> {
+
+            $(
+                if payload.$keys.trim().is_empty() {
+                    return Err("Key is empty".into());
+                }
+            )*
 
             if db.$find_fn($( &payload.$keys ),*).is_some() {
                 return Err("Already exists".into());
@@ -88,6 +112,12 @@ macro_rules! service_update {
             payload: $request_type,
         ) -> Result<$table_type, String> {
 
+            $(
+                if payload.$keys.trim().is_empty() {
+                    return Err("Key is empty".into());
+                }
+            )*
+
             {
                 let item = db.$find_mut_fn($( &payload.$keys ),*)
                     .ok_or_else(|| "Not found".to_string())?;
@@ -118,6 +148,12 @@ macro_rules! service_delete {
             db: &mut Database,
             $( $keys: String ),*
         ) -> Result<(), String> {
+
+            $(
+                if $keys.trim().is_empty() {
+                    return Err("Key is empty".into());
+                }
+            )*
 
             db.$delete_db_fn($( &$keys ),*)
                 .ok_or_else(|| "Not found".to_string())?;

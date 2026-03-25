@@ -1,8 +1,8 @@
-use crate::define_model;
+use crate::define_model_all;
 use crate::model::time_stamps::Timestamps;
 use serde::Deserialize;
 
-define_model!(
+define_model_all!(
     TaskPlanCell,
     TaskPlanCellRequest,
     TaskPlanCellRequest,
@@ -11,9 +11,6 @@ define_model!(
         date: String,
     },
     {
-        hours: f64,
-    },
-    {
-        hours: 0.0,
+        hours: f64 => 0.0,
     }
 );

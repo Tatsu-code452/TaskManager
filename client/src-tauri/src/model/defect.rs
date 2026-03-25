@@ -1,4 +1,4 @@
-use crate::define_model;
+use crate::define_model_all;
 use crate::model::tag::Tag;
 use crate::model::time_stamps::Timestamps;
 use serde::{Deserialize, Serialize};
@@ -22,7 +22,7 @@ pub enum DefectStatus {
     Closed,     // 完全クローズ
 }
 
-define_model!(
+define_model_all!(
     Defect,
     DefectRequest,
     DefectRequest,
@@ -31,33 +31,16 @@ define_model!(
         project_id: String,
     },
     {
-        task_id: Option<String>,
-        title: String,
-        description: String,
-        // 状態管理
-        severity: DefectSeverity,
-        status: DefectStatus,
-        // 担当者
-        owner: String,    // 修正担当
-        reviewer: String, // 確認担当
-        // スケジュール
-        due_date: Option<String>,      // 修正期限
-        fixed_date: Option<String>,    // 修正完了日
-        verified_date: Option<String>, // 確認完了日
-        // タグ（フィルタ用）
-        tags: Vec<Tag>,
-    },
-    {
-        task_id: None,
-        title: "".into(),
-        description: "".into(),
-        severity: DefectSeverity::Minor,
-        status: DefectStatus::Open,
-        owner: "".into(),
-        reviewer: "".into(),
-        due_date: None,
-        fixed_date: None,
-        verified_date: None,
-        tags: vec![],
+        task_id: Option<String> => None,
+        title: String => "".into(),
+        description: String => "".into(),
+        severity: DefectSeverity => DefectSeverity::Minor,
+        status: DefectStatus => DefectStatus::Open,
+        owner: String => "".into(),
+        reviewer: String => "".into(),
+        due_date: Option<String> => None,
+        fixed_date: Option<String> => None,
+        verified_date: Option<String> => None,
+        tags: Vec<Tag> => vec![],
     }
 );

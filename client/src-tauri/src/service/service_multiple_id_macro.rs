@@ -23,7 +23,7 @@ macro_rules! define_service_multiple_id {
         pub struct $service_name;
 
         impl $service_name {
-            $crate::service_list!($list_fn, $find_by_key1_fn, $table_type);
+            $crate::service_list_by_key!($list_fn, $find_by_key1_fn, $table_type);
 
             $crate::service_create_with_next_id!(
                 $create_fn,

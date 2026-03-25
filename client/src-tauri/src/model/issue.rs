@@ -1,4 +1,4 @@
-use crate::define_model;
+use crate::define_model_all;
 use crate::model::tag::Tag;
 use crate::model::time_stamps::Timestamps;
 use serde::{Deserialize, Serialize};
@@ -22,7 +22,7 @@ pub enum IssuePriority {
     Critical,
 }
 
-define_model!(
+define_model_all!(
     Issue,
     IssueRequest,
     IssueRequest,
@@ -31,27 +31,15 @@ define_model!(
         project_id: String,
     },
     {
-        task_id: Option<String>,
-        title: String,
-        description: String,
-        status: IssueStatus,
-        priority: IssuePriority,
-        owner: String,
-        reviewer: String,
-        due_date: Option<String>,
-        completed_date: Option<String>,
-        tags: Vec<Tag>,
-    },
-    {
-        task_id: None,
-        title: "".into(),
-        description: "".into(),
-        status: IssueStatus::Open,
-        priority: IssuePriority::Low,
-        owner: "".into(),
-        reviewer: "".into(),
-        due_date: None,
-        completed_date: None,
-        tags: vec![],
+        task_id: Option<String> => None,
+        title: String => "".into(),
+        description: String => "".into(),
+        status: IssueStatus => IssueStatus::Open,
+        priority: IssuePriority => IssuePriority::Low,
+        owner: String => "".into(),
+        reviewer: String => "".into(),
+        due_date: Option<String> => None,
+        completed_date: Option<String> => None,
+        tags: Vec<Tag> => vec![],
     }
 );

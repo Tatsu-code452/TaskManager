@@ -14,6 +14,7 @@ define_service_single_id!(
     find_project_mut,
     find_all_project,
     add_project,
+    update_project,
     delete_project,
     id
 );

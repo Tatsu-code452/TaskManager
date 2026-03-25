@@ -14,6 +14,7 @@ macro_rules! define_service_single_id {
         $find_mut_fn:ident,
         $find_all_fn:ident,
         $add_fn:ident,
+        $update_db_fn:ident,
         $delete_db_fn:ident,
 
         $key:ident
@@ -38,6 +39,7 @@ macro_rules! define_service_single_id {
                 $request_type,
                 $find_fn,
                 $find_mut_fn,
+                $update_db_fn,
                 $key
             );
 
@@ -69,6 +71,10 @@ macro_rules! service_create_single {
             db: &mut Database,
             payload: $request_type,
         ) -> Result<$table_type, String> {
+            if payload.$key.trim().is_empty() {
+                return Err("Key is empty".into());
+            }
+
             if db.$find_fn(&payload.$key).is_some() {
                 return Err("Already exists".into());
             }
@@ -93,6 +99,7 @@ macro_rules! service_update_single {
         $request_type:ty,
         $find_fn:ident,
         $find_mut_fn:ident,
+        $update_db_fn:ident,
         $key:ident
     ) => {
         pub fn $update_fn(
@@ -100,10 +107,13 @@ macro_rules! service_update_single {
             payload: $request_type,
         ) -> Result<$table_type, String> {
             {
+                if payload.$key.trim().is_empty() {
+                    return Err("Key is empty".into());
+                }
+
                 let item = db
                     .$find_mut_fn(&payload.$key)
                     .ok_or_else(|| "Not found".to_string())?;
-
                 item.apply_request(&payload);
                 item.timestamps.touch();
             }
@@ -123,6 +133,10 @@ macro_rules! service_delete_single {
         $key:ident
     ) => {
         pub fn $delete_fn(db: &mut Database, $key: String) -> Result<(), String> {
+            if $key.trim().is_empty() {
+                return Err("Key is empty".into());
+            }
+
             db.$delete_db_fn(&$key)
                 .ok_or_else(|| "Not found".to_string())?;
 

@@ -1,4 +1,4 @@
-use crate::define_model;
+use crate::define_model_all;
 use crate::model::time_stamps::Timestamps;
 use serde::{Deserialize, Serialize};
 
@@ -12,27 +12,18 @@ pub enum ProjectStatus {
     Archived,  // アーカイブ
 }
 
-define_model!(
+define_model_all!(
     Project,
     ProjectRequest,
     ProjectRequest,
     { id: String },
     {
-        name: String,
-        client: String,
-        description: String,
-        status: ProjectStatus,
-        start_date: Option<String>,
-        end_date: Option<String>,
-        owner: String,
-    },
-    {
-        name: "".into(),
-        client: "".into(),
-        description: "".into(),
-        status: ProjectStatus::Planned,
-        start_date: None,
-        end_date: None,
-        owner: "".into(),
+        name: String => "".into(),
+        client: String => "".into(),
+        description: String => "".into(),
+        status: ProjectStatus => ProjectStatus::Planned,
+        start_date: Option<String> => None,
+        end_date: Option<String> => None,
+        owner: String => "".into(),
     }
 );

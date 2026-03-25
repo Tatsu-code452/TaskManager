@@ -1,0 +1,63 @@
+{
+    "entity": {
+        "static_name": "project",
+        "command_name": "ProjectCommand",
+        "table_name": "projects",
+        "model_type": "Project"
+    },
+    "use": [
+        "use app_lib::command::project::ProjectCommand;",
+        "use app_lib::db::database::Database;",
+        "use app_lib::model::project::{Project, ProjectRequest, ProjectStatus};",
+        "use app_lib::model::time_stamps::Timestamps;",
+        "use it::mock_db::load_mock_db;"
+    ],
+    "test_helper": {
+        "builder_type": "ProjectRequestBuilder",
+        "request_type": "ProjectRequest",
+        "model_type": "Project",
+        "required_fields": {
+            "id": "String => \"\".into()"
+        },
+        "optional_fields": {
+            "name": "String => None",
+            "client": "String => None",
+            "description": "String => None",
+            "status": "ProjectStatus => None",
+            "start_date": "Option<String> => None",
+            "end_date": "Option<String> => None",
+            "owner": "String => None"
+        }
+    },
+    "list": {
+        "list_key_no": "\"\".into()",
+        "list_key_single": "\"P1\".into()",
+        "list_find_expr": "|p| p.id == \"P1\""
+    },
+    "create": {
+        "create_payload_init": "id: \"P999\".into()",
+        "create_expected_init": "id: \"P999\".into(),\n        name: \"\".into(),\n        client: \"\".into(),\n        description: \"\".into(),\n        status: ProjectStatus::Planned,\n        start_date: None,\n        end_date: None,\n        owner: \"\".into()",
+        "create_payload_full": "id: \"P3\".into(),\n        name: Some(\"プロジェクトC\".into()),\n        client: Some(\"顧客X\".into()),\n        description: Some(\"説明文\".into()),\n        status: Some(ProjectStatus::Active),\n        start_date: Some(Some(\"2024-01-01\".into())),\n        end_date: Some(Some(\"2024-12-31\".into())),\n        owner: Some(\"佐藤\".into())",
+        "create_expected_full": "id: \"P3\".into(),\n        name: \"プロジェクトC\".into(),\n        client: \"顧客X\".into(),\n        description: \"説明文\".into(),\n        status: ProjectStatus::Active,\n        start_date: Some(\"2024-01-01\".into()),\n        end_date: Some(\"2024-12-31\".into()),\n        owner: \"佐藤\".into()",
+        "create_find_expr_full": "\"P3\"",
+        "create_payload_gap": "ProjectRequestBuilder::new().id(\"P3\").build()",
+        "create_find_expr_gap": "\"P3\"",
+        "create_expected_gap": "\"P3\""
+    },
+    "update": {
+        "update_payload_no": "ProjectRequestBuilder::new().name(\"変更後\".into()).build()",
+        "update_payload_init": "ProjectRequestBuilder::new()\n            .id(\"P1\")\n            .build()",
+        "update_find_expr_init": "\"P1\"",
+        "update_expected_init": "id: \"P1\".into()",
+        "update_payload_full": "id: \"P1\".into(),\n        name: Some(\"修正後\".into()),\n        client: Some(\"顧客Y\".into()),\n        description: Some(\"説明修正\".into()),\n        status: Some(ProjectStatus::Completed),\n        start_date: Some(Some(\"2024-02-01\".into())),\n        end_date: Some(Some(\"2024-11-30\".into())),\n        owner: Some(\"山田\".into())",
+        "update_expected_full": "id: \"P1\".into(),\n        name: \"修正後\".into(),\n        client: \"顧客Y\".into(),\n        description: \"説明修正\".into(),\n        status: ProjectStatus::Completed,\n        start_date: Some(\"2024-02-01\".into()),\n        end_date: Some(\"2024-11-30\".into()),\n        owner: \"山田\".into()",
+        "update_find_expr_full": "\"P1\"",
+        "update_payload_not": "ProjectRequestBuilder::new()\n            .id(\"P998\")\n            .name(\"更新\".into())\n            .build()"
+    },
+    "delete": {
+        "delete_key_no": "\"\".into()",
+        "delete_key_ok": "\"P1\".into()",
+        "delete_key_ng": "\"P998\".into()",
+        "delete_find_expr_ok": "|p| p.id != \"P1\""
+    }
+}

@@ -1,4 +1,4 @@
-use crate::define_model;
+use crate::define_model_all;
 use crate::model::time_stamps::Timestamps;
 use serde::{Deserialize, Serialize};
 
@@ -22,7 +22,7 @@ pub enum PhaseStatus {
     Completed,
 }
 
-define_model!(
+define_model_all!(
     Phase,
     PhaseRequest,
     PhaseRequest,
@@ -31,23 +31,13 @@ define_model!(
         project_id: String,
     },
     {
-        name: String,
-        order: u32,
-        status: PhaseStatus,
-        start_date: Option<String>,
-        end_date: Option<String>,
-        inputs: Vec<String>,
-        outputs: Vec<String>,
-        owner: String,
-    },
-    {
-        name: "".into(),
-        order: 1,
-        status: PhaseStatus::NotStarted,
-        start_date: None,
-        end_date: None,
-        inputs: vec![],
-        outputs: vec![],
-        owner: "".into(),
+        name: String => "".into(),
+        order: u32 => 1,
+        status: PhaseStatus =>PhaseStatus::NotStarted,
+        start_date: Option<String> => None,
+        end_date: Option<String> => None,
+        inputs: Vec<String> => vec![],
+        outputs: Vec<String> => vec![],
+        owner: String => "".into(),
     }
 );
