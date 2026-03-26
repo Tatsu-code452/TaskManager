@@ -1,4 +1,5 @@
-import styles from "./modal.module.css";
+import React from "react";
+import styles from "./Modal.module.css";
 
 type ModalProps = {
     title?: string;
@@ -19,3 +20,5 @@ export const Modal = ({ title, children, onClose }: ModalProps) => {
         </div>
     );
 };
+
+export default React.memo(Modal);

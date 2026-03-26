@@ -1,0 +1,48 @@
+/* テーブル全体 */
+.table {
+    width: max-content; /* ← これが重要 */
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+}
+
+/* 行 */
+.table tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.table tr:hover {
+    background: #f5f7fa;
+}
+
+/* セル */
+.table th,
+.table td {
+    padding: 0.85rem 0.75rem;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+/* ヘッダー */
+.table th {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 2px solid #e5e7eb;
+    text-align: left;
+}
+
+/* ボディ */
+.table td {
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+}
+
+/* 最終行のボーダーを消す */
+.table tr:last-child td {
+    border-bottom: none;
+}

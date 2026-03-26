@@ -1,0 +1,63 @@
+.button {
+    padding: 0.55rem 1.1rem;
+    border-radius: 0.55rem;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition:
+        background 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.button_primary {
+    background: #0078d4;
+    color: white;
+}
+
+.button_primary:hover {
+    background: #006cc0;
+    box-shadow: 0 2px 6px rgba(0, 120, 212, 0.25);
+}
+
+/* 編集アイコン */
+.icon_button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.3rem;
+    color: #0078d4;
+    border-radius: 0.4rem;
+}
+
+.icon_button:hover {
+    background: rgba(0, 120, 212, 0.1);
+}
+
+.button_secondary {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.button_secondary:hover {
+    background: #e5e7eb;
+}
+
+.button_danger {
+    background: #d64545;
+    color: white;
+}
+
+.button_danger:hover {
+    background: #b93838;
+}
+
+.button_success {
+    background: #3ba56f;
+    color: white;
+}
+
+.button_success:hover {
+    background: #2f8a5c;
+}

@@ -1,7 +1,8 @@
 import { useCallback, useEffect } from "react";
 import { defectApi } from "../../../../api/tauri/defectApi";
-import { DefectSeverity, DefectStatus } from "../../../../types/db/defect";
-import { Defect, toDefect, toDefectPayload } from "../../types/defect";
+import { TagType } from "../../../../types/db/common";
+import { DefectPayload, DefectRow, toDefectPayload } from "../../../../types/db/defect";
+import { InitPayload } from "../../types/defect";
 import { DefectStates } from "../state/useDefectStates";
 
 export const useDefectController = (projectId: string, states: DefectStates) => {
@@ -9,55 +10,18 @@ export const useDefectController = (projectId: string, states: DefectStates) => 
         setDefects,
         loading,
         setLoading,
-        editingDefect,
+        form,
         setShowModal,
         setMode,
-        setEditingDefect,
+        setForm,
     } = states;
 
-    const validate = (data: Defect): string[] => {
-        const errors: string[] = [];
-
-        if (!data.title || data.title.trim() === "") {
-            errors.push("タイトルは必須です");
-        }
-
-        return errors;
-    };
-
     const load = useCallback(async () => {
+        setLoading(true);
         const list = await defectApi.list(projectId);
-        setDefects(list.map(toDefect));
+        setDefects(list);
         setLoading(false);
-    }, [projectId]);
-
-    const create = useCallback(async () => {
-        const errors = validate(editingDefect);
-        if (errors.length > 0) {
-            alert(errors.join("\n"));
-            return;
-        }
-
-        await defectApi.create(toDefectPayload(editingDefect));
-        await load();
-    }, [load]);
-
-    const update = useCallback(async () => {
-        const errors = validate(editingDefect);
-        if (errors.length > 0) {
-            alert(errors.join("\n"));
-            return;
-        }
-
-        await defectApi.update(toDefectPayload(editingDefect));
-        await load();
-    }, [load]);
-
-    const remove = useCallback(async (id: string) => {
-        if (!confirm("削除しますか？")) return;
-        await defectApi.delete(projectId, id);
-        await load();
-    }, [projectId, load]);
+    }, [projectId, setDefects]);
 
     useEffect(() => {
         if (loading) return;
@@ -69,32 +33,110 @@ export const useDefectController = (projectId: string, states: DefectStates) => 
         }
     }, [load]);
 
-    const handleChange = (key: keyof Defect, value: string | number) => {
-        if (!editingDefect) return;
-        setEditingDefect({ ...editingDefect, [key]: value });
+    type RequiredKeys =
+        | "title"
+        | "description"
+        | "status"
+        ;
+
+    const handleChange = (key: keyof DefectPayload, value: unknown) => {
+        if (!form) return;
+        setForm({ ...form, [key]: value });
     };
 
-    const handleShowModal = (mode: "new" | "edit", defect: Defect | null) => {
-        setMode(mode);
+    const validate = (data: DefectPayload): string[] => {
+        const requiredRules: Record<RequiredKeys, string> = {
+            title: "タイトルは必須です",
+            description: "内容は必須です",
+            status: "ステータスは必須です",
+        };
+        const errors: string[] = [];
 
-        if (mode === "new") {
-            defect = {
-                id: "",
-                projectId,
-                taskId: null,
-                title: "",
-                description: "",
-                severity: DefectSeverity.Minor,
-                status: DefectStatus.Open,
-            };
+        // 必須チェック（型安全にループ）
+        (Object.keys(requiredRules) as RequiredKeys[]).forEach((key) => {
+            const value = data[key];
+            if (!value || value.toString().trim() === "") {
+                errors.push(requiredRules[key]);
+            }
+        });
+
+        return errors;
+    };
+
+    // -----------------------------
+    // モーダル制御
+    // -----------------------------
+    const closeModal = () => {
+        setMode(null);
+        setForm(InitPayload(projectId));
+        setShowModal(false);
+    };
+
+    const handleShowModal = (modal:
+        | { mode: "new"; defect: null }
+        | { mode: "edit"; defect: DefectRow }
+    ) => {
+        setMode(modal.mode);
+
+        const payload: DefectPayload =
+            modal.mode === "edit" ?
+                toDefectPayload(modal.defect) :
+                InitPayload(projectId);
+
+        setForm(payload);
+        setShowModal(true);
+    };
+
+    const create = useCallback(async () => {
+        const errors = validate(form);
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+            return;
         }
 
-        setEditingDefect(defect);
-        setShowModal(true);
+        await defectApi.create(form);
+        await load();
+        setForm(InitPayload(projectId));
+        closeModal();
+    }, [form, load]);
+
+    const update = useCallback(async () => {
+        const errors = validate(form);
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+            return;
+        }
+
+        await defectApi.update(form);
+        setForm(InitPayload(projectId));
+        await load();
+        closeModal();
+    }, [form, load]);
+
+    const remove = useCallback(async (id: string) => {
+        if (!confirm("削除しますか？")) return;
+        await defectApi.delete(projectId, id);
+        await load();
+    }, [projectId, load]);
+
+    const addTag = (newTagType: TagType, newTagValue: string) => {
+        if (!newTagValue.trim()) return;
+
+        handleChange("tags", [
+            ...form.tags,
+            { tag_type: newTagType, value: newTagValue },
+        ]);
+    };
+
+    const removeTag = (index: number) => {
+        const newTags = [...form.tags];
+        newTags.splice(index, 1);
+        handleChange("tags", newTags);
     };
 
     return {
         load, create, update, remove,
         handleChange, handleShowModal,
+        addTag, removeTag
     };
 };

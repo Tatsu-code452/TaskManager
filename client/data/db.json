@@ -1,31 +1,50 @@
 {
-  "schema_version": 1,
-  "project": {
-    "id": "2026-03-01-001",
-    "name": "プロジェクト管理システム",
-    "client": "自社",
-    "status": "Active",
-    "start_date": "2026-03-01",
-    "end_date": "",
-    "timestamps": {
-      "created_at": "2026-03-01T16:36:00",
-      "updated_at": "2026-03-31T16:36:00"
-    }
-  },
-  "issues": [
+  "schema_version": 2,
+  "projects": [
     {
-      "id": "ISSUE-002",
-      "project_id": "2026-03-01-001",
-      "task_id": null,
+      "id": "2026-1",
+      "name": "案件管理システム",
+      "client": "自身",
+      "description": "",
+      "status": "Planned",
+      "start_date": "2026-01-01",
+      "end_date": "2026-06-25",
+      "owner": "自身",
+      "timestamps": {
+        "created_at": "2026-03-25 19:21:10",
+        "updated_at": "2026-03-25 19:22:12"
+      }
+    }
+  ],
+  "phases": [],
+  "milestones": [],
+  "tasks": [],
+  "task_plan_cells": [],
+  "task_actual_cells": [],
+  "issues": [],
+  "defects": [
+    {
+      "id": "DEFECT-1",
+      "project_id": "2026-1",
+      "task_id": "",
       "title": "データ構造全体の見直し",
       "description": "Project / Issue / Defect / Task / Phase / Milestone の構造を整理し、拡張性の高い形に統一する",
-      "status": "Open",
-      "priority": "Medium",
-      "owner": "Me",
-      "reviewer": "Me",
+      "severity": "Blocker",
+      "status": "InProgress",
+      "owner": "自身",
+      "reviewer": "自身",
       "due_date": "2026-03-25",
-      "completed_date": null,
+      "fixed_date": "2026-03-25",
+      "verified_date": "2026-03-25",
       "tags": [
+        {
+          "tag_type": "Domain",
+          "value": "react"
+        },
+        {
+          "tag_type": "Domain",
+          "value": "rust"
+        },
         {
           "tag_type": "Area",
           "value": "設計"
@@ -36,134 +55,103 @@
         }
       ],
       "timestamps": {
-        "created_at": "2026-03-17T16:50:00",
-        "updated_at": "2026-03-17T16:50:00"
-      }
-    }
-  ],
-  "defects": [
-    {
-      "id": "DEFECT-001",
-      "project_id": "2026-03-01-001",
-      "task_id": null,
-      "title": "UI:マイルストーンタブのスタイルが反映されない",
-      "description": "タイトル通り",
-      "severity": "Major",
-      "status": "Open",
-      "owner": "Me",
-      "reviewer": "Me",
-      "due_date": "2026-03-20",
-      "fixed_date": null,
-      "verified_date": null,
-      "tags": [
-        {
-          "tag_type": "Domain",
-          "value": "Frontend"
-        },
-        {
-          "tag_type": "Topic",
-          "value": "スタイル"
-        }
-      ],
-      "timestamps": {
-        "created_at": "2026-03-17T16:40:00",
-        "updated_at": "2026-03-17T16:40:00"
+        "created_at": "2026-03-25 22:43:30",
+        "updated_at": "2026-03-26 09:33:04"
       }
     },
     {
-      "id": "DEFECT-002",
-      "project_id": "2026-03-01-001",
-      "task_id": null,
+      "id": "DEFECT-2",
+      "project_id": "2026-1",
+      "task_id": "",
       "title": "データ登録の仕様不備",
       "description": "IDはプロジェクト単位で重複しない形で自動採番する必要がある",
-      "severity": "Major",
-      "status": "Open",
-      "owner": "Me",
-      "reviewer": "Me",
-      "due_date": "2026-03-22",
-      "fixed_date": null,
-      "verified_date": null,
-      "tags": [
-        {
-          "tag_type": "Domain",
-          "value": "Backend"
-        },
-        {
-          "tag_type": "Area",
-          "value": "仕様"
-        },
-        {
-          "tag_type": "Topic",
-          "value": "採番"
-        }
-      ],
+      "severity": "Critical",
+      "status": "InProgress",
+      "owner": "",
+      "reviewer": "",
+      "due_date": "",
+      "fixed_date": "",
+      "verified_date": "",
+      "tags": [],
       "timestamps": {
-        "created_at": "2026-03-17T16:40:00",
-        "updated_at": "2026-03-17T16:40:00"
+        "created_at": "2026-03-25 22:46:58",
+        "updated_at": "2026-03-25 22:46:58"
       }
     },
     {
-      "id": "DEFECT-003",
-      "project_id": "2026-03-01-001",
-      "task_id": null,
-      "title": "テストツール生成ツールの不備",
-      "description": "メソッドの可変引数への対応",
-      "severity": "Major",
-      "status": "Open",
-      "owner": "Me",
-      "reviewer": "Me",
-      "due_date": "2026-03-22",
-      "fixed_date": null,
-      "verified_date": null,
-      "tags": [
-        {
-          "tag_type": "Domain",
-          "value": "Backend"
-        },
-        {
-          "tag_type": "Area",
-          "value": "製造/UT"
-        },
-        {
-          "tag_type": "Topic",
-          "value": "テストツール"
-        }
-      ],
+      "id": "DEFECT-3",
+      "project_id": "2026-1",
+      "task_id": "",
+      "title": "react-rust間のインターフェースの不備",
+      "description": "rust側で共通定義したパラメータは、クライアントからもらう際は、同じ名前でもらう必要があるがrust側がkey1となっていた",
+      "severity": "Minor",
+      "status": "InProgress",
+      "owner": "",
+      "reviewer": "",
+      "due_date": "",
+      "fixed_date": "",
+      "verified_date": "",
+      "tags": [],
       "timestamps": {
-        "created_at": "2026-03-17T16:40:00",
-        "updated_at": "2026-03-17T16:40:00"
+        "created_at": "2026-03-25 22:57:17",
+        "updated_at": "2026-03-25 22:57:17"
       }
     },
     {
-      "id": "DEFECT-004",
-      "project_id": "2026-03-01-001",
-      "task_id": null,
-      "title": "テスト用ソースコード",
-      "description": "enumへのDebug,PartialEqの付与が必須",
-      "severity": "Major",
-      "status": "Open",
-      "owner": "Me",
-      "reviewer": "Me",
-      "due_date": "2026-03-22",
-      "fixed_date": null,
-      "verified_date": null,
-      "tags": [
-        {
-          "tag_type": "Domain",
-          "value": "Backend"
-        },
-        {
-          "tag_type": "Area",
-          "value": "製造/UT"
-        },
-        {
-          "tag_type": "Topic",
-          "value": "コーディングルール"
-        }
-      ],
+      "id": "DEFECT-4",
+      "project_id": "2026-1",
+      "task_id": "",
+      "title": "欠陥表示画面",
+      "description": "子画面で内容登録後、画面が戻らず、なにも表示されない",
+      "severity": "Critical",
+      "status": "InProgress",
+      "owner": "",
+      "reviewer": "",
+      "due_date": "",
+      "fixed_date": "",
+      "verified_date": "",
+      "tags": [],
       "timestamps": {
-        "created_at": "2026-03-17T16:40:00",
-        "updated_at": "2026-03-17T16:40:00"
+        "created_at": "2026-03-25 23:04:08",
+        "updated_at": "2026-03-25 23:04:08"
+      }
+    },
+    {
+      "id": "DEFECT-5",
+      "project_id": "2026-1",
+      "task_id": "",
+      "title": "サービスのバリデーション不足",
+      "description": "キー情報が空での登録の場合、存在チェックがOKとなり、登録されてしまう",
+      "severity": "Major",
+      "status": "InProgress",
+      "owner": "",
+      "reviewer": "",
+      "due_date": "",
+      "fixed_date": "",
+      "verified_date": "",
+      "tags": [],
+      "timestamps": {
+        "created_at": "2026-03-25 23:14:34",
+        "updated_at": "2026-03-25 23:14:34"
+      }
+    },
+    {
+      "id": "DEFECT-6",
+      "project_id": "2026-1",
+      "task_id": "",
+      "title": "欠陥表示画面",
+      "description": "子画面からの登録完了後、閉じられない。クローズ後、showmodalの状態変更忘れ",
+      "severity": "Minor",
+      "status": "Fixed",
+      "owner": "自身",
+      "reviewer": "自身",
+      "due_date": "2026-03-25",
+      "fixed_date": "2026-03-25",
+      "verified_date": "2026-03-25",
+      "tags": [],
+      "timestamps": {
+        "created_at": "2026-03-25 23:17:08",
+        "updated_at": "2026-03-25 23:19:10"
       }
     }
   ]

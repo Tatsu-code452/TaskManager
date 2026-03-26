@@ -1,22 +1,19 @@
 import { useState } from "react";
-import { ProjectStatus } from "../../../../types/db/project";
-import { Project, ProjectSearchCondition } from "../../types/model";
+import { ProjectRow } from "../../../../types/db/project";
+import { DispProjectStatus, ProjectSearchCondition } from "../../types/model";
 
 
 export const useProjectListStates = () => {
-    const [projects, setProjects] = useState<Project[]>([]);
-
+    const [projects, setProjects] = useState<ProjectRow[]>([]);
     const [search, setSearch] = useState<ProjectSearchCondition>({
         name: "",
         client: "",
-        status: ProjectStatus.All,
+        status: DispProjectStatus.All,
     });
 
 
     return {
-        projects,
-        setProjects,
-        search,
-        setSearch,
+        projects, setProjects,
+        search, setSearch,
     };
 };

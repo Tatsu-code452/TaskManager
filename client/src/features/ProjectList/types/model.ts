@@ -1,55 +1,68 @@
-import { ProjectPayload } from "../../../api/tauri/projectApi";
-import { ProjectRow, ProjectStatus } from "../../../types/db/project";
+import { ProjectPayload, ProjectStatus } from "../../../types/db/project";
+import { InputConfig } from "../../../types/inputConfig";
 
-export type Project = {
-    id: string;
-    name: string;
-    client: string;
-    status: ProjectStatus;
-    startDate: string;
-    endDate: string;
-    progress: number;
-};
+export const DispProjectStatus = {
+    ...ProjectStatus,
+    All: "",
+} as const;
+
+export type DispProjectStatus = typeof DispProjectStatus[keyof typeof DispProjectStatus];
 
 export type ProjectSearchCondition = {
     name: string;
     client: string;
-    status: ProjectStatus; // All を含む
+    status: DispProjectStatus; // All を含む
 };
 
-export const toProject = (row: ProjectRow): Project => ({
-    id: row.id,
-    name: row.name,
-    client: row.client,
-    status: row.status,
-    startDate: row.start_date,
-    endDate: row.end_date,
-    // 進捗は別集計でもいいが、今は 0 でプレースホルダ
-    progress: 0,
-});
-
-export const toProjectPayload = (param: Project): ProjectPayload => (
-    {
-        id: param.id,
-        name: param.name,
-        client: param.client,
-        status: param.status,
-        start_date: param.startDate,
-        end_date: param.endDate,
-    }
-)
-
-export const statusToLabel = (status: ProjectStatus): string => {
-    switch (status) {
-        case ProjectStatus.All:
-            return "";
-        case ProjectStatus.Planned:
-            return "計画中";
-        case ProjectStatus.Active:
-            return "実行中";
-        case ProjectStatus.Closed:
-            return "完工";
-        default:
-            return "";
-    }
+export const ProjectStatusLabel: Record<DispProjectStatus, string> = {
+    [DispProjectStatus.All]: "",
+    [DispProjectStatus.Planned]: "計画中",
+    [DispProjectStatus.Active]: "実行中",
+    [DispProjectStatus.OnHold]: "休止",
+    [DispProjectStatus.Completed]: "完工",
+    [DispProjectStatus.Archived]: "アーカイブ済",
 };
+
+export type RequiredKeys =
+    | "id"
+    | "name"
+    | "client"
+    | "status"
+    | "start_date"
+    | "end_date"
+    | "owner";
+
+export const createInputs = (form: ProjectPayload): InputConfig<RequiredKeys>[] => {
+    return [
+        { key: "id", value: form.id, type: "text", label: "ID" },
+        { key: "name", value: form.name, type: "text", label: "案件名" },
+        { key: "client", value: form.client, type: "text", label: "顧客名" },
+        {
+            key: "status",
+            value: form.status as DispProjectStatus,
+            type: "select",
+            label: "ステータス",
+            options: Object.values(DispProjectStatus),
+            labelMap: ProjectStatusLabel,
+        },
+        {
+            key: "start_date",
+            value: form.start_date,
+            type: "date",
+            label: "開始日",
+        },
+        {
+            key: "end_date",
+            value: form.end_date,
+            type: "date",
+            label: "終了日",
+        },
+        {
+            key: "owner",
+            value: form.owner,
+            type: "text",
+            label: "担当者",
+        },
+    ];
+}
+

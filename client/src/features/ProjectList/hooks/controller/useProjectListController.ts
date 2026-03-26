@@ -1,31 +1,7 @@
-/**
- * @test-import import { ProjectStatus } from "../../../../types/db/project";
- * @test-import import { Project } from "../../types/model";
- * @test-var-block project
- * const project: Project = {
- *   id: "1111",
- *   name: "name",
- *   client: "client",
- *   status: ProjectStatus.Planned,
- *   startDate: "2026-01-01",
- *   endDate: "2026-01-01",
- *   progress: 25,
- * }
- * @end-test-var-block
- * @test-var-block mock
- * vi.mock("../../../../api/tauri/projectApi", () => ({
- *   projectApi: {
- *     list: vi.fn(),
- *     create: vi.fn(),
- *     update: vi.fn(),
- *   }
- * }));
- * @end-test-var-block
- */
 import { useCallback } from "react";
-import { projectApi, ProjectPayload } from "../../../../api/tauri/projectApi";
-import { ProjectStatus } from "../../../../types/db/project";
-import { Project } from "../../types/model";
+import { projectApi } from "../../../../api/tauri/projectApi";
+import { ProjectPayload, ProjectRow, ProjectStatus, toProjectPayload } from "../../../../types/db/project";
+import { DispProjectStatus, RequiredKeys } from "../../types/model";
 
 import { useProjectFormStates } from "../state/useProjectFormStates";
 import { useProjectListStates } from "../state/useProjectListStates";
@@ -50,24 +26,17 @@ export const useProjectListController = () => {
     // -----------------------------
     // 一覧取得
     // -----------------------------
-    const loadProjects = useCallback(async () => {
-        const list = await projectApi.list(
-            search.name,
-            search.client,
-            search.status,
-        );
+    const load = useCallback(async () => {
+        const list = await projectApi.list();
         setProjects(list);
     }, [setProjects]);
 
     // -----------------------------
     // 検索
     // -----------------------------
+    // TODO: 未完成
     const searchProjects = useCallback(async () => {
-        const list = await projectApi.list(
-            search.name,
-            search.client,
-            search.status,
-        );
+        const list = await projectApi.list();
         setProjects(list);
     }, [setProjects]);
 
@@ -78,7 +47,7 @@ export const useProjectListController = () => {
         setSearch({
             name: "",
             client: "",
-            status: ProjectStatus.All,
+            status: DispProjectStatus.All,
         });
     };
 
@@ -94,62 +63,49 @@ export const useProjectListController = () => {
     // 新規作成モード
     // -----------------------------
     const openCreateModal = () => {
-        setForm({
+        const projectPayLoad: ProjectPayload = {
             id: "",
             name: "",
             client: "",
+            description: "",
             status: ProjectStatus.Planned,
             start_date: "",
             end_date: "",
-        });
-        setModalMode("create");
+            owner: "",
+        };
+
+        setForm(projectPayLoad);
+        setModalMode("new");
     };
 
     // -----------------------------
     // 編集モード
     // -----------------------------
-    const openEditModal = (project: Project) => {
-        setForm({
-            id: project.id,
-            name: project.name,
-            client: project.client,
-            status: project.status,
-            start_date: project.startDate,
-            end_date: project.endDate,
-        });
+    const openEditModal = (project: ProjectRow) => {
+        setForm(toProjectPayload(project));
         setModalMode("edit");
     };
 
     const validate = (data: ProjectPayload): string[] => {
+        // 必須項目のメッセージ定義（型安全）
+        const requiredRules: Record<RequiredKeys, string> = {
+            id: "IDは必須です",
+            name: "案件名は必須です",
+            client: "顧客名は必須です",
+            status: "ステータスは必須です",
+            start_date: "開始日は必須です",
+            end_date: "終了日は必須です",
+            owner: "担当者は必須です",
+        };
         const errors: string[] = [];
 
-        // ID（キー情報）
-        if (!data.id || data.id.trim() === "") {
-            errors.push("IDは必須です");
-        }
-
-        // 名称
-        if (!data.name || data.name.trim() === "") {
-            errors.push("案件名は必須です");
-        }
-
-        // 顧客名
-        if (!data.client || data.client.trim() === "") {
-            errors.push("顧客名は必須です");
-        }
-
-        // ステータス
-        if (!data.status) {
-            errors.push("ステータスは必須です");
-        }
-
-        // 日付
-        if (!data.start_date) {
-            errors.push("開始日は必須です");
-        }
-        if (!data.end_date) {
-            errors.push("終了日は必須です");
-        }
+        // 必須チェック（型安全にループ）
+        (Object.keys(requiredRules) as RequiredKeys[]).forEach((key) => {
+            const value = data[key];
+            if (!value || value.toString().trim() === "") {
+                errors.push(requiredRules[key]);
+            }
+        });
 
         // 日付整合性
         if (data.start_date && data.end_date) {
@@ -174,7 +130,7 @@ export const useProjectListController = () => {
         }
 
         await projectApi.create(form);
-        await loadProjects();
+        await load();
         closeModal();
     };
 
@@ -191,14 +147,14 @@ export const useProjectListController = () => {
         }
 
         await projectApi.update(form);
-        await loadProjects();
+        await load();
         closeModal();
     };
 
     return {
         // 一覧
         projects,
-        loadProjects,
+        loadProjects: load,
 
         // 検索
         search,

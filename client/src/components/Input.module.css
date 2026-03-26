@@ -1,0 +1,28 @@
+.detail_row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.detail_label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #444;
+}
+
+.detail_input,
+.detail_select {
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.45rem;
+    font-size: 0.95rem;
+    width: 100%;
+}
+
+.detail_input:focus,
+.detail_select:focus {
+    outline: none;
+    border-color: #0078d4;
+    box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+}

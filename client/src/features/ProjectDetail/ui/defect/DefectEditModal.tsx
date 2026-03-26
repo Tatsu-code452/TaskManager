@@ -1,92 +1,92 @@
-import { DefectSeverity, DefectStatus } from "../../../../types/db/defect";
-import { Defect } from "../../types/defect";
+import { useState } from "react";
+import commonStyle from "../../../../common.module.css";
+import Button from "../../../../components/Button";
+import Input from "../../../../components/Input";
+import InputSelector from "../../../../components/InputSelector";
+import { Modal } from "../../../../components/Modal";
+import Tags from "../../../../components/Tags";
+import { TagType } from "../../../../types/db/common";
+import { DefectPayload } from "../../../../types/db/defect";
+import { createInputs, TagTypeLabel } from "../../types/defect";
 import styles from "./DefectTab.module.css";
 
 interface DefectEditModalProps {
-    editingDefect: Defect;
-    handleChange: (target: string, value: string) => void;
+    form: DefectPayload;
+    onChange: (target: string, value: unknown) => void;
     onClose: () => void;
     onSave: () => void;
+    mode: "new" | "edit";
+    addTag: (newTagType: TagType, newTagValue: string) => void;
+    removeTag: (index: number) => void;
 }
 
 export const DefectEditModal = ({
-    editingDefect,
-    handleChange,
+    form,
+    onChange,
     onClose,
     onSave,
+    mode,
+    addTag,
+    removeTag,
 }: DefectEditModalProps) => {
+    const [newTagType, setNewTagType] = useState<TagType>(TagType.Domain);
+    const [newTagValue, setNewTagValue] = useState("");
+
     return (
-        <div className={styles.modal_overlay}>
-            <div className={styles.modal_content}>
-                <h3>欠陥</h3>
+        <Modal title={mode === "new" ? "新規作成" : "編集"} onClose={onClose}>
+            <div>
+                {createInputs(form).map((input) => (
+                    <InputSelector
+                        key={input.key}
+                        input={input}
+                        onChange={onChange}
+                    />
+                ))}
+            </div>
 
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>タイトル</label>
-                    <input
-                        className={styles.detail_input}
-                        value={editingDefect.title}
-                        onChange={(e) => handleChange("title", e.target.value)}
+            <div className={styles.tag_add_row}>
+                <div>
+                    <Input
+                        type="select"
+                        value={newTagType}
+                        options={Object.values(TagType)}
+                        labelMap={TagTypeLabel}
+                        onChange={(value: TagType) => setNewTagType(value)}
                     />
                 </div>
 
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>内容</label>
-                    <textarea
-                        className={styles.detail_input}
-                        value={editingDefect.description}
-                        onChange={(e) =>
-                            handleChange("description", e.target.value)
-                        }
+                <div>
+                    <Input
+                        type="text"
+                        value={newTagValue}
+                        onChange={(v) => setNewTagValue(v)}
+                        placeholder="タグ名を入力"
                     />
                 </div>
-
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>重大度</label>
-                    <select
-                        className={styles.detail_select}
-                        value={editingDefect.severity}
-                        onChange={(e) =>
-                            handleChange("severity", e.target.value)
-                        }
+                <div>
+                    <Button
+                        variant="primary"
+                        onClick={() => addTag(newTagType, newTagValue)}
                     >
-                        {Object.values(DefectSeverity).map((v) => (
-                            <option key={v} value={v}>
-                                {v}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>ステータス</label>
-                    <select
-                        className={styles.detail_select}
-                        value={editingDefect.status}
-                        onChange={(e) => handleChange("status", e.target.value)}
-                    >
-                        {Object.values(DefectStatus).map((v) => (
-                            <option key={v} value={v}>
-                                {v}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className={styles.detail_buttons}>
-                    <button
-                        className={`${styles.button} ${styles.button_primary}`}
-                        onClick={onSave}
-                    >
-                        保存
-                    </button>
-                    <button
-                        className={`${styles.button} ${styles.button_secondary}`}
-                        onClick={onClose}
-                    >
-                        キャンセル
-                    </button>
+                        追加
+                    </Button>
                 </div>
             </div>
-        </div>
+            <div>
+                <Tags
+                    tags={form.tags}
+                    tagTypeLabel={TagTypeLabel}
+                    onRemove={removeTag}
+                />
+            </div>
+            <div className={commonStyle.detail_buttons}>
+                <Button variant="primary" onClick={onSave}>
+                    保存
+                </Button>
+                <Button variant="secondary" onClick={onClose}>
+                    キャンセル
+                </Button>
+            </div>
+        </Modal>
     );
 };

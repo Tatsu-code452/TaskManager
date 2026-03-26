@@ -40,19 +40,12 @@
  */
 
 import { invoke } from "@tauri-apps/api/core";
-import { Project, toProject } from "../../features/ProjectList/types/model";
-import { ProjectKey, ProjectRow, ProjectStatus, ProjectValue } from "../../types/db/project";
-
-export type ProjectPayload = Partial<ProjectValue> & ProjectKey;
+import { ProjectPayload, ProjectRow } from "../../types/db/project";
 
 export const projectApi = {
-    list: async (name: string, client: string, status: ProjectStatus): Promise<Project[]> => {
-        const response = await invoke<ProjectRow[]>("search_projects", {
-            name,
-            client,
-            status,
-        });
-        return response.map(toProject);
+    list: async (): Promise<ProjectRow[]> => {
+        const response = await invoke<ProjectRow[]>("list_projects", {});
+        return response;
     },
     create: async (project: ProjectPayload) => {
         const response = await invoke("create_project", { payload: project });

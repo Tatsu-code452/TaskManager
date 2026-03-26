@@ -1,51 +1,22 @@
-/**
- * @test-no-props
- * @test-import import { useProjectListController } from "./hooks/controller/useProjectListController";
- * @test-import import { ProjectStatus } from "../../types/db/project";
- * @test-var-block project
- * vi.mock("./hooks/controller/useProjectListController");
- * type Controller = ReturnType<typeof useProjectListController>;
- * const mockController:Controller = {
- *   projects: [],
- *   loadProjects: vi.fn(),
- *   search: { name: "", client: "", status: ProjectStatus.Planned },
- *   setSearch: vi.fn(),
- *   searchProjects: vi.fn(),
- *   clearSearch: vi.fn(),
- *   modalMode: null,
- *   form: null,
- *   setForm: vi.fn(),
- *   openCreateModal: vi.fn(),
- *   openEditModal: vi.fn(),
- *   closeModal: vi.fn(),
- *   handleSubmitCreate: vi.fn(),
- *   handleSubmitUpdate: vi.fn(),
- * };
- * (useProjectListController as Mock).mockReturnValue(mockController);
- * const {
- *   setSearch,
- *   openCreateModal,
- *   searchProjects,
- * } = mockController;
- * @end-test-var-block
- */
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Modal } from "../../components/Modal";
-import { ProjectStatus } from "../../types/db/project";
+import commonStyles from "../../common.module.css";
+import Button from "../../components/Button";
+import Table, { BodyRow } from "../../components/Table";
+import { ProjectRow } from "../../types/db/project";
 import { useProjectListController } from "./hooks/controller/useProjectListController";
 import styles from "./index.module.css";
-import { statusToLabel } from "./types/model";
+import { ProjectStatusLabel } from "./types/model";
 import { ProjectForm } from "./ui/ProjectForm";
 
 export const ProjectListPage = () => {
     const {
         projects,
         loadProjects,
-        search,
-        setSearch,
-        searchProjects,
-        clearSearch,
+        // search,
+        // setSearch,
+        // searchProjects,
+        // clearSearch,
         modalMode,
         form,
         setForm,
@@ -61,21 +32,47 @@ export const ProjectListPage = () => {
     }, [loadProjects]);
 
     const navigation = useNavigate();
+    const buildBodyRow = (projects: ProjectRow[]): BodyRow[] =>
+        projects.map((p) => ({
+            rowProps: {
+                onClick: () => navigation(`/projects/${p.id}`),
+            },
+            cells: [
+                { content: p.id },
+                { content: p.name },
+                { content: p.client },
+                { content: ProjectStatusLabel[p.status] },
+                { content: `${p.start_date} 〜 ${p.end_date}` },
+                { content: p.owner },
+                {
+                    content: (
+                        <Button
+                            icon
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                openEditModal(p);
+                            }}
+                        >
+                            ✏️
+                        </Button>
+                    ),
+                },
+            ],
+        }));
 
     return (
-        <div className={styles.container}>
+        <div className={commonStyles.container}>
+            <h2>案件管理システム:プロジェクト一覧</h2>
+
             {/* 新規作成ボタン（右上） */}
             <div className={styles.header_actions}>
-                <button
-                    className={`${styles.button} ${styles.button_primary}`}
-                    onClick={openCreateModal}
-                >
+                <Button variant="primary" onClick={openCreateModal}>
                     新規案件作成
-                </button>
+                </Button>
             </div>
 
-            {/* 検索エリア */}
-            <div className={styles.search_area}>
+            {/* TODO:検索エリア */}
+            {/* <div className={styles.search_area}>
                 <div className={styles.search_row}>
                     <label className={styles.detail_label}>案件名</label>
                     <input
@@ -135,72 +132,38 @@ export const ProjectListPage = () => {
                         クリア
                     </button>
                 </div>
-            </div>
+            </div> */}
 
-            {/* 一覧 */}
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>案件名</th>
-                        <th>顧客名</th>
-                        <th>ステータス</th>
-                        <th>期間</th>
-                        <th>進捗</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {projects.map((p) => (
-                        <tr
-                            key={p.id}
-                            onClick={() => navigation(`/projects/${p.id}`)}
-                        >
-                            <td>{p.id}</td>
-                            <td>{p.name}</td>
-                            <td>{p.client}</td>
-                            <td>{p.status}</td>
-                            <td>
-                                {p.startDate} 〜 {p.endDate}
-                            </td>
-                            <td>{p.progress}%</td>
-                            <td>
-                                <button
-                                    className={styles.icon_button}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        openEditModal(p);
-                                    }}
-                                >
-                                    ✏️
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <Table
+                headerRows={[
+                    [
+                        { content: "ID" },
+                        { content: "案件名" },
+                        { content: "顧客名" },
+                        { content: "ステータス" },
+                        { content: "期間" },
+                        { content: "担当者" },
+                        { content: "操作" },
+                    ],
+                ]}
+                bodyRows={buildBodyRow(projects)}
+            />
 
             {/* モーダル */}
             {modalMode && (
-                <Modal
-                    title={modalMode === "create" ? "新規案件作成" : "案件編集"}
-                    onClose={closeModal}
-                >
-                    <ProjectForm
-                        form={form}
-                        onChange={(key, value) =>
-                            setForm({ ...form, [key]: value })
-                        }
-                        onSubmit={
-                            modalMode === "create"
-                                ? handleSubmitCreate
-                                : handleSubmitUpdate
-                        }
-                        onCancel={closeModal}
-                        mode={modalMode}
-                    />
-                </Modal>
+                <ProjectForm
+                    form={form}
+                    onChange={(key, value) =>
+                        setForm({ ...form, [key]: value })
+                    }
+                    onSubmit={
+                        modalMode === "new"
+                            ? handleSubmitCreate
+                            : handleSubmitUpdate
+                    }
+                    onCancel={closeModal}
+                    mode={modalMode}
+                />
             )}
         </div>
     );

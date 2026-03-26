@@ -1,20 +1,20 @@
 import { useState } from "react";
-import { Defect } from "../../types/defect";
+import { DefectPayload, DefectRow } from "../../../../types/db/defect";
 
 export const useDefectStates = () => {
-    const [defects, setDefects] = useState<Defect[]>([]);
+    const [defects, setDefects] = useState<DefectRow[]>([]);
     const [loading, setLoading] = useState(false);
 
     const [showModal, setShowModal] = useState(false);
     const [mode, setMode] = useState<"new" | "edit">("new");
-    const [editingDefect, setEditingDefect] = useState<Defect | null>(null);
+    const [form, setForm] = useState<DefectPayload | null>(null);
 
     return {
         defects, setDefects,
         loading, setLoading,
         showModal, setShowModal,
         mode, setMode,
-        editingDefect, setEditingDefect,
+        form, setForm,
     };
 };
 

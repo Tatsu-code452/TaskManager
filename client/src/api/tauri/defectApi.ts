@@ -1,7 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { DefectKey, DefectRow, DefectValue } from "../../types/db/defect";
-
-export type DefectPayload = Partial<DefectValue> & DefectKey;
+import { DefectPayload, DefectRow } from "../../types/db/defect";
 
 export const defectApi = {
     list: async (projectId: string): Promise<DefectRow[]> => {
