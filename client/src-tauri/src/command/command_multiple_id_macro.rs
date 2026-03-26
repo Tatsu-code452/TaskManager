@@ -58,10 +58,10 @@ macro_rules! define_tauri_commands_multiple_id {
         #[tauri::command]
         pub fn $list_fn(
             state: tauri::State<AppState>,
-            key1: String,
+            project_id: String,
         ) -> Result<Vec<$table_type>, String> {
             let db = state.db.lock().unwrap();
-            $command_name::list_impl(&db, key1)
+            $command_name::list_impl(&db, project_id)
         }
 
         #[tauri::command]
@@ -85,11 +85,11 @@ macro_rules! define_tauri_commands_multiple_id {
         #[tauri::command]
         pub fn $delete_fn(
             state: tauri::State<AppState>,
-            key1: String,
-            key2: String,
+            project_id: String,
+            id: String,
         ) -> Result<(), String> {
             let mut db = state.db.lock().unwrap();
-            $command_name::delete_impl(&mut db, key1, key2)
+            $command_name::delete_impl(&mut db, project_id, id)
         }
     };
 }
