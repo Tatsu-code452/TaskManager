@@ -1,13 +1,10 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import commonStyles from "../../common.module.css";
-import Button from "../../components/Button";
-import Table, { BodyRow } from "../../components/Table";
-import { ProjectRow } from "../../types/db/project";
+import { Button } from "../../components";
 import { useProjectListController } from "./hooks/controller/useProjectListController";
 import styles from "./index.module.css";
-import { ProjectStatusLabel } from "./types/model";
-import { ProjectForm } from "./ui/ProjectForm";
+import { ProjectForm, ProjectTable } from "./ui";
 
 export const ProjectListPage = () => {
     const {
@@ -32,33 +29,6 @@ export const ProjectListPage = () => {
     }, [loadProjects]);
 
     const navigation = useNavigate();
-    const buildBodyRow = (projects: ProjectRow[]): BodyRow[] =>
-        projects.map((p) => ({
-            rowProps: {
-                onClick: () => navigation(`/projects/${p.id}`),
-            },
-            cells: [
-                { content: p.id },
-                { content: p.name },
-                { content: p.client },
-                { content: ProjectStatusLabel[p.status] },
-                { content: `${p.start_date} 〜 ${p.end_date}` },
-                { content: p.owner },
-                {
-                    content: (
-                        <Button
-                            icon
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                openEditModal(p);
-                            }}
-                        >
-                            ✏️
-                        </Button>
-                    ),
-                },
-            ],
-        }));
 
     return (
         <div className={commonStyles.container}>
@@ -67,7 +37,7 @@ export const ProjectListPage = () => {
             {/* 新規作成ボタン（右上） */}
             <div className={styles.header_actions}>
                 <Button variant="primary" onClick={openCreateModal}>
-                    新規案件作成
+                    新規作成
                 </Button>
             </div>
 
@@ -134,20 +104,13 @@ export const ProjectListPage = () => {
                 </div>
             </div> */}
 
-            <Table
-                headerRows={[
-                    [
-                        { content: "ID" },
-                        { content: "案件名" },
-                        { content: "顧客名" },
-                        { content: "ステータス" },
-                        { content: "期間" },
-                        { content: "担当者" },
-                        { content: "操作" },
-                    ],
-                ]}
-                bodyRows={buildBodyRow(projects)}
-            />
+            <div>
+                <ProjectTable
+                    projects={projects}
+                    navigation={navigation}
+                    openEditModal={openEditModal}
+                />
+            </div>
 
             {/* モーダル */}
             {modalMode && (
@@ -161,7 +124,7 @@ export const ProjectListPage = () => {
                             ? handleSubmitCreate
                             : handleSubmitUpdate
                     }
-                    onCancel={closeModal}
+                    onClose={closeModal}
                     mode={modalMode}
                 />
             )}

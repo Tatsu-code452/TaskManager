@@ -1,71 +1,84 @@
-import { IssuePayload } from "../../../api/tauri/issueApi";
-import { IssuePriority, IssueRow, IssueStatus } from "../../../types/db/issue";
+import { IssuePayload, IssuePriority, IssueStatus } from "../../../types/db/issue";
+import { InputConfig } from "../../../types/inputConfig";
 
-export const statusToLabel = (status: IssueStatus): string => {
-    switch (status) {
-        case IssueStatus.Open:
-            return "未対応";
-        case IssueStatus.InProgress:
-            return "対応中";
-        case IssueStatus.Resolved:
-            return "対応済み";
-        case IssueStatus.Closed:
-            return "完了";
-        default:
-            return "";
-    }
+export const IssueStatusLabel: Record<IssueStatus, string> = {
+    [IssueStatus.Open]: "未対応",
+    [IssueStatus.InProgress]: "対応中",
+    [IssueStatus.Review]: "確認中",
+    [IssueStatus.Resolved]: "解決済み",
+    [IssueStatus.Closed]: "完了",
 };
 
-export interface Issue {
-    id: string;
-    projectId: string;
-    taskId: string;
-    title: string;
-    description: string;
-    status: IssueStatus;
-    priority: IssuePriority;
-    owner: string;
-}
+export const IssuePriorityLabel: Record<IssuePriority, string> = {
+    [IssuePriority.Low]: "軽微",
+    [IssuePriority.Medium]: "中程度",
+    [IssuePriority.High]: "重大",
+    [IssuePriority.Critical]: "致命的",
+};
 
-export const toIssue = (param: IssueRow): Issue => (
-    {
-        id: param.id,
-        projectId: param.project_id,
-        taskId: param.task_id,
-        title: param.title,
-        description: param.description,
-        status: param.status,
-        priority: param.priority,
-        owner: param.owner,
-    }
-)
+export type RequiredKeys =
+    | "id"
+    | "project_id"
+    | "title"
+    | "description"
+    | "status"
+    | "priority"
 
-export const toIssueRow = (param: Issue): IssueRow => (
+export const InitPayload = (projectId: string): IssuePayload => (
     {
-        id: param.id,
-        project_id: param.projectId,
-        task_id: param.taskId,
-        title: param.title,
-        description: param.description,
-        status: param.status,
-        priority: param.priority,
-        owner: param.owner,
-        timestamps: {
-            created_at: "",
-            updated_at: ""
-        }
+        id: "",
+        project_id: projectId,
+        task_id: "",
+        title: "",
+        description: "",
+        priority: IssuePriority.Low,
+        status: IssueStatus.Open,
+        owner: "",
+        reviewer: "",
+        due_date: "",
+        completed_date: "",
+        tags: [],
     }
-)
+);
 
-export const toIssuePayload = (param: Issue): IssuePayload => (
-    {
-        id: param.id,
-        project_id: param.projectId,
-        task_id: param.taskId,
-        title: param.title,
-        description: param.description,
-        status: param.status,
-        priority: param.priority,
-        owner: param.owner,
-    }
-)
+export const createInputs = (form: IssuePayload): InputConfig<keyof IssuePayload>[] => {
+    return [
+        { key: "title", label: "タイトル", type: "text", value: form.title },
+        {
+            key: "description",
+            label: "詳細",
+            type: "textarea",
+            value: form.description,
+        },
+        {
+            key: "priority",
+            label: "優先度",
+            type: "select",
+            value: form.priority,
+            options: Object.values(IssuePriority) as IssuePriority[],
+            labelMap: IssuePriorityLabel,
+        },
+        {
+            key: "status",
+            label: "ステータス",
+            type: "select",
+            value: form.status,
+            options: Object.values(IssueStatus) as IssueStatus[],
+            labelMap: IssueStatusLabel,
+        },
+        { key: "owner", label: "担当者", type: "text", value: form.owner },
+        {
+            key: "reviewer",
+            label: "確認者",
+            type: "text",
+            value: form.reviewer,
+        },
+        { key: "due_date", label: "期日", type: "date", value: form.due_date },
+        {
+            key: "completed_date",
+            label: "完了日",
+            type: "date",
+            value: form.completed_date,
+        },
+    ];
+};

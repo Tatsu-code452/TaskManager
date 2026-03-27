@@ -13,3 +13,9 @@ export type Tag = {
     tag_type: TagType,
     value: string,
 };
+
+export const TagTypeLabel: Record<TagType, string> = {
+    [TagType.Domain]: "技術領域",
+    [TagType.Area]: "業務領域",
+    [TagType.Topic]: "テーマ",
+};

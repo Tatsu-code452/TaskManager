@@ -1,69 +1,48 @@
-import { MilestonePayload } from "../../../api/tauri/milestoneApi";
-import { MilestoneRow, MilestoneStatus } from "../../../types/db/milestone";
+import { MilestonePayload, MilestoneStatus } from "../../../types/db/milestone";
+import { InputConfig } from "../../../types/inputConfig";
 
-export const statusToLabel = (status: MilestoneStatus): string => {
-    switch (status) {
-        case MilestoneStatus.NotStarted:
-            return "未着手";
-        case MilestoneStatus.InProgress:
-            return "実施中";
-        case MilestoneStatus.Done:
-            return "完了";
-        default:
-            return "";
-    }
-};
-
-export interface Milestone {
-    id: string;
-    projectId: string;
-    name: string;
-    plannedStartDate: string;
-    plannedEndDate: string;
-    actualStartDate: string;
-    actualEndDate: string;
-    status: MilestoneStatus;
+export const MilestoneStatusLabel: Record<MilestoneStatus, string> = {
+    [MilestoneStatus.NotStarted]: "未着手",
+    [MilestoneStatus.InProgress]: "対応中",
+    [MilestoneStatus.Completed]: "完了",
+    [MilestoneStatus.Archived]: "アーカイブ済み",
 }
 
-export const toMilestone = (param: MilestoneRow): Milestone => (
+export type RequiredKeys =
+    | "title"
+    | "status"
+    | "start_date"
+    | "end_date"
+
+export const InitPayload = (project_id: string): MilestonePayload => (
     {
-        id: param.id,
-        projectId: param.project_id,
-        name: param.name,
-        plannedStartDate: param.planned_start_date,
-        plannedEndDate: param.planned_end_date,
-        actualStartDate: param.actual_start_date,
-        actualEndDate: param.actual_end_date,
-        status: param.status,
+        id: "",
+        project_id,
+        title: "",
+        description: "",
+        status: MilestoneStatus.NotStarted,
+        progress: 0,
+        start_date: "",
+        end_date: "",
+        owner: "",
     }
 )
 
-export const toMilestoneRow = (param: Milestone): MilestoneRow => (
-    {
-        id: param.id,
-        project_id: param.projectId,
-        name: param.name,
-        planned_start_date: param.plannedStartDate,
-        planned_end_date: param.plannedEndDate,
-        actual_start_date: param.actualStartDate,
-        actual_end_date: param.actualEndDate,
-        status: param.status,
-        timestamps: {
-            created_at: "",
-            updated_at: ""
-        }
-    }
-)
-
-export const toMilestonePayload = (param: Milestone): MilestonePayload => (
-    {
-        id: param.id,
-        project_id: param.projectId,
-        name: param.name,
-        planned_start_date: param.plannedStartDate,
-        planned_end_date: param.plannedEndDate,
-        actual_start_date: param.actualStartDate,
-        actual_end_date: param.actualEndDate,
-        status: param.status,
-    }
-)
+export const createInputs = (form: MilestonePayload): InputConfig<keyof MilestonePayload>[] => {
+    return [
+        { key: "title", label: "タイトル", type: "text", value: form.title },
+        {
+            key: "status",
+            label: "ステータス",
+            type: "select",
+            value: form.status,
+            options: Object.values(MilestoneStatus) as MilestoneStatus[],
+            labelMap: MilestoneStatusLabel,
+        },
+        { key: "start_date", label: "開始日", type: "date", value: form.start_date },
+        { key: "end_date", label: "終了日", type: "date", value: form.end_date, },
+        { key: "progress", label: "進捗率", type: "number", value: form.progress.toString() },
+        { key: "owner", label: "担当者", type: "text", value: form.owner },
+        { key: "description", label: "備考", type: "textarea", value: form.description },
+    ];
+};

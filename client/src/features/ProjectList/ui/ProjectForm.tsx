@@ -1,16 +1,11 @@
 import commonStyle from "../../../common.module.css";
-import Button from "../../../components/Button";
-import InputSelector from "../../../components/InputSelector";
-import { Modal } from "../../../components/Modal";
+import { Button, InputSelector, Modal } from "../../../components";
 import { ProjectPayload } from "../../../types/db/project";
+import { FormProps } from "../../common/ui/props";
 import { ModalMode } from "../hooks/state/useProjectFormStates";
 import { createInputs } from "../types/model";
 
-type ProjectFormProps = {
-    form: ProjectPayload;
-    onChange: (key: keyof ProjectPayload, value: string | number) => void;
-    onSubmit: () => void;
-    onCancel: () => void;
+type ProjectFormProps = FormProps<ProjectPayload> & {
     mode: ModalMode;
 };
 
@@ -18,11 +13,11 @@ export const ProjectForm = ({
     form,
     onChange,
     onSubmit,
-    onCancel,
+    onClose,
     mode,
 }: ProjectFormProps) => {
     return (
-        <Modal title={mode === "new" ? "新規作成" : "編集"} onClose={onCancel}>
+        <Modal title={mode === "new" ? "新規作成" : "編集"} onClose={onClose}>
             <div>
                 {createInputs(form).map((input) => (
                     <InputSelector
@@ -32,11 +27,12 @@ export const ProjectForm = ({
                     />
                 ))}
             </div>
+
             <div className={commonStyle.detail_buttons}>
                 <Button variant="primary" onClick={onSubmit}>
                     {mode === "new" ? "作成" : "更新"}
                 </Button>
-                <Button variant="secondary" onClick={onCancel}>
+                <Button variant="secondary" onClick={onClose}>
                     キャンセル
                 </Button>
             </div>

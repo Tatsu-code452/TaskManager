@@ -1,4 +1,3 @@
-import { TagType } from "../../../types/db/common";
 import { DefectPayload, DefectSeverity, DefectStatus } from "../../../types/db/defect";
 import { InputConfig } from "../../../types/inputConfig";
 
@@ -15,12 +14,6 @@ export const DefectSeverityLabel: Record<DefectSeverity, string> = {
     [DefectSeverity.Major]: "重大",
     [DefectSeverity.Critical]: "致命的",
     [DefectSeverity.Blocker]: "ブロッカー",
-};
-
-export const TagTypeLabel: Record<TagType, string> = {
-    [TagType.Domain]: "技術領域",
-    [TagType.Area]: "業務領域",
-    [TagType.Topic]: "テーマ",
 };
 
 export type RequiredKeys =

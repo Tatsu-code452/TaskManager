@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Table.module.css";
 
-type HeaderCell = React.ThHTMLAttributes<HTMLTableCellElement> & {
+export type HeaderCell = React.ThHTMLAttributes<HTMLTableCellElement> & {
     content: React.ReactNode;
 };
 

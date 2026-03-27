@@ -1,7 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { IssueKey, IssueRow, IssueValue } from "../../types/db/issue";
-
-export type IssuePayload = Partial<IssueValue> & IssueKey;
+import { IssuePayload, IssueRow } from "../../types/db/issue";
 
 export const issueApi = {
     list: async (projectId: string): Promise<IssueRow[]> => {

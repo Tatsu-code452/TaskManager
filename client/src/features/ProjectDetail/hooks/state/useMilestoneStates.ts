@@ -1,22 +1,22 @@
 import { useState } from "react";
-import { Milestone } from "../../types/milestone";
+import { MilestonePayload, MilestoneRow } from "../../../../types/db/milestone";
 
 export const useMilestoneStates = () => {
     // tab
-    const [milestones, setMilestones] = useState<Milestone[]>([]);
+    const [milestones, setMilestones] = useState<MilestoneRow[]>([]);
     const [loading, setLoading] = useState(false);
 
     // dialog
     const [showModal, setShowModal] = useState(false);
     const [mode, setMode] = useState<"new" | "edit">("new");
-    const [editingMilestone, setEditingMilestone] = useState<Milestone | null>(null);
+    const [form, setForm] = useState<MilestonePayload | null>(null);
 
     return {
         milestones, setMilestones,
         loading, setLoading,
         showModal, setShowModal,
         mode, setMode,
-        editingMilestone, setEditingMilestone,
+        form, setForm,
     };
 };
 

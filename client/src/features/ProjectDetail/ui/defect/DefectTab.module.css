@@ -13,6 +13,13 @@
     margin-bottom: 1rem;
 }
 
+/* 新規作成ボタン（右上） */
+.header_actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
 /* ステータス表示 */
 .badge {
     padding: 0.3rem 0.6rem;
@@ -59,31 +66,6 @@
     gap: 0.5rem;
 }
 
-.tag_add_row {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-    margin-bottom: 1rem;
-}
-
-.tag_add_row div {
-    flex-direction: row;
-}
-
-/* select と input の幅調整 */
-.tag_add_row select {
-    width: 8rem;
-    align-items: baseline;
-    gap: 0;
-}
-
-.tag_add_row input {
-    width: 8rem;
-    align-items: baseline;
-    gap: 0;
-}
-
 /* 列幅の最適化 */
 .col_title {
     width: 18rem;
@@ -112,6 +94,6 @@
 }
 
 .col_actions {
-    width: 4rem;
+    width: 1rem;
     text-align: center;
 }

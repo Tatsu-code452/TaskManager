@@ -1,22 +1,22 @@
 import { useState } from "react";
-import { Phase } from "../../types/phase";
+import { PhasePayload, PhaseRow } from "../../../../types/db/phase";
 
 export const usePhaseStates = () => {
     // tab
-    const [phases, setPhases] = useState<Phase[]>([]);
+    const [phases, setPhases] = useState<PhaseRow[]>([]);
     const [loading, setLoading] = useState(false);
 
     // dialog
     const [showModal, setShowModal] = useState(false);
     const [mode, setMode] = useState<"new" | "edit">("new");
-    const [editingPhase, setEditingPhase] = useState<Phase | null>(null);
+    const [form, setForm] = useState<PhasePayload | null>(null);
 
     return {
         phases, setPhases,
         loading, setLoading,
         showModal, setShowModal,
         mode, setMode,
-        editingPhase, setEditingPhase
+        form, setForm,
     };
 };
 

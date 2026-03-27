@@ -1,101 +1,63 @@
-import { IssuePriority, IssueStatus } from "../../../../types/db/issue";
-import { Issue } from "../../types/issue";
-import styles from "./IssueTab.module.css";
+import commonStyle from "../../../../common.module.css";
+import {
+    Button,
+    InputSelector,
+    Modal,
+    TagAddRow,
+    Tags,
+} from "../../../../components";
+import { TagType, TagTypeLabel } from "../../../../types/db/common";
+import { IssuePayload } from "../../../../types/db/issue";
+import { FormProps } from "../../../common/ui/props";
+import { createInputs } from "../../types/issue";
 
-interface IssueEditModalProps {
-    editingIssue: Issue;
-    handleChange: (target: string, value: string) => void;
-    onClose: () => void;
-    onSave: () => void;
-}
+type IssueEditModalProps = FormProps<IssuePayload> & {
+    mode: "new" | "edit";
+    addTag: (newTagType: TagType, newTagValue: string) => void;
+    removeTag: (index: number) => void;
+};
 
 export const IssueEditModal = ({
-    editingIssue,
-    handleChange,
+    form,
+    onChange,
+    onSubmit,
     onClose,
-    onSave,
+    mode,
+    addTag,
+    removeTag,
 }: IssueEditModalProps) => {
     return (
-        <div className={styles.modal_overlay}>
-            <div className={styles.modal_content}>
-                <h3>課題</h3>
-
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>タイトル</label>
-                    <input
-                        className={styles.detail_input}
-                        value={editingIssue.title}
-                        onChange={(e) => handleChange("title", e.target.value)}
+        <Modal title={mode === "new" ? "新規作成" : "編集"} onClose={onClose}>
+            <div>
+                {createInputs(form).map((input) => (
+                    <InputSelector
+                        key={input.key}
+                        input={input}
+                        onChange={onChange}
                     />
-                </div>
-
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>内容</label>
-                    <textarea
-                        className={styles.detail_input}
-                        value={editingIssue.description}
-                        onChange={(e) =>
-                            handleChange("description", e.target.value)
-                        }
-                    />
-                </div>
-
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>ステータス</label>
-                    <select
-                        className={styles.detail_select}
-                        value={editingIssue.status}
-                        onChange={(e) => handleChange("status", e.target.value)}
-                    >
-                        {Object.values(IssueStatus).map((v) => (
-                            <option key={v} value={v}>
-                                {v}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>優先度</label>
-                    <select
-                        className={styles.detail_select}
-                        value={editingIssue.priority}
-                        onChange={(e) =>
-                            handleChange("priority", e.target.value)
-                        }
-                    >
-                        {Object.values(IssuePriority).map((v) => (
-                            <option key={v} value={v}>
-                                {v}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>担当者</label>
-                    <input
-                        className={styles.detail_input}
-                        value={editingIssue.owner}
-                        onChange={(e) => handleChange("owner", e.target.value)}
-                    />
-                </div>
-
-                <div className={styles.detail_buttons}>
-                    <button
-                        className={`${styles.button} ${styles.button_primary}`}
-                        onClick={onSave}
-                    >
-                        保存
-                    </button>
-                    <button
-                        className={`${styles.button} ${styles.button_secondary}`}
-                        onClick={onClose}
-                    >
-                        キャンセル
-                    </button>
-                </div>
+                ))}
             </div>
-        </div>
+
+            <div>
+                <TagAddRow tagTypeLabel={TagTypeLabel} onAdd={addTag} />
+            </div>
+
+            <div>
+                <Tags
+                    tags={form.tags}
+                    tagTypeLabel={TagTypeLabel}
+                    onRemove={removeTag}
+                />
+            </div>
+
+            <div className={commonStyle.detail_buttons}>
+                <Button variant="primary" onClick={onSubmit}>
+                    保存
+                </Button>
+                <Button variant="secondary" onClick={onClose}>
+                    キャンセル
+                </Button>
+            </div>
+        </Modal>
     );
 };

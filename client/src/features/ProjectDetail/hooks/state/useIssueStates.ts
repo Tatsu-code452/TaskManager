@@ -1,20 +1,20 @@
 import { useState } from "react";
-import { Issue } from "../../types/issue";
+import { IssuePayload, IssueRow } from "../../../../types/db/issue";
 
 export const useIssueStates = () => {
-    const [issues, setIssues] = useState<Issue[]>([]);
+    const [issues, setIssues] = useState<IssueRow[]>([]);
     const [loading, setLoading] = useState(false);
 
     const [showModal, setShowModal] = useState(false);
     const [mode, setMode] = useState<"new" | "edit">("new");
-    const [editingIssue, setEditingIssue] = useState<Issue | null>(null);
+    const [form, setForm] = useState<IssuePayload | null>(null);
 
     return {
         issues, setIssues,
         loading, setLoading,
         showModal, setShowModal,
         mode, setMode,
-        editingIssue, setEditingIssue,
+        form, setForm
     };
 };
 

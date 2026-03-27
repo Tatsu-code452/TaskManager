@@ -5,7 +5,7 @@ type InputBase<K extends string> = {
 };
 
 type TextInput<K extends string> = InputBase<K> & {
-    type: "text" | "date" | "textarea";
+    type: "text" | "date" | "textarea" | "number";
 };
 
 type SelectInput<K extends string> = InputBase<K> & {

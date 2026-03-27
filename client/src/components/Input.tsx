@@ -20,12 +20,12 @@ type TextareaProps = BaseProps & {
     onChange: (value: string) => void;
 };
 
-type TextInputProps = BaseProps & {
-    type: "text" | "date" | "number";
-    value: string;
-    placeholder?: string;
-    onChange: (value: string) => void;
-};
+type TextInputProps = BaseProps &
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> & {
+        type: "text" | "date" | "number";
+        value: string;
+        onChange: (value: string) => void;
+    };
 
 export type InputProps<T extends string = string> =
     | SelectProps<T>
@@ -64,10 +64,10 @@ export const Input = <T extends string>(props: InputProps<T>) => {
 
             {props.type !== "select" && props.type !== "textarea" && (
                 <input
+                    {...props}
                     className={`${styles.detail_input} ${className ?? ""}`}
                     value={props.value}
                     onChange={(e) => props.onChange(e.target.value as T)}
-                    placeholder={props.placeholder}
                 />
             )}
         </div>

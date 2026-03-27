@@ -1,0 +1,24 @@
+.tag_add_row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.tag_add_row div {
+    flex-direction: row;
+}
+
+/* select と input の幅調整 */
+.tag_add_row select {
+    width: 8rem;
+    align-items: baseline;
+    gap: 0;
+}
+
+.tag_add_row input {
+    width: 8rem;
+    align-items: baseline;
+    gap: 0;
+}

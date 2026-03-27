@@ -1,7 +1,10 @@
+import commonStyles from "../../../../common.module.css";
+import { Button } from "../../../../components";
 import { usePhaseController } from "../../hooks/controller/usePhaseController";
 import { PhaseStates } from "../../hooks/state/usePhaseStates";
 import { PhaseEditModal } from "./PhaseEditModal";
 import styles from "./PhaseTab.module.css";
+import PhaseTable from "./PhaseTable";
 
 interface PhaseTabProps {
     projectId: string;
@@ -9,64 +12,45 @@ interface PhaseTabProps {
 }
 
 export const PhaseTab = ({ projectId, states }: PhaseTabProps) => {
-    const { phases, showModal, setShowModal, mode, editingPhase } = states;
+    const { phases, showModal, setShowModal, mode, form } = states;
 
     const { create, update, remove, handleChange, handleShowModal } =
         usePhaseController(projectId, states);
 
     return (
-        <div className={styles.container}>
-            <button
-                className={styles.newButton}
-                onClick={() => handleShowModal("new", null)}
-            >
-                新規フェーズ追加
-            </button>
+        <div className={commonStyles.container}>
+            <div className={styles.section_card}>
+                <div className={styles.section_title}>フェーズ一覧</div>
 
-            {showModal && (
-                <PhaseEditModal
-                    editingPhase={editingPhase}
-                    handleChange={handleChange}
-                    onClose={() => setShowModal(false)}
-                    onSave={mode === "new" ? create : update}
-                />
-            )}
+                <div className={styles.header_actions}>
+                    <Button
+                        variant="primary"
+                        onClick={() =>
+                            handleShowModal({ mode: "new", phase: null })
+                        }
+                    >
+                        新規作成
+                    </Button>
+                </div>
 
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        <th>名称</th>
-                        <th>順序</th>
-                        <th>入力物</th>
-                        <th>出力物</th>
-                        <th>編集</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {phases.map((p) => (
-                        <tr key={p.id}>
-                            <td>{p.name}</td>
-                            <td>{p.order}</td>
-                            <td>{p.inputs?.join(", ") ?? "-"}</td>
-                            <td>{p.outputs?.join(", ") ?? "-"}</td>
-                            <td>
-                                <button
-                                    className={styles.icon_button}
-                                    onClick={() => handleShowModal("edit", p)}
-                                >
-                                    ✎
-                                </button>
-                                <button
-                                    className={styles.icon_button}
-                                    onClick={() => remove(p.id)}
-                                >
-                                    🗑
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                <div className={commonStyles.table_wrapper}>
+                    <PhaseTable
+                        phases={phases}
+                        remove={remove}
+                        handleShowModal={handleShowModal}
+                    />
+                </div>
+
+                {showModal && (
+                    <PhaseEditModal
+                        form={form}
+                        onChange={handleChange}
+                        onSubmit={mode === "new" ? create : update}
+                        onClose={() => setShowModal(false)}
+                        mode={mode}
+                    />
+                )}
+            </div>
         </div>
     );
 };

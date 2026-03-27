@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { milestoneApi } from "../../../../api/tauri/milestoneApi";
-import { MilestoneStatus } from "../../../../types/db/milestone";
-import { Milestone, toMilestone, toMilestonePayload } from "../../types/milestone";
+import { MilestonePayload, MilestoneRow, toMilestonePayload } from "../../../../types/db/milestone";
+import { InitPayload, RequiredKeys } from "../../types/milestone";
 import { MilestoneStates } from "../state/useMilestoneStates";
 
 export const useMilestoneController = (projectId: string, states: MilestoneStates) => {
@@ -9,69 +9,19 @@ export const useMilestoneController = (projectId: string, states: MilestoneState
         setMilestones,
         loading,
         setLoading,
-        editingMilestone,
+        form,
         setShowModal,
         setMode,
-        setEditingMilestone,
+        setForm,
     } = states;
 
-
-    const validate = (data: Milestone): string[] => {
-        const errors: string[] = [];
-
-        if (!data.name || data.name.trim() === "") {
-            errors.push("名称は必須です");
-        }
-
-        if (data.plannedStartDate && data.plannedEndDate) {
-            if (data.plannedStartDate > data.plannedEndDate) {
-                errors.push("開始予定日は終了予定日より前である必要があります");
-            }
-        }
-
-        if (data.actualStartDate && data.actualEndDate) {
-            if (data.actualStartDate > data.actualEndDate) {
-                errors.push("開始実績日は終了実績日より前である必要があります");
-            }
-        }
-
-        return errors;
-    };
-
     const load = useCallback(async () => {
+        setLoading(true);
         const list = await milestoneApi.list(projectId);
-        setMilestones(list.map(toMilestone));
+        setMilestones(list);
         setLoading(false);
-    }, [projectId]);
+    }, [projectId, setMilestones]);
 
-    const create = useCallback(async () => {
-        const errors = validate(editingMilestone);
-        if (errors.length > 0) {
-            alert(errors.join("\n"));
-            return;
-        }
-
-        await milestoneApi.create(toMilestonePayload(editingMilestone));
-        await load();
-    }, [load]);
-
-    const update = useCallback(async () => {
-        const errors = validate(editingMilestone);
-        if (errors.length > 0) {
-            alert(errors.join("\n"));
-            return;
-        }
-        await milestoneApi.update(toMilestonePayload(editingMilestone));
-        await load();
-    }, [load]);
-
-    const remove = useCallback(async (id: string) => {
-        if (!confirm("削除しますか？")) return;
-        await milestoneApi.delete(projectId, id);
-        await load();
-    }, [projectId, load]);
-
-    // strict mode回避
     useEffect(() => {
         if (loading) return;
         try {
@@ -82,31 +32,89 @@ export const useMilestoneController = (projectId: string, states: MilestoneState
         }
     }, [load]);
 
-    const handleChange = (key: keyof Milestone, value: string | number) => {
-        if (!editingMilestone) return;
-        setEditingMilestone({ ...editingMilestone, [key]: value })
-    }
+    const handleChange = (key: keyof MilestonePayload, value: unknown) => {
+        if (!form) return;
+        setForm({ ...form, [key]: value });
+    };
 
-    const handleShowModal = (mode: "new" | "edit", milestone: Milestone) => {
-        setMode(mode);
-        if (mode === "new") {
-            milestone = {
-                id: "",
-                projectId,
-                name: "",
-                plannedStartDate: "",
-                plannedEndDate: "",
-                actualStartDate: "",
-                actualEndDate: "",
-                status: MilestoneStatus.NotStarted,
+    const validate = (data: MilestonePayload): string[] => {
+        const requiredRules: Record<RequiredKeys, string> = {
+            title: "タイトルは必須です",
+            status: "ステータスは必須です",
+            start_date: "開始日は必須です",
+            end_date: "終了日は必須です",
+        };
+        const errors: string[] = [];
+
+        // 必須チェック（型安全にループ）
+        (Object.keys(requiredRules) as RequiredKeys[]).forEach((key) => {
+            const value = data[key];
+            if (!value || value.toString().trim() === "") {
+                errors.push(requiredRules[key]);
             }
-        }
-        setEditingMilestone(milestone);
+        });
+
+        return errors;
+    };
+
+    // -----------------------------
+    // モーダル制御
+    // -----------------------------
+    const closeModal = () => {
+        setMode(null);
+        setForm(InitPayload(projectId));
+        setShowModal(false);
+    };
+
+    const handleShowModal = (modal:
+        | { mode: "new"; milestone: null }
+        | { mode: "edit"; milestone: MilestoneRow }
+    ) => {
+        setMode(modal.mode);
+
+        const payload: MilestonePayload =
+            modal.mode === "edit" ?
+                toMilestonePayload(modal.milestone) :
+                InitPayload(projectId);
+
+        setForm(payload);
         setShowModal(true);
-    }
+    };
+
+    const create = useCallback(async () => {
+        const errors = validate(form);
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+            return;
+        }
+
+        await milestoneApi.create(form);
+        await load();
+        setForm(InitPayload(projectId));
+        closeModal();
+    }, [form, load]);
+
+    const update = useCallback(async () => {
+        const errors = validate(form);
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+            return;
+        }
+
+        await milestoneApi.update(form);
+        setForm(InitPayload(projectId));
+        await load();
+        closeModal();
+    }, [form, load]);
+
+    const remove = useCallback(async (id: string) => {
+        if (!confirm("削除しますか？")) return;
+        await milestoneApi.delete(projectId, id);
+        await load();
+    }, [projectId, load]);
 
     return {
         load, create, update, remove,
-        handleChange, handleShowModal
+        handleChange, handleShowModal,
     };
 };

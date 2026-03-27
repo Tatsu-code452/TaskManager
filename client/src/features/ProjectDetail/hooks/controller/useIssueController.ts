@@ -1,7 +1,8 @@
 import { useCallback, useEffect } from "react";
 import { issueApi } from "../../../../api/tauri/issueApi";
-import { IssuePriority, IssueStatus } from "../../../../types/db/issue";
-import { Issue, toIssue, toIssuePayload } from "../../types/issue";
+import { TagType } from "../../../../types/db/common";
+import { IssuePayload, IssueRow, toIssuePayload } from "../../../../types/db/issue";
+import { InitPayload } from "../../types/issue";
 import { IssueStates } from "../state/useIssueStates";
 
 export const useIssueController = (projectId: string, states: IssueStates) => {
@@ -9,55 +10,18 @@ export const useIssueController = (projectId: string, states: IssueStates) => {
         setIssues,
         loading,
         setLoading,
-        editingIssue,
+        form,
         setShowModal,
         setMode,
-        setEditingIssue,
+        setForm,
     } = states;
 
-    const validate = (data: Issue): string[] => {
-        const errors: string[] = [];
-
-        if (!data.title || data.title.trim() === "") {
-            errors.push("タイトルは必須です");
-        }
-
-        return errors;
-    };
-
     const load = useCallback(async () => {
+        setLoading(true);
         const list = await issueApi.list(projectId);
-        setIssues(list.map(toIssue));
+        setIssues(list);
         setLoading(false);
-    }, [projectId]);
-
-    const create = useCallback(async () => {
-        const errors = validate(editingIssue);
-        if (errors.length > 0) {
-            alert(errors.join("\n"));
-            return;
-        }
-
-        await issueApi.create(toIssuePayload(editingIssue));
-        await load();
-    }, [load]);
-
-    const update = useCallback(async () => {
-        const errors = validate(editingIssue);
-        if (errors.length > 0) {
-            alert(errors.join("\n"));
-            return;
-        }
-
-        await issueApi.update(toIssuePayload(editingIssue));
-        await load();
-    }, [load]);
-
-    const remove = useCallback(async (id: string) => {
-        if (!confirm("削除しますか？")) return;
-        await issueApi.delete(projectId, id);
-        await load();
-    }, [projectId, load]);
+    }, [projectId, setIssues]);
 
     useEffect(() => {
         if (loading) return;
@@ -69,33 +33,110 @@ export const useIssueController = (projectId: string, states: IssueStates) => {
         }
     }, [load]);
 
-    const handleChange = (key: keyof Issue, value: string | number) => {
-        if (!editingIssue) return;
-        setEditingIssue({ ...editingIssue, [key]: value });
+    type RequiredKeys =
+        | "title"
+        | "description"
+        | "status"
+        ;
+
+    const handleChange = (key: keyof IssuePayload, value: unknown) => {
+        if (!form) return;
+        setForm({ ...form, [key]: value });
     };
 
-    const handleShowModal = (mode: "new" | "edit", issue: Issue | null) => {
-        setMode(mode);
+    const validate = (data: IssuePayload): string[] => {
+        const requiredRules: Record<RequiredKeys, string> = {
+            title: "タイトルは必須です",
+            description: "内容は必須です",
+            status: "ステータスは必須です",
+        };
+        const errors: string[] = [];
 
-        if (mode === "new") {
-            issue = {
-                id: "",
-                projectId,
-                taskId: null,
-                title: "",
-                description: "",
-                status: IssueStatus.Open,
-                priority: IssuePriority.Low,
-                owner: "",
-            };
+        // 必須チェック（型安全にループ）
+        (Object.keys(requiredRules) as RequiredKeys[]).forEach((key) => {
+            const value = data[key];
+            if (!value || value.toString().trim() === "") {
+                errors.push(requiredRules[key]);
+            }
+        });
+
+        return errors;
+    };
+
+    // -----------------------------
+    // モーダル制御
+    // -----------------------------
+    const closeModal = () => {
+        setMode(null);
+        setForm(InitPayload(projectId));
+        setShowModal(false);
+    };
+
+    const handleShowModal = (modal:
+        | { mode: "new"; issue: null }
+        | { mode: "edit"; issue: IssueRow }
+    ) => {
+        setMode(modal.mode);
+
+        const payload: IssuePayload =
+            modal.mode === "edit" ?
+                toIssuePayload(modal.issue) :
+                InitPayload(projectId);
+
+        setForm(payload);
+        setShowModal(true);
+    };
+
+    const create = useCallback(async () => {
+        const errors = validate(form);
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+            return;
         }
 
-        setEditingIssue(issue);
-        setShowModal(true);
+        await issueApi.create(form);
+        await load();
+        setForm(InitPayload(projectId));
+        closeModal();
+    }, [form, load]);
+
+    const update = useCallback(async () => {
+        const errors = validate(form);
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+            return;
+        }
+
+        await issueApi.update(form);
+        setForm(InitPayload(projectId));
+        await load();
+        closeModal();
+    }, [form, load]);
+
+    const remove = useCallback(async (id: string) => {
+        if (!confirm("削除しますか？")) return;
+        await issueApi.delete(projectId, id);
+        await load();
+    }, [projectId, load]);
+
+    const addTag = (newTagType: TagType, newTagValue: string) => {
+        if (!newTagValue.trim()) return;
+
+        handleChange("tags", [
+            ...form.tags,
+            { tag_type: newTagType, value: newTagValue },
+        ]);
+    };
+
+    const removeTag = (index: number) => {
+        const newTags = [...form.tags];
+        newTags.splice(index, 1);
+        handleChange("tags", newTags);
     };
 
     return {
         load, create, update, remove,
         handleChange, handleShowModal,
+        addTag, removeTag
     };
 };

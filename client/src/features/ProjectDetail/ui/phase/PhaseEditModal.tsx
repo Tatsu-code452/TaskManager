@@ -1,82 +1,40 @@
-import { Phase } from "../../types/phase";
-import styles from "./PhaseTab.module.css";
+import commonStyle from "../../../../common.module.css";
+import { Button, InputSelector, Modal } from "../../../../components";
+import { PhasePayload } from "../../../../types/db/phase";
+import { FormProps } from "../../../common/ui/props";
+import { createInputs } from "../../types/phase";
 
-interface PhaseEditModalProps {
-    editingPhase: Phase;
-    handleChange: (target: string, value: string) => void;
-    onClose: () => void;
-    onSave: () => void;
-}
+type PhaseEditModalProps = FormProps<PhasePayload> & {
+    mode: "new" | "edit";
+};
 
 export const PhaseEditModal = ({
-    editingPhase,
-    handleChange,
+    form,
+    onChange,
+    onSubmit,
     onClose,
-    onSave,
+    mode,
 }: PhaseEditModalProps) => {
     return (
-        <div className={styles.modal_overlay}>
-            <div className={styles.modal_content}>
-                <h3>フェーズ</h3>
-
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>名称</label>
-                    <input
-                        className={styles.detail_input}
-                        value={editingPhase.name}
-                        onChange={(e) => handleChange("name", e.target.value)}
+        <Modal title={mode === "new" ? "新規作成" : "編集"} onClose={onClose}>
+            <div>
+                {createInputs(form).map((input) => (
+                    <InputSelector
+                        key={input.key}
+                        input={input}
+                        onChange={onChange}
                     />
-                </div>
-
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>順序</label>
-                    <input
-                        className={styles.detail_input}
-                        type="number"
-                        value={editingPhase.order}
-                        onChange={(e) => handleChange("order", e.target.value)}
-                    />
-                </div>
-
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>
-                        入力物（カンマ区切り）
-                    </label>
-                    <input
-                        className={styles.detail_input}
-                        value={editingPhase.inputs?.join(", ") ?? ""}
-                        onChange={(e) => handleChange("inputs", e.target.value)}
-                    />
-                </div>
-
-                <div className={styles.detail_row}>
-                    <label className={styles.detail_label}>
-                        出力物（カンマ区切り）
-                    </label>
-                    <input
-                        className={styles.detail_input}
-                        value={editingPhase.outputs?.join(", ") ?? ""}
-                        onChange={(e) =>
-                            handleChange("outputs", e.target.value)
-                        }
-                    />
-                </div>
-
-                <div className={styles.detail_buttons}>
-                    <button
-                        className={`${styles.button} ${styles.button_primary}`}
-                        onClick={onSave}
-                    >
-                        保存
-                    </button>
-                    <button
-                        className={`${styles.button} ${styles.button_secondary}`}
-                        onClick={onClose}
-                    >
-                        キャンセル
-                    </button>
-                </div>
+                ))}
             </div>
-        </div>
+
+            <div className={commonStyle.detail_buttons}>
+                <Button variant="primary" onClick={onSubmit}>
+                    保存
+                </Button>
+                <Button variant="secondary" onClick={onClose}>
+                    キャンセル
+                </Button>
+            </div>
+        </Modal>
     );
 };
