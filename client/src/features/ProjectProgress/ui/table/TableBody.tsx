@@ -6,10 +6,12 @@ import styles from "./table.module.css";
 export const TableBody = ({
     dates,
     tasks,
+    baseDate,
     editTarget,
     handleKeyDownCell,
     handleChangeCell,
-    cancelEdit,
+    startEdit,
+    endEdit,
     onDragMove,
     onDragResize,
     collapsedPhases,
@@ -45,6 +47,7 @@ export const TableBody = ({
                             <>
                                 <TableBodyRowPlan
                                     task={task}
+                                    baseDate={baseDate}
                                     planRowCells={dates.map((d) => {
                                         const c = task.plan.cells.find(
                                             (x) => x.date === d,
@@ -54,13 +57,15 @@ export const TableBody = ({
                                     editTarget={editTarget}
                                     handleKeyDownCell={handleKeyDownCell}
                                     handleChangeCell={handleChangeCell}
-                                    cancelEdit={cancelEdit}
+                                    startEdit={startEdit}
+                                    endEdit={endEdit}
                                     onDragMove={onDragMove}
                                     onDragResize={onDragResize}
                                 />
 
                                 <TableBodyRowActual
                                     task={task}
+                                    baseDate={baseDate}
                                     actualRowCells={dates.map((d) => {
                                         const c = task.actual.cells.find(
                                             (x) => x.date === d,
@@ -70,7 +75,8 @@ export const TableBody = ({
                                     editTarget={editTarget}
                                     handleKeyDownCell={handleKeyDownCell}
                                     handleChangeCell={handleChangeCell}
-                                    cancelEdit={cancelEdit}
+                                    startEdit={startEdit}
+                                    endEdit={endEdit}
                                     onDragMove={onDragMove}
                                     onDragResize={onDragResize}
                                 />

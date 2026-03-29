@@ -3,11 +3,13 @@ import styles from "./table.module.css";
 
 export const TableBodyRowPlan = ({
     task,
+    baseDate,
     planRowCells,
     editTarget,
     handleKeyDownCell,
     handleChangeCell,
-    cancelEdit,
+    startEdit,
+    endEdit,
     onDragMove,
     onDragResize,
 }) => {
@@ -24,13 +26,19 @@ export const TableBodyRowPlan = ({
             {planRowCells.map((cell) => (
                 <MatrixCell
                     key={task.id + "-" + cell.date}
-                    cell={cell}
+                    value={cell.value}
                     task={task}
-                    cellType="planCell"
-                    editTarget={editTarget}
+                    baseDate={baseDate}
+                    editTarget={{
+                        type: "planCell",
+                        taskIndex: task.id,
+                        date: cell.date,
+                    }}
+                    currentEditTarget={editTarget}
                     handleKeyDownCell={handleKeyDownCell}
                     handleChangeCell={handleChangeCell}
-                    cancelEdit={cancelEdit}
+                    startEdit={startEdit}
+                    endEdit={endEdit}
                     onDragMove={onDragMove}
                     onDragResize={onDragResize}
                 />

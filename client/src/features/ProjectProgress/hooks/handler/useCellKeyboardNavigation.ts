@@ -1,6 +1,7 @@
 import { EditTarget } from "../../types/types";
 
 export const useCellKeyboardNavigation = () => {
+    // 編集開始入力
     const isStartEdit = (e: React.KeyboardEvent) => {
         if (e.key === "Process") return false; // IME対策
         return (
@@ -9,11 +10,12 @@ export const useCellKeyboardNavigation = () => {
         );
     };
 
+    //タブ移動用先を示すリスト作成
     const buildFlatCellList = (
         tasks: { id: string }[],
         dates: string[]
     ) => {
-        const list: Array<EditTarget> = [];
+        const list: EditTarget[] = [];
 
         for (const task of tasks) {
             // planRow
@@ -39,13 +41,23 @@ export const useCellKeyboardNavigation = () => {
         tasks: { id: string }[],
         dates: string[]
     ): EditTarget | null => {
+        // 移動先リスト取得
         const flat = buildFlatCellList(tasks, dates);
 
+        // 現在の位置を探索
         const index = flat.findIndex((c) => {
-            if (c.type !== current.type) return false;
-            if (c.taskIndex !== current.taskIndex) return false;
-            if ("date" in c && "date" in current) return c.date === current.date;
-            return !("date" in c) && !("date" in current);
+            // 現在セルが工数セルかどうか、dateの有無で確認
+            const isMatrix = ("date" in c) && ("date" in current);
+
+            if ((c.type === current.type) &&
+                (c.taskIndex !== current.taskIndex)) {
+                if ((!isMatrix) ||
+                    (isMatrix && (c.date === current.date))) {
+                    return true;
+                }
+            }
+
+            return false;
         });
 
         if (index === -1) return null;
@@ -58,16 +70,12 @@ export const useCellKeyboardNavigation = () => {
 
         // ArrowRight / ArrowLeft（date を持つセルのみ）
         if (current.type === "planCell" || current.type === "actualCell") {
-            const idx = dates.indexOf(current.date);
-
             if (e.key === "ArrowRight") {
-                const nextDate = dates[idx + 1];
-                if (nextDate) return { ...current, date: nextDate };
+                return flat[index + 1] ?? null;
             }
 
             if (e.key === "ArrowLeft") {
-                const prevDate = dates[idx - 1];
-                if (prevDate) return { ...current, date: prevDate };
+                return flat[index - 1] ?? null;
             }
         }
 

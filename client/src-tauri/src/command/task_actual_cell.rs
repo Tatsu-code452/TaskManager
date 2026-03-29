@@ -13,7 +13,8 @@ define_command_composite_impl!(
     create,
     update,
     delete,
-    { date }
+    taskId,
+    date
 );
 
 define_tauri_commands_composite!(
@@ -24,5 +25,6 @@ define_tauri_commands_composite!(
     create_task_actual_cell,
     update_task_actual_cell,
     delete_task_actual_cell,
-    { date }
+    taskId,
+    date
 );

@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;
 use std::io::Write;
+use std::panic;
 use std::path::Path;
 
 use crate::model::{
@@ -79,8 +80,16 @@ impl Database {
     pub fn load() -> Result<Self, String> {
         match fs::read_to_string(DB_PATH) {
             Ok(content) => {
-                let mut db: Database = serde_json::from_str(&content)
-                    .map_err(|e| format!("JSON decode error: {}", e))?;
+                let result = panic::catch_unwind(|| serde_json::from_str::<Database>(&content));
+                let mut db: Database = match result {
+                    Ok(Ok(db)) => db,
+                    Ok(Err(e)) => {
+                        return Err(format!("JSON decode error: {}", e));
+                    }
+                    Err(_) => {
+                        return Err("JSON parse panic: structure mismatch".into());
+                    }
+                };
 
                 if db.schema_version != CURRENT_SCHEMA_VERSION {
                     db = db.migrate()?;

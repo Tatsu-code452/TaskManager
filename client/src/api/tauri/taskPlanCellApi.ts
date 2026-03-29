@@ -21,12 +21,10 @@ import { invoke } from "@tauri-apps/api/core";
 import { TaskPlanRow } from "../../types/db/taskPlan";
 
 export const taskPlanCellApi = {
-    list: async (id: string): Promise<TaskPlanRow[]> => {
-        return await invoke("get_plan_cells", { taskId: id });
+    list: async (taskId: string): Promise<TaskPlanRow[]> => {
+        return await invoke("list_task_plan_cells", { taskId });
     },
     update: async (taskId: string, date: string, hours: number) => {
-        return await invoke("update_plan_cell", {
-            payload: { taskId, date, hours },
-        });
+        return await invoke("update_task_plan_cell", { taskId, date, hours });
     },
 };

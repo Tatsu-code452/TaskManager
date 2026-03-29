@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import commonStyles from "../../common.module.css";
 import { Button } from "../../components";
@@ -24,8 +24,15 @@ export const ProjectListPage = () => {
         handleSubmitUpdate,
     } = useProjectListController();
 
+    const loadingRef = useRef(false);
+
     useEffect(() => {
-        loadProjects();
+        if (loadingRef.current) return;
+        loadingRef.current = true;
+
+        loadProjects().finally(() => {
+            loadingRef.current = false;
+        });
     }, [loadProjects]);
 
     const navigation = useNavigate();

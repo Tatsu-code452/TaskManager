@@ -4,13 +4,14 @@ import { taskPlanCellApi } from "../../../api/tauri/taskPlanCellApi";
 import { TaskRow } from "../../../types/db/task";
 import { TaskActualRow } from "../../../types/db/taskActual";
 import { TaskPlanRow } from "../../../types/db/taskPlan";
+import { TaskModel } from "../types/model";
 import { calcCriticalPath } from "./calcCriticalPath";
 import { toTaskModelFromRows } from "./toTaskModelFromRows";
 
-export const fetchTaskModelList = async (projectId: string) => {
-    
-    const result = [];
-    
+export const fetchTaskModelList = async (projectId: string): Promise<TaskModel[]> => {
+
+    const result: TaskModel[] = [];
+
     const tasks: TaskRow[] = await taskApi.list(projectId);
     for (const task of tasks) {
         const planCells: TaskPlanRow[] = await taskPlanCellApi.list(task.id);

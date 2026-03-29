@@ -1,54 +1,4 @@
-import { TaskRow, TaskStatus } from "../../../types/db/task";
-import { TaskActualRow } from "../../../types/db/taskActual";
-import { TaskPlanRow } from "../../../types/db/taskPlan";
-
-export type TaskModel = {
-    id: string;
-    phase: string;
-    name: string;
-    status: TaskStatus;
-
-    isCritical?: boolean;
-
-    plan: {
-        start?: string;
-        end?: string;
-        totalHours: number;
-        progress: number;
-        cells: TaskMatrixValue[];
-    };
-
-    actual: {
-        start?: string;
-        end?: string;
-        totalHours: number;
-        progress: number;
-        cells: TaskMatrixValue[];
-    };
-};
-
-/** 計画情報 */
-export interface TaskPlan {
-    cells: TaskMatrixValue[];
-    start?: string;
-    end?: string;
-    totalHours: number;
-    progress: number;
-}
-
-/** 実績情報 */
-export interface TaskActual {
-    cells: TaskMatrixValue[];
-    start?: string;
-    end?: string;
-    totalHours: number;
-    progress: number;
-}
-
-export type TaskMatrixValue = {
-    date: string;
-    value: number;
-};
+import { TaskStatus } from "../../../types/db/task";
 
 export interface ProgressPageState {
     displayRange: DisplayRange;
@@ -61,46 +11,37 @@ export interface DisplayRange {
     to: string;
 }
 
-export const toTaskModel = (
-    task: TaskRow,
-    planCells: TaskPlanRow[],
-    actualCells: TaskActualRow[],
-): TaskModel => {
-    const planMatrix: TaskMatrixValue[] = planCells.map((c) => ({
-        date: c.date,
-        value: c.hours,
-    }));
+export type TaskModel = {
+    id: string;
+    phase: string;
+    name: string;
+    status: TaskStatus;
 
-    const actualMatrix: TaskMatrixValue[] = actualCells.map((c) => ({
-        date: c.date,
-        value: c.hours,
-    }));
+    isCritical?: boolean;
 
-    return {
-        id: task.id,
-        phase: task.phase_id,
-        name: task.name,
-        status: task.status,
-
-        plan: {
-            start: task.planned_start,
-            end: task.planned_end,
-            totalHours: task.planned_hours,
-            progress: task.progress_rate,
-            cells: planMatrix,
-        },
-
-        actual: {
-            start: task.actual_start,
-            end: task.actual_end,
-            totalHours: task.actual_hours,
-            progress: task.progress_rate,
-            cells: actualMatrix,
-        },
-    };
+    plan: TaskPlan;
+    actual: TaskActual;
 };
 
-export type EditTarget =
-    | { type: "planCell"; taskIndex: string; date: string; pressedKey?: string }
-    | { type: "actualCell"; taskIndex: string; date: string; pressedKey?: string }
-    | { type: "actualProgress"; taskIndex: string; pressedKey?: string };
+/** 計画情報 */
+export interface TaskPlan {
+    start?: string;
+    end?: string;
+    totalHours: number;
+    progress: number;
+    cells: TaskMatrixValue[];
+}
+
+/** 実績情報 */
+export interface TaskActual {
+    start?: string;
+    end?: string;
+    totalHours: number;
+    progress: number;
+    cells: TaskMatrixValue[];
+}
+
+export type TaskMatrixValue = {
+    date: string;
+    value: number;
+};

@@ -1,23 +1,7 @@
-.container {
-  padding: 16px;
-}
-
 .tabs {
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
-}
-
-.tabs button {
-  padding: 8px 16px;
-  border: none;
-  background: #eee;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.tabs button:hover {
-  background: #ddd;
 }
 
 .active {

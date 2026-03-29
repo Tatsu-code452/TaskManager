@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useProjectProgressController } from "../hooks/controller/useProjectProgressController";
 import styles from "./index.module.css";
 import { ProjectProgressTable } from "./table/ProjectProgressTable";
@@ -17,20 +16,13 @@ export const ProjectProgressPage = ({
         dispatch,
         handleKeyDownCell,
         handleChangeCell,
-        cancelEdit,
         onDragMove,
         onDragResize,
-        loadTasks,
         togglePhase,
         toggleAllPhases,
         allCollapsed,
         collapsedPhases,
     } = useProjectProgressController(projectId);
-
-    // 初回ロード
-    useEffect(() => {
-        loadTasks();
-    }, [projectId]);
 
     return (
         <div className={styles.page_container}>
@@ -66,17 +58,19 @@ export const ProjectProgressPage = ({
                     <ProjectProgressTable
                         dates={dates}
                         tasks={pageState.tasks}
+                        baseDate={pageState.baseDate}
                         editTarget={editTarget}
                         handleKeyDownCell={handleKeyDownCell}
                         handleChangeCell={handleChangeCell}
-                        cancelEdit={cancelEdit}
+                        startEdit={dispatch.startEdit}
+                        endEdit={dispatch.endEdit}
                         onDragMove={onDragMove}
                         onDragResize={onDragResize}
                         collapsedPhases={collapsedPhases}
                         togglePhase={togglePhase}
                         toggleAllPhases={toggleAllPhases}
                         allCollapsed={allCollapsed}
-                    />{" "}
+                    />
                 </div>
             </div>
         </div>

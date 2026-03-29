@@ -5,10 +5,12 @@ import styles from "./table.module.css";
 export const ProjectProgressTable = ({
     dates,
     tasks,
+    baseDate,
     editTarget,
     handleKeyDownCell,
     handleChangeCell,
-    cancelEdit,
+    startEdit,
+    endEdit,
     onDragMove,
     onDragResize,
     collapsedPhases,
@@ -26,10 +28,12 @@ export const ProjectProgressTable = ({
             <TableBody
                 dates={dates}
                 tasks={tasks}
+                baseDate={baseDate}
                 editTarget={editTarget}
                 handleKeyDownCell={handleKeyDownCell}
                 handleChangeCell={handleChangeCell}
-                cancelEdit={cancelEdit}
+                startEdit={startEdit}
+                endEdit={endEdit}
                 onDragMove={onDragMove}
                 onDragResize={onDragResize}
                 collapsedPhases={collapsedPhases}

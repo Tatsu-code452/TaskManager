@@ -28,7 +28,7 @@
     border: var(--border);
     height: var(--row-height);
     white-space: nowrap;
-    text-align: center;
+    text-align: left;
 }
 
 .head_row_1 th {
@@ -39,7 +39,7 @@
 
 .head_row_2 th {
     position: sticky;
-    top: calc(var(--row-height) + 0.6rem);
+    top: 0;
     z-index: 3;
 }
 
@@ -57,13 +57,13 @@
 .matrix_cell {
     padding: 0.2rem;
     text-align: center;
-    min-width: 3rem;
+    min-width: 1rem;
     cursor: default;
 }
 
 /* 入力セル */
 .input_cell {
-    width: 100%;
+    width: 1rem;
     box-sizing: border-box;
 }
 

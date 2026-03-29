@@ -3,3 +3,10 @@ members = [
     "src-tauri",
     "src-tauri/tool/cargo-testgen",
 ]
+
+[profile.dev]
+opt-level = 0
+debug = true
+debug-assertions = true
+overflow-checks = true
+incremental = true

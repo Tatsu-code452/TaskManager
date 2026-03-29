@@ -3,11 +3,13 @@ import styles from "./table.module.css";
 
 export const TableBodyRowActual = ({
     task,
+    baseDate,
     actualRowCells,
     editTarget,
     handleKeyDownCell,
     handleChangeCell,
-    cancelEdit,
+    startEdit,
+    endEdit,
     onDragMove,
     onDragResize,
 }) => {
@@ -36,13 +38,19 @@ export const TableBodyRowActual = ({
             {actualRowCells.map((cell) => (
                 <MatrixCell
                     key={task.id + "-" + cell.date}
-                    cell={cell}
+                    value={cell.value}
                     task={task}
-                    cellType="actualCell"
-                    editTarget={editTarget}
+                    baseDate={baseDate}
+                    editTarget={{
+                        type: "actualCell",
+                        taskIndex: task.id,
+                        date: cell.date,
+                    }}
+                    currentEditTarget={editTarget}
                     handleKeyDownCell={handleKeyDownCell}
                     handleChangeCell={handleChangeCell}
-                    cancelEdit={cancelEdit}
+                    startEdit={startEdit}
+                    endEdit={endEdit}
                     onDragMove={onDragMove}
                     onDragResize={onDragResize}
                 />

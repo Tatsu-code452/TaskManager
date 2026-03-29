@@ -1,88 +1,49 @@
-import { TaskPayload } from "../../../api/tauri/taskApi";
-import { TaskRow, TaskStatus } from "../../../types/db/task";
+import { TaskPayload, TaskStatus } from "../../../types/db/task";
+import { InputConfig } from "../../../types/inputConfig";
 
-export const statusToLabel = (status: TaskStatus): string => {
-    switch (status) {
-        case TaskStatus.NotStarted:
-            return "未着手";
-        case TaskStatus.InProgress:
-            return "実施中";
-        case TaskStatus.Done:
-            return "完了";
-        default:
-            return "";
-    }
-};
-
-export interface Task {
-    id: string;
-    projectId: string;
-    phaseId: string,
-    name: string,
-
-    plannedStart: string,
-    plannedEnd: string,
-    actualStart: string,
-    actualEnd: string,
-
-    plannedHours: number,
-    actualHours: number,
-    progressRate: number,
-
-    status: TaskStatus,
+export const TaskStatusLabel: Record<TaskStatus, string> = {
+    [TaskStatus.NotStarted]: "未着手",
+    [TaskStatus.InProgress]: "対応中",
+    [TaskStatus.Done]: "完了",
 }
 
-export const toTask = (param: TaskRow): Task => (
+export type RequiredKeys =
+    | "name"
+
+export const InitPayload = (project_id: string): TaskPayload => (
     {
-        id: param.id,
-        projectId: param.project_id,
-        phaseId: param.phase_id,
-        name: param.name,
-        plannedStart: param.planned_start,
-        plannedEnd: param.planned_end,
-        actualStart: param.actual_start,
-        actualEnd: param.actual_end,
-        plannedHours: param.planned_hours,
-        actualHours: param.actual_hours,
-        progressRate: param.progress_rate,
-        status: param.status,
+        id: "",
+        project_id,
+        phase_id: "",
+        name: "",
+        planned_start: "",
+        planned_end: "",
+        planned_hours: 0.0,
+        actual_start: "",
+        actual_end: "",
+        actual_hours: 0.0,
+        progress_rate: 0.0,
+        status: TaskStatus.NotStarted,
     }
 )
 
-export const toTaskRow = (param: Task): TaskRow => (
-    {
-        id: param.id,
-        project_id: param.projectId,
-        phase_id: param.phaseId,
-        name: param.name,
-        planned_start: param.plannedStart,
-        planned_end: param.plannedEnd,
-        actual_start: param.actualStart,
-        actual_end: param.actualEnd,
-        planned_hours: param.plannedHours,
-        actual_hours: param.actualHours,
-        progress_rate: param.progressRate,
-        status: param.status,
-        timestamps: {
-            created_at: "",
-            updated_at: ""
-        }
-    }
-)
-
-export const toTaskPayload = (param: Task): TaskPayload => (
-    {
-        id: param.id,
-        project_id: param.projectId,
-        phase_id: param.phaseId,
-        name: param.name,
-        planned_start: param.plannedStart,
-        planned_end: param.plannedEnd,
-        actual_start: param.actualStart,
-        actual_end: param.actualEnd,
-        planned_hours: param.plannedHours,
-        actual_hours: param.actualHours,
-        progress_rate: param.progressRate,
-        status: param.status,
-    }
-)
+export const createInputs = (form: TaskPayload): InputConfig<keyof TaskPayload>[] => {
+    return [
+        { key: "name", label: "タスク名", type: "text", value: form.name },
+        {
+            key: "status",
+            label: "ステータス",
+            type: "select",
+            value: form.status,
+            options: Object.values(TaskStatus) as TaskStatus[],
+            labelMap: TaskStatusLabel,
+        },
+        { key: "planned_start", label: "開始日", type: "date", value: form.planned_start },
+        { key: "planned_end", label: "終了日", type: "date", value: form.planned_end, },
+        { key: "planned_hours", label: "工数", type: "number", value: form.planned_hours.toString() },
+        { key: "actual_start", label: "開始日", type: "date", value: form.actual_start },
+        { key: "actual_end", label: "終了日", type: "date", value: form.actual_end, },
+        { key: "planned_hours", label: "工数", type: "number", value: form.planned_hours.toString() },
+        { key: "progress_rate", label: "進捗率", type: "number", value: form.progress_rate.toString() },
+    ];
+};

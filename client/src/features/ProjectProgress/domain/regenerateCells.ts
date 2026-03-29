@@ -1,6 +1,5 @@
-import { taskPlanCellApi } from "../../../api/tauri/taskPlanCellApi";
-
-export const regeneratePlanCells = async (
+export const regenerateCells = async (
+    updateApi: (taskId: string, date: string, hours: number) => Promise<unknown>,
     taskId: string,
     start: string,
     end: string,
@@ -17,6 +16,6 @@ export const regeneratePlanCells = async (
         d.setDate(d.getDate() + i);
         const date = d.toISOString().slice(0, 10);
 
-        await taskPlanCellApi.update(taskId, date, perDay);
+        await updateApi(taskId, date, perDay);
     }
 };

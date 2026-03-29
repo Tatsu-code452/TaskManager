@@ -8,7 +8,7 @@ import {
 import { TagTypeLabel } from "../../../../types/db/common";
 import { IssueRow } from "../../../../types/db/issue";
 import { IssuePriorityLabel, IssueStatusLabel } from "../../types/issue";
-import styles from "./IssusTab.module.css";
+import styles from "./IssueTab.module.css";
 
 type IssueTableProps = {
     issues: IssueRow[];

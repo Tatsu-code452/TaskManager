@@ -32,6 +32,7 @@ define_model!(
     }
 );
 
+#[allow(unused_variables)]
 impl Task {
     pub fn new(id: String, project_id: String) -> Self {
         Self {

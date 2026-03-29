@@ -39,6 +39,5 @@ define_model_all!(
         start_date: Option<String> => None,
         end_date: Option<String> => None,
         owner: String => "".into(),
-        tags: Vec<Tag> => vec![],
     }
 );

@@ -1,133 +1,219 @@
 import { isDelayedCell } from "../../../domain/isDelayed";
+import { TaskModel } from "../../../types/model";
+import { EditTarget } from "../../../types/types";
 import styles from "../table.module.css";
 
-export const MatrixCell = ({
-    cell,
-    task,
-    cellType,
+interface MatrixCellProps {
+    value: number | null;
+    task: TaskModel;
+    baseDate: string;
+    editTarget: EditTarget;
+    currentEditTarget: EditTarget;
+    handleKeyDownCell: (e) => void;
+    handleChangeCell: (target: EditTarget, newValue: number) => Promise<void>;
+    startEdit: (editTarget: EditTarget) => void;
+    endEdit: () => void;
+    onDragMove: (args: {
+        taskId: string;
+        fromDate: string;
+        toDate: string;
+        type: string;
+    }) => Promise<void>;
+    onDragResize: (args: {
+        taskId: string;
+        toDate: string;
+        type: string;
+        edge: string;
+    }) => Promise<void>;
+}
+
+const isEditingTarget = (current: EditTarget, edit: EditTarget) => {
+    if (!current) return false;
+    if (current.type !== edit.type) return false;
+
+    // actualProgress は日付を見ない
+    if (current.type === "actualProgress" || edit.type === "actualProgress") {
+        return current.taskIndex === edit.taskIndex;
+    }
+
+    return current.taskIndex === edit.taskIndex && current.date === edit.date;
+};
+
+const buildStyleList = (
+    value: number | null,
+    isPlan: boolean,
+    isActual: boolean,
+    isDelayed: boolean,
+    editTarget: EditTarget,
+    baseDate: string,
+) => {
+    const list = [styles.matrix_cell];
+
+    if (editTarget.type === "actualProgress") return list;
+
+    if (value && isPlan) list.push(styles.plan_bar);
+    if (value && isActual) list.push(styles.actual_bar);
+    if (value && editTarget.date === baseDate) list.push(styles.today);
+    if (isDelayed) list.push(styles.delay_bar);
+
+    return list;
+};
+
+const setDragData = (
+    e: React.DragEvent,
+    editTarget: EditTarget,
+    extra: Record<string, string> = {},
+) => {
+    if (editTarget.type === "actualProgress") return;
+
+    e.dataTransfer.setData("type", editTarget.type);
+    e.dataTransfer.setData("taskId", editTarget.taskIndex);
+    e.dataTransfer.setData("date", editTarget.date);
+
+    Object.entries(extra).forEach(([k, v]) => e.dataTransfer.setData(k, v));
+};
+
+const Cell = ({
+    isBarStart,
+    isBarEnd,
+    isEditing,
     editTarget,
+    value,
+    endEdit,
+    handleChangeCell,
+}: {
+    isBarStart: boolean;
+    isBarEnd: boolean;
+    isEditing: boolean;
+    editTarget: EditTarget;
+    value: number | null;
+    endEdit: () => void;
+    handleChangeCell: (target: EditTarget, newValue: number) => Promise<void>;
+}) => (
+    <>
+        {/* 左端ハンドル */}
+        {isBarStart && (
+            <div
+                className={styles.handle_left}
+                draggable
+                onDragStart={(e) =>
+                    setDragData(e, editTarget, { edge: "start" })
+                }
+            />
+        )}
+
+        {/* 右端ハンドル */}
+        {isBarEnd && (
+            <div
+                className={styles.handle_right}
+                draggable
+                onDragStart={(e) => setDragData(e, editTarget, { edge: "end" })}
+            />
+        )}
+
+        {isEditing ? (
+            <input
+                className={styles.input_cell}
+                autoFocus
+                defaultValue={value ?? ""}
+                onBlur={endEdit}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                        handleChangeCell(
+                            editTarget,
+                            Number(e.currentTarget.value),
+                        );
+                    }
+                }}
+            />
+        ) : (
+            (value ?? "")
+        )}
+    </>
+);
+
+export const MatrixCell = ({
+    value,
+    task,
+    baseDate,
+    editTarget,
+    currentEditTarget,
     handleKeyDownCell,
     handleChangeCell,
-    cancelEdit,
+    startEdit,
+    endEdit,
     onDragMove,
     onDragResize,
-}) => {
-    const isEditing =
-        editTarget &&
-        editTarget.type === cellType &&
-        editTarget.taskIndex === task.id &&
-        editTarget.date === cell.date;
-
-    const plannedValue =
-        task.plan.cells.find((c) => c.date === cell.date)?.value ?? null;
-    const actualValue =
-        task.actual.cells.find((c) => c.date === cell.date)?.value ?? null;
-
-    const isPlannedBar = cellType === "planCell" && plannedValue !== null;
-    const isActualBar = cellType === "actualCell" && actualValue !== null;
-    const isDelayed = isDelayedCell(task, cell.date);
-
-    const today = new Date().toISOString().slice(0, 10);
-
+}: MatrixCellProps) => {
+    // -------------------------
+    // 判定ロジック
+    // -------------------------
+    const isEditing = isEditingTarget(currentEditTarget, editTarget);
+    const isDelayed = isDelayedCell(task, baseDate);
+    const isPlan = editTarget.type === "planCell";
+    const isActual = editTarget.type === "actualCell";
     const isBarStart =
-        (cellType === "planCell" && cell.date === task.plan.start) ||
-        (cellType === "actualCell" && cell.date === task.actual.start);
-
+        (isPlan && editTarget.date === task.plan.start) ||
+        (isActual && editTarget.date === task.actual.start);
     const isBarEnd =
-        (cellType === "planCell" && cell.date === task.plan.end) ||
-        (cellType === "actualCell" && cell.date === task.actual.end);
+        (isPlan && editTarget.date === task.plan.end) ||
+        (isActual && editTarget.date === task.actual.end);
+
+    // -------------------------
+    // スタイル構築
+    // -------------------------
+    const styleList = buildStyleList(
+        value,
+        isPlan,
+        isActual,
+        isDelayed,
+        editTarget,
+        baseDate,
+    );
+
+    // -------------------------
+    // Drag helpers
+    // -------------------------
+    const handleDrop = (e) => {
+        if (editTarget.type === "actualProgress") return;
+
+        const taskId = e.dataTransfer.getData("taskId");
+        const fromDate = e.dataTransfer.getData("date");
+        const type = e.dataTransfer.getData("type");
+        const edge = e.dataTransfer.getData("edge");
+        const toDate = e.currentTarget.dataset.date;
+
+        if (edge) {
+            onDragResize({ taskId, toDate, type, edge });
+        } else {
+            onDragMove({ taskId, fromDate, toDate, type });
+        }
+    };
 
     return (
         <td
-            className={`
-                ${styles.matrix_cell}
-                ${isPlannedBar ? styles.plan_bar : ""}
-                ${isActualBar ? styles.actual_bar : ""}
-                ${isDelayed ? styles.delay_bar : ""}
-                ${cell.date === today ? styles.today : ""}
-                ${task.isCritical ? styles.critical_border : ""}
-            `}
-            data-type={cellType}
-            data-task-index={task.id}
-            data-date={cell.date}
-            onKeyDown={handleKeyDownCell}
-            onClick={() =>
-                handleChangeCell(
-                    { type: cellType, taskIndex: task.id, date: cell.date },
-                    cell.value ?? 0,
-                )
+            className={styleList.join(" ")}
+            data-type={editTarget.type}
+            data-task-index={editTarget.taskIndex}
+            data-date={
+                editTarget.type === "actualProgress" ? "" : editTarget.date
             }
-            draggable={isPlannedBar || isActualBar}
-            onDragStart={(e) => {
-                e.dataTransfer.setData("taskId", task.id);
-                e.dataTransfer.setData("date", cell.date);
-                e.dataTransfer.setData("type", cellType);
-            }}
+            onKeyDown={handleKeyDownCell}
+            onClick={() => startEdit(editTarget)}
+            draggable={isPlan || isActual}
+            onDragStart={(e) => setDragData(e, editTarget)}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => {
-                const taskId = e.dataTransfer.getData("taskId");
-                const fromDate = e.dataTransfer.getData("date");
-                const type = e.dataTransfer.getData("type");
-                const edge = e.dataTransfer.getData("edge");
-                const toDate = cell.date;
-
-                if (edge) {
-                    onDragResize({ taskId, fromDate, toDate, type, edge });
-                } else {
-                    onDragMove({ taskId, fromDate, toDate, type });
-                }
-            }}
+            onDrop={handleDrop}
         >
-            {/* 左端ハンドル */}
-            {isBarStart && (
-                <div
-                    className={styles.handle_left}
-                    draggable
-                    onDragStart={(e) => {
-                        e.dataTransfer.setData("taskId", task.id);
-                        e.dataTransfer.setData("date", cell.date);
-                        e.dataTransfer.setData("type", cellType);
-                        e.dataTransfer.setData("edge", "start");
-                    }}
-                />
-            )}
-
-            {/* 右端ハンドル */}
-            {isBarEnd && (
-                <div
-                    className={styles.handle_right}
-                    draggable
-                    onDragStart={(e) => {
-                        e.dataTransfer.setData("taskId", task.id);
-                        e.dataTransfer.setData("date", cell.date);
-                        e.dataTransfer.setData("type", cellType);
-                        e.dataTransfer.setData("edge", "end");
-                    }}
-                />
-            )}
-
-            {isEditing ? (
-                <input
-                    className={styles.input_cell}
-                    autoFocus
-                    defaultValue={cell.value ?? ""}
-                    onBlur={cancelEdit}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            handleChangeCell(
-                                {
-                                    type: cellType,
-                                    taskIndex: task.id,
-                                    date: cell.date,
-                                },
-                                Number(e.currentTarget.value),
-                            );
-                        }
-                    }}
-                />
-            ) : (
-                (cell.value ?? "")
-            )}
+            <Cell
+                isBarStart={isBarStart}
+                isBarEnd={isBarEnd}
+                isEditing={isEditing}
+                editTarget={editTarget}
+                value={value}
+                endEdit={endEdit}
+                handleChangeCell={handleChangeCell}
+            />
         </td>
     );
 };
