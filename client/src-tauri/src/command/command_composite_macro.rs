@@ -16,6 +16,7 @@ macro_rules! define_command_composite_impl {
         pub struct $command_name;
 
         impl $command_name {
+            #[allow(non_snake_case)]
             pub fn list_impl(db: &Database, $key1: String) -> Result<Vec<$table_type>, String> {
                 $service_name::$list_fn(db, $key1)
             }
@@ -33,6 +34,7 @@ macro_rules! define_command_composite_impl {
                 $service_name::$update_fn(db, payload)
             }
 
+            #[allow(non_snake_case)]
             pub fn delete_impl(
                 db: &mut Database,
                 $key1: String,
@@ -61,6 +63,7 @@ macro_rules! define_tauri_commands_composite {
         $key2: ident
     ) => {
         #[tauri::command]
+        #[allow(non_snake_case)]
         pub fn $list_cmd(
             state: tauri::State<AppState>,
             $key1: String,
@@ -89,6 +92,7 @@ macro_rules! define_tauri_commands_composite {
         }
 
         #[tauri::command]
+        #[allow(non_snake_case)]
         pub fn $delete_cmd(
             state: tauri::State<AppState>,
             $key1: String,

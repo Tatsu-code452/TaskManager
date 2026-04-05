@@ -1,69 +1,30 @@
-import { useCallback } from "react";
-import { projectApi } from "../../../../api/tauri/projectApi";
 import { ProjectPayload, ProjectRow, ProjectStatus, toProjectPayload } from "../../../../types/db/project";
-import { DispProjectStatus, RequiredKeys } from "../../types/model";
 
-import { useProjectFormStates } from "../state/useProjectFormStates";
+import { useProjectListActions } from "../handler/useProjectListActions";
 import { useProjectListStates } from "../state/useProjectListStates";
 
 export const useProjectListController = () => {
     // 一覧・検索
     const {
-        projects,
-        setProjects,
-        search,
-        setSearch,
+        projects, setProjects,
+        search, setSearch,
+        page, setPage,
+        totalPages, setTotalPages, limit,
+        modalState, setModalState,
     } = useProjectListStates();
 
-    // モーダル・フォーム
-    const {
-        form,
-        setForm,
-        modalMode,
-        setModalMode,
-    } = useProjectFormStates();
-
-    // -----------------------------
-    // 一覧取得
-    // -----------------------------
-    const load = useCallback(async () => {
-        const list = await projectApi.list();
-        setProjects(list);
-    }, [setProjects]);
-
-    // -----------------------------
-    // 検索
-    // -----------------------------
-    // TODO: 未完成
-    const searchProjects = useCallback(async () => {
-        const list = await projectApi.list();
-        setProjects(list);
-    }, [setProjects]);
-
-    // -----------------------------
-    // 検索クリア
-    // -----------------------------
-    const clearSearch = () => {
-        setSearch({
-            name: "",
-            client: "",
-            status: DispProjectStatus.All,
-        });
-    };
+    const { createProject, updateProject, searchProjects } =
+        useProjectListActions(setProjects, setTotalPages);
 
     // -----------------------------
     // モーダル制御
     // -----------------------------
     const closeModal = () => {
-        setModalMode(null);
-        setForm(null);
+        setModalState({ open: false });
     };
 
-    // -----------------------------
-    // 新規作成モード
-    // -----------------------------
     const openCreateModal = () => {
-        const projectPayLoad: ProjectPayload = {
+        const empty: ProjectPayload = {
             id: "",
             name: "",
             client: "",
@@ -74,104 +35,137 @@ export const useProjectListController = () => {
             owner: "",
         };
 
-        setForm(projectPayLoad);
-        setModalMode("new");
+        setModalState({ open: true, mode: "new", form: empty });
     };
 
-    // -----------------------------
-    // 編集モード
-    // -----------------------------
     const openEditModal = (project: ProjectRow) => {
-        setForm(toProjectPayload(project));
-        setModalMode("edit");
+        setModalState({
+            open: true,
+            mode: "edit",
+            form: toProjectPayload(project),
+            projectId: project.id
+        });
     };
 
     const validate = (data: ProjectPayload): string[] => {
         // 必須項目のメッセージ定義（型安全）
-        const requiredRules: Record<RequiredKeys, string> = {
+        const required: Record<keyof ProjectPayload, string> = {
             id: "IDは必須です",
             name: "案件名は必須です",
             client: "顧客名は必須です",
+            description: "",
             status: "ステータスは必須です",
             start_date: "開始日は必須です",
             end_date: "終了日は必須です",
             owner: "担当者は必須です",
+            timestamps: "",
         };
+
         const errors: string[] = [];
 
-        // 必須チェック（型安全にループ）
-        (Object.keys(requiredRules) as RequiredKeys[]).forEach((key) => {
+        (Object.keys(required) as (keyof ProjectPayload)[]).forEach((key) => {
+            const message = required[key];
+            if (!message) return;
+
             const value = data[key];
             if (!value || value.toString().trim() === "") {
-                errors.push(requiredRules[key]);
+                errors.push(message);
             }
         });
 
-        // 日付整合性
-        if (data.start_date && data.end_date) {
-            if (data.start_date > data.end_date) {
-                errors.push("開始日は終了日より前である必要があります");
-            }
+        if (data.start_date && data.end_date &&
+            data.start_date > data.end_date) {
+            errors.push("開始日は終了日より前である必要があります");
         }
-
         return errors;
     };
 
     // -----------------------------
-    // 作成処理
+    // 作成
     // -----------------------------
-    const handleSubmitCreate = async () => {
-        if (!form) return;
+    const handleCreate = async () => {
+        if (!modalState.open || modalState.mode !== "new") return;
 
-        const errors = validate(form);
+        const errors = validate(modalState.form);
         if (errors.length > 0) {
             alert(errors.join("\n"));
             return;
         }
 
-        await projectApi.create(form);
-        await load();
+        await createProject(modalState.form, search, page, limit);
         closeModal();
     };
 
     // -----------------------------
     // 更新処理
     // -----------------------------
-    const handleSubmitUpdate = async () => {
-        if (!form) return;
+    const handleUpdate = async () => {
+        if (!modalState.open || modalState.mode !== "edit") return;
 
-        const errors = validate(form);
+        const errors = validate(modalState.form);
         if (errors.length > 0) {
             alert(errors.join("\n"));
             return;
         }
 
-        await projectApi.update(form);
-        await load();
+        await updateProject(modalState.form, search, page, limit);
         closeModal();
+    };
+
+    // -----------------------------
+    // 検索
+    // -----------------------------
+    const handleSearch = async () => {
+        await searchProjects(search, page, limit);
+    };
+
+
+    // -----------------------------
+    // 検索クリア
+    // -----------------------------
+    const clearSearch = async () => {
+        setSearch({
+            name: "",
+            client: "",
+            status: ProjectStatus.All,
+        });
+        await searchProjects({}, 1, limit);
+    };
+
+    const updateForm = (key: keyof ProjectPayload, value: string) => {
+        if (!modalState.open) return;
+        setModalState({
+            ...modalState,
+            form: {
+                ...modalState.form,
+                [key]: value,
+            },
+        });
     };
 
     return {
         // 一覧
         projects,
-        loadProjects: load,
+        searchProjects,
+        page, setPage,
+        totalPages, setTotalPages, limit,
 
         // 検索
         search,
         setSearch,
-        searchProjects,
+        handleSearch,
         clearSearch,
 
         // モーダル
-        modalMode,
-        form,
-        setForm,
+        modalState,
+        setModalState,
         openCreateModal,
         openEditModal,
         closeModal,
+        updateForm,
 
         // 作成・更新
-        handleSubmitCreate,
-        handleSubmitUpdate,
+        handleCreate,
+        handleUpdate,
     };
 };

@@ -2,19 +2,18 @@ import commonStyle from "../../../common.module.css";
 import { Button, InputSelector, Modal } from "../../../components";
 import { ProjectPayload } from "../../../types/db/project";
 import { FormProps } from "../../common/ui/props";
-import { ModalMode } from "../hooks/state/useProjectFormStates";
 import { createInputs } from "../types/model";
 
 type ProjectFormProps = FormProps<ProjectPayload> & {
-    mode: ModalMode;
+    mode: string;
 };
 
 export const ProjectForm = ({
+    mode,
     form,
     onChange,
     onSubmit,
     onClose,
-    mode,
 }: ProjectFormProps) => {
     return (
         <Modal title={mode === "new" ? "新規作成" : "編集"} onClose={onClose}>

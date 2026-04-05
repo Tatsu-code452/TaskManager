@@ -10,6 +10,22 @@ pub enum ProjectStatus {
     OnHold,    // 一時停止
     Completed, // 完了
     Archived,  // アーカイブ
+    All,       // 検索用
+}
+
+#[derive(Debug, Clone, serde::Deserialize)]
+pub struct ProjectSearchCondition {
+    pub id: Option<String>,
+    pub name: Option<String>,
+    pub client: Option<String>,
+    pub description: Option<String>,
+    pub status: Option<ProjectStatus>,
+    pub start_date: Option<String>,
+    pub end_date: Option<String>,
+    pub owner: Option<String>,
+
+    pub page: Option<usize>,
+    pub limit: Option<usize>,
 }
 
 define_model_all!(

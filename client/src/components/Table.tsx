@@ -1,8 +1,9 @@
 import React from "react";
 import styles from "./Table.module.css";
 
-export type HeaderCell = React.ThHTMLAttributes<HTMLTableCellElement> & {
+export type HeaderCell = {
     content: React.ReactNode;
+    props?:React.ThHTMLAttributes<HTMLTableCellElement>;
 };
 
 export type BodyCell = {

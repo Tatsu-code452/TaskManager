@@ -6,6 +6,7 @@ export enum ProjectStatus {
     OnHold = "OnHold",   // 一時停止
     Completed = "Completed", // 完了
     Archived = "Archived",  // アーカイブ
+    All = "All",
 }
 
 export type ProjectKey = {
@@ -38,3 +39,19 @@ export const toProjectPayload = (param: ProjectRow): ProjectPayload => (
         owner: param.owner,
     }
 )
+
+export type ProjectSearchCondition = {
+    id?: string;
+    name?: string;
+    client?: string;
+    description?: string;
+    status?: ProjectStatus;
+    start_date?: string;
+    end_date?: string;
+    owner?: string;
+};
+
+export type ProjectSearchResult = {
+    items: ProjectRow[];
+    total_pages: number;
+};

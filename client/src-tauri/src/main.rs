@@ -13,6 +13,7 @@ fn main() {
             command::project::create_project,
             command::project::update_project,
             command::project::delete_project,
+            command::project::search_projects,
             // Phase
             command::phase::list_phases,
             command::phase::create_phase,

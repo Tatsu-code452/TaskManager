@@ -5,6 +5,7 @@ pub mod phase_aggregate_service;
 pub mod phase_service;
 pub mod project_aggregate_service;
 pub mod project_service;
+pub mod search_utils;
 pub mod service_composite_macro;
 pub mod service_macro;
 pub mod service_multiple_id_macro;

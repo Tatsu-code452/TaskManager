@@ -5,6 +5,7 @@
     cursor: pointer;
     font-size: 0.95rem;
     font-weight: 600;
+    max-height: 2.5rem;
     transition:
         background 0.15s ease,
         box-shadow 0.15s ease;

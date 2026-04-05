@@ -1,7 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import { ProjectDetail } from "./features/ProjectDetail/ui/ProjectDetail";
-import { ProjectListPage } from "./features/ProjectList";
+import { ProjectListPage } from "./features/ProjectList/ProjectListPage";
 
 function App() {
     return (

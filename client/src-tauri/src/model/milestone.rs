@@ -1,5 +1,4 @@
 use crate::define_model_all;
-use crate::model::tag::Tag;
 use crate::model::time_stamps::Timestamps;
 use serde::{Deserialize, Serialize};
 

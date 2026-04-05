@@ -10,6 +10,7 @@ export type TableColumn<T> = {
 export type TableCreatorProps<T> = {
     tableDef: TableColumn<T>[];
     rows: T[];
+    headerProps?: (row: T) => React.HTMLAttributes<HTMLTableRowElement>;
     rowProps?: (row: T) => React.HTMLAttributes<HTMLTableRowElement>;
 };
 

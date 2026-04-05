@@ -4,6 +4,7 @@ import styles from "./Input.module.css";
 type BaseProps = {
     label?: string;
     className?: string;
+    rowClassName?: string;
 };
 
 type SelectProps<T extends string> = BaseProps & {
@@ -33,10 +34,10 @@ export type InputProps<T extends string = string> =
     | TextInputProps;
 
 export const Input = <T extends string>(props: InputProps<T>) => {
-    const { label, className } = props;
+    const { label, className, rowClassName, ...rest } = props;
 
     return (
-        <div className={styles.detail_row}>
+        <div className={`${styles.detail_row} ${rowClassName ?? ""}`}>
             {label && <label className={styles.detail_label}>{label}</label>}
 
             {props.type === "select" && (
@@ -64,7 +65,7 @@ export const Input = <T extends string>(props: InputProps<T>) => {
 
             {props.type !== "select" && props.type !== "textarea" && (
                 <input
-                    {...props}
+                    {...rest}
                     className={`${styles.detail_input} ${className ?? ""}`}
                     value={props.value}
                     onChange={(e) => props.onChange(e.target.value as T)}
