@@ -23,7 +23,7 @@ define_service_single_id!(
 #[derive(serde::Serialize)]
 pub struct ProjectSearchResult {
     pub items: Vec<Project>,
-    pub total_pages: usize,
+    pub total_num: usize,
 }
 
 impl ProjectService {
@@ -41,8 +41,7 @@ impl ProjectService {
             .order_by(|p| p.id.clone(), Order::Asc)
             .execute();
 
-        let total = filtered.len();
-        let total_pages = (total + limit - 1) / limit; // 切り上げ
+        let total_num = filtered.len();
 
         // --- ページネーション適用 ---
         let items = filtered
@@ -51,7 +50,7 @@ impl ProjectService {
             .take(limit)
             .collect::<Vec<_>>();
 
-        Ok(ProjectSearchResult { items, total_pages })
+        Ok(ProjectSearchResult { items, total_num })
     }
 }
 

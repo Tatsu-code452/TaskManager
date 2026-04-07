@@ -15,7 +15,7 @@ export const ProjectListPage = () => {
         searchProjects,
         page,
         setPage,
-        totalPages,
+        totalNum,
         limit,
 
         // 検索
@@ -80,8 +80,8 @@ export const ProjectListPage = () => {
 
             <div>
                 <Pagination
-                    length={projects.length}
-                    totalPages={totalPages}
+                    length={totalNum}
+                    totalPages={totalNum / limit}
                     page={page}
                     setPage={setPage}
                     onClick={handleSearch}

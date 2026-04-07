@@ -9,12 +9,12 @@ export const useProjectListController = () => {
         projects, setProjects,
         search, setSearch,
         page, setPage,
-        totalPages, setTotalPages, limit,
+        totalNum, setTotalNum, limit,
         modalState, setModalState,
     } = useProjectListStates();
 
     const { createProject, updateProject, searchProjects } =
-        useProjectListActions(setProjects, setTotalPages);
+        useProjectListActions(setProjects, setTotalNum);
 
     // -----------------------------
     // モーダル制御
@@ -148,7 +148,7 @@ export const useProjectListController = () => {
         projects,
         searchProjects,
         page, setPage,
-        totalPages, setTotalPages, limit,
+        totalNum, setTotalNum, limit,
 
         // 検索
         search,

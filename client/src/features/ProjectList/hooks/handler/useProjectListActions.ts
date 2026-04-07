@@ -5,7 +5,7 @@ import { ProjectPayload, ProjectRow, ProjectSearchCondition } from "../../../../
 
 export const useProjectListActions = (
     setProjects: (list: ProjectRow[]) => void,
-    setTotalPages: (n: number) => void,
+    setTotalNum: (n: number) => void,
 ) => {
     const loading = useRef(false);
 
@@ -27,10 +27,10 @@ export const useProjectListActions = (
 
         const result = await projectApi.search(condition, page, limit);
         setProjects(result.items);
-        setTotalPages(result.total_pages);
+        setTotalNum(result.total_num);
 
         loading.current = false;
-    }, [setProjects, setTotalPages]);
+    }, [setProjects, setTotalNum]);
 
     const createProject = useCallback(async (
         payload: ProjectPayload,

@@ -9,9 +9,9 @@ export const actionPage = (page: PageOptions) => {
             listMock: MockedFunction<(condition?: ProjectSearchCondition, page?: number, limit?: number)
                 => Promise<ProjectSearchResult>>,
             items: ProjectRow[],
-            totalPages: number
+            totalNum: number
         ) => {
-            listMock.mockResolvedValueOnce({ items, total_pages: totalPages });
+            listMock.mockResolvedValueOnce({ items, total_num: totalNum });
         },
         clickCreate: () => {
             fireEvent.click(page.createButton);

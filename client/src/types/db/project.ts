@@ -53,5 +53,5 @@ export type ProjectSearchCondition = {
 
 export type ProjectSearchResult = {
     items: ProjectRow[];
-    total_pages: number;
+    total_num: number;
 };

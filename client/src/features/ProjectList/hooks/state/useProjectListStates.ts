@@ -22,7 +22,7 @@ export const useProjectListStates = () => {
         projects, setProjects,
         search, setSearch,
         page, setPage,
-        totalPages, setTotalPages, limit,
+        totalNum: totalPages, setTotalNum: setTotalPages, limit,
         modalState, setModalState,
     };
 };
