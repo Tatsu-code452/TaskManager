@@ -1,3 +1,26 @@
+export type ExpectFromMeta<D extends Record<string, ExpectMeta>> = {
+    [K in keyof D]:
+    D[K] extends { async: true }
+    ? () => Promise<ExpectResult<D[K]["tests"]>>
+    : ExpectResult<D[K]["tests"]>;
+};
+
+export type ExpectMeta = {
+    type: string,
+    target: string;
+    helpers: readonly string[];
+    value?: unknown;
+    async?: boolean;
+    tests: readonly ExpectDefine[];
+};
+
+export type ExpectDefine = {
+    name: string,
+    params?: readonly string[],
+    tests?: readonly TestsDefine[];
+};
+
+
 export type TestsDefine = {
     type: string;
     method?: string,
@@ -6,13 +29,6 @@ export type TestsDefine = {
     expected?: readonly string[] | string,
     params?: readonly string[],
 }
-
-export type ExpectDefine = {
-    name: string,
-    key?: string,
-    params?: readonly string[],
-    tests?: readonly TestsDefine[];
-};
 
 export type Ctx = {
     context: unknown;

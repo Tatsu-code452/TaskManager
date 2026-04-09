@@ -24,7 +24,6 @@ vi.mock("react-router-dom", async () => {
 import { projectApi } from "../../../api/tauri/projectApi";
 
 export const createMock = () => {
-
     return {
         listMock: vi.mocked(projectApi.search),
         createMock: vi.mocked(projectApi.create),

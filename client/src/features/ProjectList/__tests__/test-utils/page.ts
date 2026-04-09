@@ -1,43 +1,65 @@
-import { ByRoleOptions, within } from "@testing-library/react";
-import { baseOptions, BaseOptions } from "./pageUtils/baseOptions";
-import { DefineItem } from "./pageUtils/types";
+import { ByRoleOptions, Screen, waitFor } from "@testing-library/react";
+import { createOptions } from "./pageUtils/createOptions";
+import { Options, PageDefines, PageOptionsFromMeta, UiMeta } from "./pageUtils/types";
 
-export const defineOptions = <T extends readonly DefineItem[]>(
-    target: HTMLElement,
-    defs: T
-) => {
-    const base: BaseOptions = baseOptions(within(target));
-
-    const handler = {
-        button: (label: string) => () => base.button(label),
-        text: (label: string) => {
-            if (label.includes("${text}")) {
-                return (value: string) => {
-                    return base.text(label.replace("${text}", value));
-                };
-            } else if (label.startsWith("/") && label.endsWith("/")) {
-                return () => base.text(new RegExp(label.slice(1, -1)));
-            } else {
-                return () => base.text(label);
-            }
-        },
-        input: (label: string) => (value: string) => base.input(label.replace("${label}", value)),
-        select: (label: string) => (value: string) => base.select(label.replace("${label}", value)),
-        date: (label: string) => (value: string) => base.date(label.replace("${label}", value)),
-        options: (label: string) => (value: string) => base.options(label.replace("${label}", value)),
-        selectedOption: (label: string) => (value: string) => base.selectedOption(label.replace("${label}", value)),
-        tableRow: () => (opts: ByRoleOptions) => base.tableRow(opts),
-        tableRowByText: () => async (text: string) => await base.tableRowByText(text),
-    } as const;
-
-    const result = {} as {
-        [K in T[number]as K["name"]]:
-        ReturnType<typeof handler[K["type"]]>;
-    };
-
-    defs.forEach(({ name, type, label }) => {
-        result[name] = handler[type](label as string);
+export const pageOptions = async <
+    D extends PageDefines
+>(
+    screen: Screen,
+    pageDefines: D
+): Promise<PageOptionsFromMeta<D>> => {
+    await waitFor(() => {
+        expect(screen.getByTestId("container")).toBeInTheDocument();
     });
 
-    return result;
+    const result: Partial<PageOptionsFromMeta<D>> = {};
+
+    for (const key of Object.keys(pageDefines) as (keyof D)[]) {
+        result[key] = await assignForKey(screen, pageDefines[key]) as PageOptionsFromMeta<D>[typeof key];
+    }
+
+    return result as PageOptionsFromMeta<D>;
+};
+
+const assignForKey = async (
+    screen: Screen,
+    meta: UiMeta
+): Promise<
+    HTMLElement | Options | (() => Promise<HTMLElement>) | (() => Promise<Options>)
+> => {
+    if (meta["elements"].length === 0) {
+        if (meta.async === true) {
+            return (async () => {
+                const el = await resolveElement(screen, meta);
+                return el as HTMLElement;
+            })
+        } else {
+            const el = await resolveElement(screen, meta);
+            return el as HTMLElement;
+        }
+    } else {
+        if (meta.async === true) {
+            return (async () => {
+                const el = await resolveElement(screen, meta);
+                return createOptions(el, meta.elements) as Options;
+            })
+        } else {
+            const el = await resolveElement(screen, meta);
+            return createOptions(el, meta.elements) as Options
+        }
+    }
+};
+
+const resolveElement = async (screen: Screen, meta: UiMeta): Promise<HTMLElement> => {
+    if (meta.type === "testId") {
+        return await screen.findByTestId(meta.target);
+    }
+
+    if (meta.type === "role") {
+        return meta.value
+            ? await screen.findByRole(meta.target, meta.value as ByRoleOptions)
+            : await screen.findByRole(meta.target);
+    }
+
+    throw new Error(`Unknown meta type: ${meta.type}`);
 };

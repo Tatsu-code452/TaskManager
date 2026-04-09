@@ -5,21 +5,36 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { ProjectListPage } from "../ProjectListPage";
 import { filteredList, initialList } from "./data";
-import { createExpect } from "./expect";
-import {
-    actionModal,
-    actionPage,
-    actionPagination,
-    actionSearch,
-    actionTable,
-} from "./flow";
-import { pageOptions } from "./page";
+import { expectDefines, helperRegistry } from "./expectDefines";
+import { createAction } from "./flow";
+import { pageDefines } from "./pageDefines";
+import { createExpect } from "./test-utils/expect";
+import { pageOptions } from "./test-utils/page";
+import { Expect, PageOptions } from "./types";
 
 let alertMock;
-let page: ReturnType<typeof pageOptions>;
-let expect: ReturnType<typeof createExpect>;
+let page: PageOptions;
+let expect: Expect;
+let action: Awaited<ReturnType<typeof createAction>>;
+const describeValue = (value: unknown): string => {
+    if (value instanceof HTMLElement) {
+        return `<${value.tagName.toLowerCase()} id="${value.id}" class="${value.className}">`;
+    }
+
+    if (typeof value === "function") {
+        return value.constructor.name === "AsyncFunction"
+            ? `async function ${value.name || "(anonymous)"}`
+            : `function ${value.name || "(anonymous)"}`;
+    }
+
+    if (typeof value === "object" && value !== null) {
+        return `{ ${Object.keys(value).join(", ")} }`;
+    }
+
+    return String(value);
+};
 describe("ProjectListPage（画面ベース機能網羅）", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         vi.clearAllMocks();
         mocked.listMock.mockResolvedValue({
             items: initialList,
@@ -32,8 +47,17 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
             </MemoryRouter>,
         );
 
-        page = pageOptions(screen);
-        expect = createExpect(page);
+        page = await pageOptions(screen, pageDefines);
+        for (const key of Object.keys(page)) {
+            const value = page[key];
+            console.debug(`[SETUP][page]: ${key} → ${describeValue(value)}`);
+        }
+        expect = await createExpect(page, expectDefines, helperRegistry);
+        for (const key of Object.keys(expect)) {
+            const value = expect[key];
+            console.debug(`[SETUP][expect]: ${key} → ${describeValue(value)}`);
+        }
+        action = await createAction(page);
         alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
     });
 
@@ -42,28 +66,26 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
     });
 
     it("初期表示で一覧が表示され、検索条件は空である", async () => {
+        console.debug("mockCalled");
         await expect.wait.mockCalled(mocked.listMock, 1);
         await expect.search.init();
-        await expect.table.searchRow(initialList[0]);
         await expect.table.searchRow(initialList[0]);
     });
 
     it("ステータスのプルダウンに正しい選択肢が表示される", async () => {
-        actionSearch(page).openSelect("ステータス");
+        action.search().openSelect("ステータス");
         expect.search.optionLabel();
     });
 
     it("検索ボタン押下で searchProjects が呼ばれる", async () => {
-        const action = actionSearch(page);
         await expect.wait.mockCalled(mocked.listMock, 1);
-        action.inputSearch("案件名", "販売");
-        action.clickSearch();
+        action.search().inputSearch("案件名", "販売");
+        action.search().clickSearch();
         await expect.wait.mockCalled(mocked.listMock, 2);
     });
 
     it("検索条件なしで検索すると全件が表示される", async () => {
-        const action = actionSearch(page);
-        action.clickSearch();
+        action.search().clickSearch();
         await expect.wait.mockCalled(mocked.listMock, 2);
         await expect.table.searchRow(initialList[0]);
     });
@@ -73,38 +95,38 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
             items: filteredList,
             total_num: 1,
         });
-        actionSearch(page).inputSearch("案件名", "（改修）");
-        actionSearch(page).clickSearch();
+        action.search().inputSearch("案件名", "（改修）");
+        action.search().clickSearch();
         await expect.wait.mockCalled(mocked.listMock, 2);
         await expect.table.searchRow(filteredList[0]);
     });
 
     it("クリア押下で検索条件が初期化され、loadProjects が呼ばれる", async () => {
-        actionSearch(page).clickClear();
+        action.search().clickClear();
         await expect.wait.mockCalled(mocked.listMock, 2);
         await expect.search.init();
     });
 
     it("行クリックで詳細画面へ遷移する", async () => {
-        await actionTable(page).clickRow(initialList[0]);
+        await action.table().clickRow(initialList[0]);
         expect.table.navigate(mocked.navigateMock, "/projects/PJT-001");
     });
 
     it("編集ボタン押下でモーダルが開く", async () => {
-        await actionTable(page).clickEdit();
+        await action.table().clickEdit();
         await (await expect.modal()).editModal();
     });
 
     it("新規作成ボタン押下でモーダルが開く", async () => {
-        await actionPage(page).clickCreate();
+        action.page().clickCreate();
         await (await expect.modal()).createModal();
     });
 
     it("作成ボタン押下で createProject が呼ばれる", async () => {
-        actionPage(page).clickCreate();
+        action.page().clickCreate();
         await (await expect.modal()).createModal();
         await (
-            await actionModal(page)
+            await action.modal()
         ).inputAll({
             name: "新規案件",
             id: "TEST-001",
@@ -113,91 +135,91 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
             end_date: "2025-02-01",
             owner: "山田",
         });
-        await (await actionModal(page)).clickCreate();
+        await (await action.modal()).clickCreate();
         await expect.wait.mockCalled(mocked.createMock, 1);
     });
 
     it("更新ボタン押下で updateProject が呼ばれる", async () => {
-        actionTable(page).clickEdit();
+        action.table().clickEdit();
         await (await expect.modal()).editModal();
-        await (await actionModal(page)).input("案件名", "更新後案件");
-        await (await actionModal(page)).clickUpdate();
+        await (await action.modal()).input("案件名", "更新後案件");
+        await (await action.modal()).clickUpdate();
         await expect.wait.mockCalled(mocked.updateMock, 1);
     });
 
     it("必須項目が空なら alert が表示される", async () => {
-        actionPage(page).clickCreate();
+        action.page().clickCreate();
         await (await expect.modal()).createModal();
-        await (await actionModal(page)).clickCreate();
+        await (await action.modal()).clickCreate();
         await expect.wait.mockCalled(alertMock, 1);
     });
 
     it("キャンセルでモーダルが閉じる", async () => {
-        actionPage(page).clickCreate();
+        action.page().clickCreate();
         await (await expect.modal()).createModal();
-        await (await actionModal(page)).clickClose();
+        await (await action.modal()).clickClose();
         await expect.wait.noModal(page);
     });
 
     it("初期表示でページ情報が 1 / totalPages と表示される", async () => {
         mocked.listMock.mockResolvedValueOnce({
             items: initialList,
-            total_num: 5,
+            total_num: 115,
         });
-        actionSearch(page).clickClear();
+        action.search().clickClear();
         await expect.wait.mockCalled(mocked.listMock, 2);
-        expect.pagination.page(1, 5);
+        await expect.pagination.page(1, 6);
     });
 
     it("次へ押下で 2 ページ目が表示される", async () => {
         mocked.listMock.mockResolvedValueOnce({
             items: initialList,
-            total_num: 5,
+            total_num: 100,
         });
-        actionSearch(page).clickClear();
+        action.search().clickClear();
         await expect.wait.mockCalled(mocked.listMock, 2);
         mocked.listMock.mockResolvedValueOnce({
             items: initialList,
-            total_num: 5,
+            total_num: 100,
         });
-        actionPagination(page).clickNext();
+        action.pagination().clickNext();
         await expect.wait.mockCalled(mocked.listMock, 3);
-        expect.pagination.page(2, 5);
+        await expect.pagination.page(2, 5);
     });
 
     it("前へ押下で 1 ページ目に戻る", async () => {
         mocked.listMock.mockResolvedValueOnce({
             items: initialList,
-            total_num: 5,
+            total_num: 100,
         });
-        actionSearch(page).clickClear();
+        action.search().clickClear();
         await expect.wait.mockCalled(mocked.listMock, 2);
-        actionPagination(page).clickNext();
+        action.pagination().clickNext();
         await expect.wait.mockCalled(mocked.listMock, 3);
-        actionPagination(page).clickPrev();
+        action.pagination().clickPrev();
         await expect.wait.mockCalled(mocked.listMock, 4);
-        expect.pagination.page(1, 1);
+        await expect.pagination.page(1, 1);
     });
 
     it("最終ページでは次へが disabled になる", async () => {
         mocked.listMock.mockResolvedValueOnce({
             items: initialList,
-            total_num: 2,
+            total_num: 40,
         });
-        actionSearch(page).clickClear();
+        action.search().clickClear();
         await expect.wait.mockCalled(mocked.listMock, 2);
         mocked.listMock.mockResolvedValueOnce({
             items: initialList,
-            total_num: 2,
+            total_num: 40,
         });
-        actionPagination(page).clickNext();
+        action.pagination().clickNext();
         await expect.wait.mockCalled(mocked.listMock, 3);
-        expect.pagination.page(2, 2);
-        expect.pagination.disableNext();
+        await expect.pagination.page(2, 2);
+        await expect.pagination.disableNext();
     });
 
     it("1 ページ目では前へが disabled になる", async () => {
-        expect.pagination.page(1, 1);
-        expect.pagination.disablePrev();
+        await expect.pagination.page(1, 1);
+        await expect.pagination.disablePrev();
     });
 });

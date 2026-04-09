@@ -42,7 +42,6 @@ export const ProjectListPage = () => {
     }, [searchProjects, page, limit]);
 
     const navigation = useNavigate();
-
     return (
         <div data-testid="container" className={commonStyles.container}>
             <h2>プロジェクト一覧</h2>
@@ -81,7 +80,7 @@ export const ProjectListPage = () => {
             <div>
                 <Pagination
                     length={totalNum}
-                    totalPages={totalNum / limit}
+                    totalPages={Math.ceil(totalNum / limit)}
                     page={page}
                     setPage={setPage}
                     onClick={handleSearch}

@@ -11,6 +11,8 @@ export const evalExpression = (expr: string, ctx: Record<string, unknown>) => {
             : Function(...keys, `return ${expr};`)(...values);
 
     } catch (error) {
+        console.debug("catch:" + error);
+        console.debug("return:" + expr);
         return expr;
     }
 };

@@ -1,22 +1,24 @@
-import { ByRoleOptions, Matcher } from "@testing-library/react";
 import { getDateByLabel } from "./getDateByLabel";
 import { getInputByLabel } from "./getInputByLabel";
 import { getOptionsByLabel } from "./getOptionsByLabel";
 import { getSelectByLabel } from "./getSelectByLabel";
 import { getSelectedOption } from "./getSelectedOption";
-import { Functions } from "./types";
+import { Functions, HandlerArgMap, HandlerReturnMap } from "./types";
 
-export type BaseOptions = ReturnType<typeof baseOptions>;
-export const baseOptions = (target: Functions) => {
+export type BaseOptions = {
+    [K in keyof HandlerArgMap]: (arg: HandlerArgMap[K]) => HandlerReturnMap[K];
+};
+
+export const baseOptions = (target: Functions): BaseOptions => {
     return {
-        button: (label: string) => target.getByRole("button", { name: label }),
-        text: (text: Matcher) => target.getByText(text),
-        input: (label: string) => getInputByLabel(target, label),
-        date: (label: string) => getDateByLabel(target, label),
-        select: (label: string) => getSelectByLabel(target, label),
-        options: (label: string) => getOptionsByLabel(target, label),
-        selectedOption: (label: string) => getSelectedOption(target, label),
-        tableRow: (opts: ByRoleOptions) => target.getByRole("row", opts),
-        tableRowByText: async (text: string) => await target.findByRole("row", { name: new RegExp(text) }),
+        button: (label) => target.getByRole("button", { name: label }),
+        text: (text) => target.getByText(text),
+        input: (label) => getInputByLabel(target, label),
+        date: (label) => getDateByLabel(target, label),
+        select: (label) => getSelectByLabel(target, label),
+        options: (label) => Array.from(getOptionsByLabel(target, label)),
+        selectedOption: (label) => getSelectedOption(target, label),
+        tableRow: (opts) => target.getByRole("row", opts),
+        tableRowByText: (matcer) => target.findByRole("row", { name: matcer }),
     }
 }

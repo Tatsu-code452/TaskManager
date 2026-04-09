@@ -1,9 +1,17 @@
 import { fireEvent, waitFor, within } from "@testing-library/react";
 import { MockedFunction } from "vitest";
 import { ProjectRow, ProjectSearchCondition, ProjectSearchResult } from "../../../types/db/project";
-import { PageOptions } from "./page";
+import { PageOptions } from "./types";
 
-export const actionPage = (page: PageOptions) => {
+export const createAction = async (page: PageOptions) => ({
+    page: () => actionPage(page),
+    search: () => actionSearch(page),
+    table: () => actionTable(page),
+    modal: async () => await actionModal(page),
+    pagination: () => actionPagination(page),
+});
+
+const actionPage = (page: PageOptions) => {
     return {
         setListMock: (
             listMock: MockedFunction<(condition?: ProjectSearchCondition, page?: number, limit?: number)
@@ -19,7 +27,7 @@ export const actionPage = (page: PageOptions) => {
     };
 }
 
-export const actionSearch = (page: PageOptions) => {
+const actionSearch = (page: PageOptions) => {
     const search = page.search;
 
     return {
@@ -40,7 +48,7 @@ export const actionSearch = (page: PageOptions) => {
     };
 }
 
-export const actionTable = (page: PageOptions) => {
+const actionTable = (page: PageOptions) => {
     const table = page.table;
 
     return {
@@ -53,8 +61,8 @@ export const actionTable = (page: PageOptions) => {
     };
 }
 
-export const actionModal = async (page: PageOptions) => {
-    const modal = await page.modal;
+const actionModal = async (page: PageOptions) => {
+    const modal = await page.modal();
 
     return {
         input: async (label: string, value: string) => {
@@ -123,7 +131,7 @@ export const actionModal = async (page: PageOptions) => {
     }
 }
 
-export const actionPagination = (page: PageOptions) => {
+const actionPagination = (page: PageOptions) => {
     const pagination = page.pagination;
     return {
         clickNext: () => {
