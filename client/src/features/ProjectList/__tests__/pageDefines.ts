@@ -2,7 +2,6 @@ export const pageDefines = {
     all: {
         type: "testId",
         target: "container",
-        elements: [],
     },
     search: {
         type: "testId",
@@ -53,6 +52,5 @@ export const pageDefines = {
         type: "role",
         target: "button",
         value: { name: "新規作成" },
-        elements: [],
     },
 } as const;

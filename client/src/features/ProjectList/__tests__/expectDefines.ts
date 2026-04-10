@@ -1,9 +1,21 @@
-import { ProjectStatus } from "../../../types/db/project";
+import { ProjectRow, ProjectStatus } from "../../../types/db/project";
 import { ProjectStatusLabel } from "../types/model";
+import { PageOptions } from "./types";
 
 export const helperRegistry = {
     ProjectStatus,
     ProjectStatusLabel,
+} as const;
+
+export const paramRegistry = {
+    project: {} as ProjectRow,
+    mockedFn: {} as (...args: unknown[]) => unknown,
+    with: {} as string,
+    times: {} as number,
+    num: {} as number,
+    page: {} as number,
+    totalPages: {} as number,
+    pageObj: {} as PageOptions,
 } as const;
 
 export const expectDefines = {
@@ -66,7 +78,6 @@ export const expectDefines = {
         type: "page",
         target: "modal",
         async: true,
-        helpers: [],
         tests: [
             {
                 name: "editModal",
@@ -87,7 +98,6 @@ export const expectDefines = {
     pagination: {
         type: "page",
         target: "pagination",
-        helpers: [],
         tests: [
             {
                 name: "result", params: ["num"],
@@ -102,13 +112,13 @@ export const expectDefines = {
                 ]
             },
             {
-                name: "disablePrev", params: ["pagination"],
+                name: "disablePrev",
                 tests: [
                     { type: "disabled", method: "prev" }
                 ]
             },
             {
-                name: "disableNext", params: ["pagination"],
+                name: "disableNext",
                 tests: [
                     { type: "disabled", method: "next" }
                 ]
@@ -117,8 +127,6 @@ export const expectDefines = {
     },
     wait: {
         type: "none",
-        target: "",
-        helpers: [],
         tests: [
             {
                 name: "mockCalled", params: ["mockedFn", "times"],
@@ -127,7 +135,7 @@ export const expectDefines = {
                 ]
             },
             {
-                name: "noModal", params: ["page"],
+                name: "noModal", params: ["pageObj"],
                 tests: [
                     { type: "notInDocument", method: "all", key: "dialog" }
                 ]

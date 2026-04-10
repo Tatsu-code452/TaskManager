@@ -1,6 +1,6 @@
 import { ByRoleOptions, Screen, waitFor } from "@testing-library/react";
 import { createOptions } from "./pageUtils/createOptions";
-import { Options, PageDefines, PageOptionsFromMeta, UiMeta } from "./pageUtils/types";
+import { GeneratedPageOption, PageDefines, PageOptionsFromMeta, UiMeta } from "./pageUtils/types";
 
 export const pageOptions = async <
     D extends PageDefines
@@ -21,32 +21,39 @@ export const pageOptions = async <
     return result as PageOptionsFromMeta<D>;
 };
 
-const assignForKey = async (
+const assignForKey = async <
+    M extends UiMeta
+>(
     screen: Screen,
-    meta: UiMeta
-): Promise<
-    HTMLElement | Options | (() => Promise<HTMLElement>) | (() => Promise<Options>)
-> => {
-    if (meta["elements"].length === 0) {
+    meta: M
+): Promise<GeneratedPageOption<M>> => {
+
+    const noElements =
+        meta.elements === undefined ||
+        (Array.isArray(meta.elements) && meta.elements.length === 0);
+
+    if (noElements) {
+        // --- 単一 HTMLElement ---
         if (meta.async === true) {
             return (async () => {
                 const el = await resolveElement(screen, meta);
                 return el as HTMLElement;
-            })
+            }) as GeneratedPageOption<M>;
         } else {
             const el = await resolveElement(screen, meta);
-            return el as HTMLElement;
+            return el as GeneratedPageOption<M>;
         }
+    }
+
+    // --- Options ---
+    if (meta.async === true) {
+        return (async () => {
+            const el = await resolveElement(screen, meta);
+            return createOptions(el, meta.elements!);
+        }) as GeneratedPageOption<M>;
     } else {
-        if (meta.async === true) {
-            return (async () => {
-                const el = await resolveElement(screen, meta);
-                return createOptions(el, meta.elements) as Options;
-            })
-        } else {
-            const el = await resolveElement(screen, meta);
-            return createOptions(el, meta.elements) as Options
-        }
+        const el = await resolveElement(screen, meta);
+        return createOptions(el, meta.elements!) as GeneratedPageOption<M>;
     }
 };
 

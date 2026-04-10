@@ -8,6 +8,7 @@ import { filteredList, initialList } from "./data";
 import { expectDefines, helperRegistry } from "./expectDefines";
 import { createAction } from "./flow";
 import { pageDefines } from "./pageDefines";
+import { describeValue } from "./test-utils/describeValue";
 import { createExpect } from "./test-utils/expect";
 import { pageOptions } from "./test-utils/page";
 import { Expect, PageOptions } from "./types";
@@ -16,23 +17,7 @@ let alertMock;
 let page: PageOptions;
 let expect: Expect;
 let action: Awaited<ReturnType<typeof createAction>>;
-const describeValue = (value: unknown): string => {
-    if (value instanceof HTMLElement) {
-        return `<${value.tagName.toLowerCase()} id="${value.id}" class="${value.className}">`;
-    }
-
-    if (typeof value === "function") {
-        return value.constructor.name === "AsyncFunction"
-            ? `async function ${value.name || "(anonymous)"}`
-            : `function ${value.name || "(anonymous)"}`;
-    }
-
-    if (typeof value === "object" && value !== null) {
-        return `{ ${Object.keys(value).join(", ")} }`;
-    }
-
-    return String(value);
-};
+let isFirst = true;
 describe("ProjectListPage（画面ベース機能網羅）", () => {
     beforeEach(async () => {
         vi.clearAllMocks();
@@ -48,17 +33,26 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
         );
 
         page = await pageOptions(screen, pageDefines);
-        for (const key of Object.keys(page)) {
-            const value = page[key];
-            console.debug(`[SETUP][page]: ${key} → ${describeValue(value)}`);
+        if (isFirst) {
+            for (const key of Object.keys(page)) {
+                const value = page[key];
+                console.debug(
+                    `[SETUP][page]: ${key} → ${describeValue(value)}`,
+                );
+            }
         }
         expect = await createExpect(page, expectDefines, helperRegistry);
-        for (const key of Object.keys(expect)) {
-            const value = expect[key];
-            console.debug(`[SETUP][expect]: ${key} → ${describeValue(value)}`);
+        if (isFirst) {
+            for (const key of Object.keys(expect)) {
+                const value = expect[key];
+                console.debug(
+                    `[SETUP][expect]: ${key} → ${describeValue(value)}`,
+                );
+            }
         }
         action = await createAction(page);
         alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
+        isFirst = false;
     });
 
     afterEach(() => {
@@ -66,7 +60,6 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
     });
 
     it("初期表示で一覧が表示され、検索条件は空である", async () => {
-        console.debug("mockCalled");
         await expect.wait.mockCalled(mocked.listMock, 1);
         await expect.search.init();
         await expect.table.searchRow(initialList[0]);

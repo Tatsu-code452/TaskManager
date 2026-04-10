@@ -7,7 +7,7 @@ export type PageDefines = Record<string, UiMeta>;
 export type UiMeta = {
     type: string,
     target: string;
-    elements: DefineItems;
+    elements?: DefineItems;
     value?: unknown; // type(target, value)
     async?: boolean; // return async () => unknown
 };
@@ -22,7 +22,7 @@ export type DefineItem =
         }
     }[keyof LabelMap];
 
-type LabelMap = {
+export type LabelMap = {
     button: string;
     text: `${string}\${text}${string}` | `/${string}/` | string;
     input: `${string}\${label}${string}`;
@@ -35,18 +35,25 @@ type LabelMap = {
 };
 
 // --- 生成関連 ---
-export type Options = ReturnType<typeof createOptions<DefineItem[]>>;
+type OptionsOf<M> =
+    ExtractElements<M> extends readonly []
+    ? HTMLElement
+    : ReturnType<typeof createOptions<ExtractElements<M>>>;
 
-export type PageOptionsFromMeta<D extends Record<string, UiMeta>> = {
-    [K in keyof D]:
-    D[K]["elements"] extends readonly []
-    ? (D[K] extends { async: true } ? () => Promise<HTMLElement> : HTMLElement)
-    : (D[K] extends { async: true } ? () => Promise<Options> : Options);
-};
+type ExtractElements<M> =
+    M extends { elements: readonly DefineItem[] }
+    ? M["elements"]
+    : readonly [];
+
+type IsAsync<M> = M extends { async: true } ? true : false;
+
+export type GeneratedPageOption<M> =
+    IsAsync<M> extends true
+    ? () => Promise<OptionsOf<M>>
+    : OptionsOf<M>;
 
 // --- Options生成関連
-export type Queries = typeof queries;
-export type Functions = BoundFunctions<Queries>;
+export type Functions = BoundFunctions<typeof queries>;
 
 export type HandlerArgMap = {
     button: string;
@@ -70,4 +77,9 @@ export type HandlerReturnMap = {
     selectedOption: HTMLElement;
     tableRow: HTMLElement;
     tableRowByText: Promise<HTMLElement>;
+};
+
+// --- 返却関連 ---
+export type PageOptionsFromMeta<M extends Record<string, UiMeta>> = {
+    [K in keyof M]: GeneratedPageOption<M[K]>;
 };

@@ -1,16 +1,16 @@
 import { createExpects } from "./expectUtils/createExpects";
-import { ExpectFromMeta, ExpectMeta } from "./expectUtils/types";
-import { PageOptionsFromMeta, UiMeta } from "./pageUtils/types";
+import { AllExpectDefines, CreateExpectResult } from "./expectUtils/types";
+import { PageDefines, PageOptionsFromMeta } from "./pageUtils/types";
 
-export const createExpect = async<
-    A extends Record<string, UiMeta>,
-    D extends Record<string, ExpectMeta>,
+export const createExpect = async <
+    D extends AllExpectDefines,
+    R extends Record<string, unknown>,
 >(
-    page: PageOptionsFromMeta<A>,
+    page: PageOptionsFromMeta<PageDefines>,
     expectDefines: D,
     helpers: Record<string, unknown>
-): Promise<ExpectFromMeta<D>> => {
-    const result = {} as ExpectFromMeta<D>;
+): Promise<CreateExpectResult<D, R>> => {
+    const result: Partial<CreateExpectResult<D, R>> = {};
 
     for (const key of Object.keys(expectDefines) as (keyof D)[]) {
         const meta = expectDefines[key];
@@ -19,25 +19,27 @@ export const createExpect = async<
             (meta.helpers ?? []).map(name => [name, helpers[name]])
         );
 
+        // --- page expect ---
         if (meta.type === "page") {
             if (meta.async) {
+                // async page → () => Promise<ExpectFunctionSet>
                 result[key] = (async () => {
-                    const fn = page[meta.target] as unknown as () => Promise<HTMLElement>;
-                    const resolved = await fn();
+                    const fn = page[meta.target];
+                    const resolved = typeof fn === "function" ? await fn() : fn;
                     return createExpects(meta.tests, resolved, extractHelpers);
-                }) as ExpectFromMeta<D>[typeof key];
+                }) as CreateExpectResult<D, R>[typeof key];
             } else {
-                const value = createExpects(meta.tests, page[meta.target], extractHelpers);
-                result[key] = value as ExpectFromMeta<D>[typeof key];
+                // sync page → ExpectFunctionSet
+                const resolved = page[meta.target];
+                result[key] = createExpects(meta.tests, resolved, extractHelpers) as CreateExpectResult<D, R>[typeof key];
             }
         }
 
+        // --- none expect ---
         if (meta.type === "none") {
-            const value = createExpects(meta.tests);
-            result[key] = value as ExpectFromMeta<D>[typeof key];
-            continue;
+            result[key] = createExpects(meta.tests) as CreateExpectResult<D, R>[typeof key];
         }
     }
 
-    return result;
+    return result as CreateExpectResult<D, R>;
 };

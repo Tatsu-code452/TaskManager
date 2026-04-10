@@ -1,25 +1,20 @@
-export type ExpectFromMeta<D extends Record<string, ExpectMeta>> = {
-    [K in keyof D]:
-    D[K] extends { async: true }
-    ? () => Promise<ExpectResult<D[K]["tests"]>>
-    : ExpectResult<D[K]["tests"]>;
-};
+
+// --- 定義ファイル構造関連 ---
+export type AllExpectDefines = Record<string, ExpectMeta>;
 
 export type ExpectMeta = {
     type: string,
-    target: string;
-    helpers: readonly string[];
-    value?: unknown;
+    target?: string;
+    helpers?: readonly string[];
     async?: boolean;
     tests: readonly ExpectDefine[];
 };
 
-export type ExpectDefine = {
+export type ExpectDefine<R extends Record<string, unknown> = Record<string, unknown>> = {
     name: string,
-    params?: readonly string[],
+    params?: readonly (keyof R)[],
     tests?: readonly TestsDefine[];
 };
-
 
 export type TestsDefine = {
     type: string;
@@ -30,6 +25,7 @@ export type TestsDefine = {
     params?: readonly string[],
 }
 
+// --- 生成関連 ---
 export type Ctx = {
     context: unknown;
     helpers?: Record<string, unknown>;
@@ -38,16 +34,34 @@ export type Ctx = {
     targetRow?: HTMLElement;
 };
 
-export type UnionToIntersection<U> =
-    (U extends unknown ? (k: U) => void : never) extends
-    (k: infer I) => void ? I : never;
+export type ParamsOf<
+    P extends readonly (keyof R)[] | undefined,
+    R extends Record<string, unknown>
+> =
+    P extends readonly [...infer Keys]
+    ? { [K in keyof Keys]:
+        Keys[K] extends keyof R ? R[Keys[K]] : never
+    }
+    : [];
 
-export type ExpectResult<T extends readonly ExpectDefine[]> =
-    UnionToIntersection<
-        T[number] extends infer U
-        ? U extends { name: infer N extends string }
-        ? { [K in N]: (...args: unknown[]) => Promise<void> }
+export type ExpectFunctionSet<
+    T extends readonly ExpectDefine[],
+    R extends Record<string, unknown>,
+> = {
+        [K in T[number]["name"]]:
+        Extract<T[number], { name: K }> extends infer E extends ExpectDefine
+        ? (...args: ParamsOf<E["params"], R>) => Promise<void>
+        : never;
+    };
 
-        : never
-        : never
-    >;
+// --- 返却関連 ---
+export type CreateExpectResult<
+    D extends Record<string, ExpectMeta>,
+    R extends Record<string, unknown>,
+> = {
+        [K in keyof D]:
+        D[K]["async"] extends true
+        ? () => Promise<ExpectFunctionSet<D[K]["tests"], R>>
+        : ExpectFunctionSet<D[K]["tests"], R>;
+    };
+// export type ExpectFunctionSet = Record<string, (...args: unknown[]) => Promise<void>>;

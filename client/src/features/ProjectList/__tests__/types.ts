@@ -1,7 +1,7 @@
-import { expectDefines } from "./expectDefines";
+import { expectDefines, paramRegistry } from "./expectDefines";
 import { pageDefines } from "./pageDefines";
-import { ExpectFromMeta } from "./test-utils/expectUtils/types";
+import { createExpect } from "./test-utils/expect";
 import { pageOptions } from "./test-utils/page";
 
 export type PageOptions = Awaited<ReturnType<typeof pageOptions<typeof pageDefines>>>;
-export type Expect = Awaited<ExpectFromMeta<typeof expectDefines>>;
+export type Expect = Awaited<ReturnType<typeof createExpect<typeof expectDefines, typeof paramRegistry>>>;
