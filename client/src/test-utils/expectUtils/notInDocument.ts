@@ -1,4 +1,4 @@
-import { waitFor, within } from "@testing-library/react";
+import { waitFor, within } from "../typesTesting";
 import { Ctx, TestsDefine } from "./types";
 
 export const notInDocument = async (test: TestsDefine, ctx: Ctx) => {

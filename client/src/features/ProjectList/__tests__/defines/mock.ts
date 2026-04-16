@@ -3,7 +3,7 @@ const navigateMock = vi.fn();
 // ------------------------------
 // API モック（import より前）
 // ------------------------------
-vi.mock("../../../api/tauri/projectApi", () => {
+vi.mock("../../../../api/tauri/projectApi", () => {
     const mock = {
         list: vi.fn(),
         create: vi.fn(),
@@ -21,7 +21,7 @@ vi.mock("react-router-dom", async () => {
     };
 });
 
-import { projectApi } from "../../../api/tauri/projectApi";
+import { projectApi } from "../../../../api/tauri/projectApi";
 
 export const createMock = () => {
     return {
@@ -31,5 +31,3 @@ export const createMock = () => {
         navigateMock,
     };
 }
-
-

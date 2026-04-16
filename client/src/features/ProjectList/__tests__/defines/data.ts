@@ -1,4 +1,4 @@
-import { ProjectRow, ProjectStatus } from "../../../types/db/project";
+import { ProjectRow, ProjectStatus } from "../../../../types/db/project";
 
 export const initialList: ProjectRow[] = [
     {

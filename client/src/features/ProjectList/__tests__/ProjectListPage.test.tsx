@@ -1,23 +1,26 @@
-import { createMock } from "./mock";
+import { createMock } from "./defines/mock";
 const mocked = createMock();
 
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { createAction, createExpect, createPageOptions } from "../../../test-utils";
 import { ProjectListPage } from "../ProjectListPage";
-import { filteredList, initialList } from "./data";
-import { expectDefines, helperRegistry } from "./expectDefines";
-import { createAction } from "./flow";
-import { pageDefines } from "./pageDefines";
-import { describeValue } from "./test-utils/describeValue";
-import { createExpect } from "./test-utils/expect";
-import { pageOptions } from "./test-utils/page";
-import { Expect, PageOptions } from "./types";
+import { actionDefines } from "./defines/actionDefines";
+import { filteredList, initialList } from "./defines/data";
+import { expectDefines } from "./defines/expectDefines";
+import { pageDefines } from "./defines/pageDefines";
+import {
+    Action,
+    assignToModal,
+    Expect,
+    helperRegistry,
+    PageOptions,
+} from "./defines/types";
 
 let alertMock;
 let page: PageOptions;
 let expect: Expect;
-let action: Awaited<ReturnType<typeof createAction>>;
-let isFirst = true;
+let action: Action;
 describe("ProjectListPage（画面ベース機能網羅）", () => {
     beforeEach(async () => {
         vi.clearAllMocks();
@@ -32,27 +35,10 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
             </MemoryRouter>,
         );
 
-        page = await pageOptions(screen, pageDefines);
-        if (isFirst) {
-            for (const key of Object.keys(page)) {
-                const value = page[key];
-                console.debug(
-                    `[SETUP][page]: ${key} → ${describeValue(value)}`,
-                );
-            }
-        }
+        page = await createPageOptions(screen, pageDefines);
         expect = await createExpect(page, expectDefines, helperRegistry);
-        if (isFirst) {
-            for (const key of Object.keys(expect)) {
-                const value = expect[key];
-                console.debug(
-                    `[SETUP][expect]: ${key} → ${describeValue(value)}`,
-                );
-            }
-        }
-        action = await createAction(page);
+        action = createAction(page, actionDefines);
         alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
-        isFirst = false;
     });
 
     afterEach(() => {
@@ -101,7 +87,7 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
     });
 
     it("行クリックで詳細画面へ遷移する", async () => {
-        await action.table().clickRow(initialList[0]);
+        await action.table().clickRow(initialList[0].id);
         expect.table.navigate(mocked.navigateMock, "/projects/PJT-001");
     });
 
@@ -118,9 +104,8 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
     it("作成ボタン押下で createProject が呼ばれる", async () => {
         action.page().clickCreate();
         await (await expect.modal()).createModal();
-        await (
-            await action.modal()
-        ).inputAll({
+        const modal = await assignToModal(page);
+        await modal.inputAll({
             name: "新規案件",
             id: "TEST-001",
             client: "XYZ",
@@ -175,7 +160,7 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
             items: initialList,
             total_num: 100,
         });
-        action.pagination().clickNext();
+        (await action.pagination()).clickNext();
         await expect.wait.mockCalled(mocked.listMock, 3);
         await expect.pagination.page(2, 5);
     });
@@ -187,9 +172,9 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
         });
         action.search().clickClear();
         await expect.wait.mockCalled(mocked.listMock, 2);
-        action.pagination().clickNext();
+        (await action.pagination()).clickNext();
         await expect.wait.mockCalled(mocked.listMock, 3);
-        action.pagination().clickPrev();
+        (await action.pagination()).clickPrev();
         await expect.wait.mockCalled(mocked.listMock, 4);
         await expect.pagination.page(1, 1);
     });
@@ -205,7 +190,7 @@ describe("ProjectListPage（画面ベース機能網羅）", () => {
             items: initialList,
             total_num: 40,
         });
-        action.pagination().clickNext();
+        (await action.pagination()).clickNext();
         await expect.wait.mockCalled(mocked.listMock, 3);
         await expect.pagination.page(2, 2);
         await expect.pagination.disableNext();

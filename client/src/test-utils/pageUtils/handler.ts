@@ -1,4 +1,4 @@
-import { ByRoleOptions } from "@testing-library/react";
+import { ByRoleOptions } from "../typesTesting";
 import { BaseOptions } from "./baseOptions";
 
 export const handlers = (

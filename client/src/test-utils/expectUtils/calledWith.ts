@@ -1,4 +1,4 @@
-import { Mock } from "vitest";
+import { Mock } from "../typesTesting";
 import { Ctx, TestsDefine } from "./types";
 
 export const calledWith = async (test: TestsDefine, ctx: Ctx) => {

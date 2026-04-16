@@ -1,8 +1,6 @@
 
 // --- 定義ファイル構造関連 ---
-export type AllExpectDefines = Record<string, ExpectMeta>;
-
-export type ExpectMeta = {
+export type ExpectDefines = {
     type: string,
     target?: string;
     helpers?: readonly string[];
@@ -44,7 +42,7 @@ export type ParamsOf<
     }
     : [];
 
-export type ExpectFunctionSet<
+export type ReturnExpectFunctions<
     T extends readonly ExpectDefine[],
     R extends Record<string, unknown>,
 > = {
@@ -55,13 +53,12 @@ export type ExpectFunctionSet<
     };
 
 // --- 返却関連 ---
-export type CreateExpectResult<
-    D extends Record<string, ExpectMeta>,
+export type Result<
+    D extends Record<string, ExpectDefines>,
     R extends Record<string, unknown>,
 > = {
         [K in keyof D]:
         D[K]["async"] extends true
-        ? () => Promise<ExpectFunctionSet<D[K]["tests"], R>>
-        : ExpectFunctionSet<D[K]["tests"], R>;
+        ? () => Promise<ReturnExpectFunctions<D[K]["tests"], R>>
+        : ReturnExpectFunctions<D[K]["tests"], R>;
     };
-// export type ExpectFunctionSet = Record<string, (...args: unknown[]) => Promise<void>>;

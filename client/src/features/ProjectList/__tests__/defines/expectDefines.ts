@@ -1,23 +1,3 @@
-import { ProjectRow, ProjectStatus } from "../../../types/db/project";
-import { ProjectStatusLabel } from "../types/model";
-import { PageOptions } from "./types";
-
-export const helperRegistry = {
-    ProjectStatus,
-    ProjectStatusLabel,
-} as const;
-
-export const paramRegistry = {
-    project: {} as ProjectRow,
-    mockedFn: {} as (...args: unknown[]) => unknown,
-    with: {} as string,
-    times: {} as number,
-    num: {} as number,
-    page: {} as number,
-    totalPages: {} as number,
-    pageObj: {} as PageOptions,
-} as const;
-
 export const expectDefines = {
     search: {
         type: "page",

@@ -1,4 +1,4 @@
-import { within } from "@testing-library/react";
+import { within } from "../typesTesting";
 import { evalValue } from "./evalValue";
 import { getElement } from "./getElement";
 import { Ctx, TestsDefine } from "./types";

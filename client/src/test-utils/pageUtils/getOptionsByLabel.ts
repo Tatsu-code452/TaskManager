@@ -1,6 +1,5 @@
-import { fireEvent, within } from "@testing-library/react";
+import { Functions, fireEvent, within } from "../typesTesting";
 import { getSelectByLabel } from "./getSelectByLabel";
-import { Functions } from "./types";
 
 export const getOptionsByLabel = (target: Functions, label: string) => {
     const select = getSelectByLabel(target, label);
