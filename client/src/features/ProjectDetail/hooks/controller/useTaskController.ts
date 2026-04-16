@@ -34,6 +34,7 @@ export const useTaskController = (projectId: string, states: TaskStates) => {
 
     const handleChange = (key: keyof TaskPayload, value: unknown) => {
         if (!form) return;
+        if (typeof form[key] === "number") value = Number(value)
         setForm({ ...form, [key]: value });
     };
 

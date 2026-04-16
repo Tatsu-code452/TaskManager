@@ -43,7 +43,7 @@ export const createInputs = (form: TaskPayload): InputConfig<keyof TaskPayload>[
         { key: "planned_hours", label: "工数", type: "number", value: form.planned_hours.toString() },
         { key: "actual_start", label: "開始日", type: "date", value: form.actual_start },
         { key: "actual_end", label: "終了日", type: "date", value: form.actual_end, },
-        { key: "planned_hours", label: "工数", type: "number", value: form.planned_hours.toString() },
+        { key: "actual_hours", label: "工数", type: "number", value: form.actual_hours.toString() },
         { key: "progress_rate", label: "進捗率", type: "number", value: form.progress_rate.toString() },
     ];
 };
