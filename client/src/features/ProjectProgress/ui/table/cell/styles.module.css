@@ -1,0 +1,86 @@
+.bar_base {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 0.75rem;
+    pointer-events: none; /* ← 重要：ドラッグ操作を邪魔しない */
+}
+
+.plan_bar {
+    background-color: rgba(0, 120, 212, 0.35);
+}
+.actual_bar {
+    background-color: rgba(40, 167, 69, 0.45);
+}
+.delay_bar {
+    background-color: rgba(220, 53, 69, 0.55);
+}
+.today {
+    background-color: rgba(255, 0, 0, 0.15);
+}
+
+.cell_editor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+
+    text-align: center;
+    font-size: 0.75rem;
+
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 10; /* ← バーの上に表示 */
+}
+
+.handle_left,
+.handle_right {
+    position: absolute;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    cursor: ew-resize;
+    z-index: 20; /* editor より上 */
+}
+
+.handle_left {
+    left: 0;
+}
+
+.handle_right {
+    right: 0;
+}
+
+.interaction_layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    z-index: 5; /* Visual より上、Editor より下 */
+    background: transparent;
+
+    cursor: pointer;
+}
+
+.matrix_cell {
+    position: relative;
+    padding: 0;
+    min-width: 1rem;
+    height: 1.6rem;
+    text-align: center;
+}

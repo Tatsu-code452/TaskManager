@@ -1,7 +1,7 @@
 import { taskActualCellApi } from "../../../../api/tauri/taskActualCellApi";
 import { taskApi } from "../../../../api/tauri/taskApi";
 import { taskPlanCellApi } from "../../../../api/tauri/taskPlanCellApi";
-import { regenerateCells } from "../../domain/regenerateCells";
+import { regenerateCells } from "../../domain/service/regenerateCells";
 import { ProgressPageState } from "../../types/model";
 
 export const useTaskCellDrag = (projectId: string, pageState: ProgressPageState, loadTasks: () => Promise<void>) => {

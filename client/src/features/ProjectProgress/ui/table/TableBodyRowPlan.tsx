@@ -1,20 +1,47 @@
+import { getDelayStatus } from "../../domain/service/delay";
+import { EditDispatch, GanttParams, RowSelectors } from "../../types/contract";
+import { TaskModel } from "../../types/model";
+import { GanttDragController } from "../../types/uiApi";
+import { DragTooltip } from "./cell/DragTooltip";
 import { MatrixCell } from "./cell/MatrixCell";
+import { createMatrixCellRenderers } from "./cell/MatrixCellRenderers";
 import styles from "./table.module.css";
 
+interface TableBodyRowPlanProps {
+    dateList: string[];
+    task: TaskModel;
+    baseDate: string;
+    editDispatch: EditDispatch;
+    selectors: RowSelectors;
+    taskOrder: string[];
+    onPointerDown: GanttDragController["onPointerDown"];
+    tooltip: GanttDragController["tooltip"];
+}
+
 export const TableBodyRowPlan = ({
+    dateList,
     task,
     baseDate,
-    planRowCells,
-    editTarget,
-    handleKeyDownCell,
-    handleChangeCell,
-    startEdit,
-    endEdit,
-    onDragMove,
-    onDragResize,
-}) => {
+    editDispatch,
+    selectors,
+    taskOrder,
+    onPointerDown,
+    tooltip,
+}: TableBodyRowPlanProps) => {
+    const delay = getDelayStatus(task);
+
+    const rowClass = delay.endDelayed
+        ? styles.delay_end
+        : delay.startDelayed
+          ? styles.delay_start
+          : delay.workloadDelayed
+            ? styles.delay_workload
+            : "";
+
     return (
-        <tr className={`${styles.task_row} ${styles[`status_${task.status}`]}`}>
+        <tr
+            className={`${styles.task_row} ${styles[`status_${task.status}`]} ${rowClass}`}
+        >
             <td rowSpan={2}>{task.phase}</td>
             <td rowSpan={2}>{task.name}</td>
 
@@ -23,26 +50,42 @@ export const TableBodyRowPlan = ({
             <td>{task.plan.totalHours}</td>
             <td>{task.plan.progress}%</td>
 
-            {planRowCells.map((cell) => (
-                <MatrixCell
-                    key={task.id + "-" + cell.date}
-                    value={cell.value}
-                    task={task}
-                    baseDate={baseDate}
-                    editTarget={{
-                        type: "planCell",
-                        taskIndex: task.id,
-                        date: cell.date,
-                    }}
-                    currentEditTarget={editTarget}
-                    handleKeyDownCell={handleKeyDownCell}
-                    handleChangeCell={handleChangeCell}
-                    startEdit={startEdit}
-                    endEdit={endEdit}
-                    onDragMove={onDragMove}
-                    onDragResize={onDragResize}
-                />
-            ))}
+            {dateList.map((date) => {
+                const params: GanttParams = {
+                    taskId: task.id,
+                    date,
+                    isPlan: true,
+                };
+                const rendererResults = createMatrixCellRenderers({
+                    params,
+                    value: task.plan.cells[date] ?? null,
+                    task,
+                    baseDate,
+                    onPointerDown,
+                });
+
+                return (
+                    <MatrixCell
+                        key={task.id + "-" + date}
+                        editDispatch={editDispatch}
+                        editTarget={selectors.editTarget}
+                        taskOrder={taskOrder}
+                        dateList={dateList}
+                        params={params}
+                        CellVisualRenderer={rendererResults.cellVisualRenderer}
+                        CellDragHandleRenderer={
+                            rendererResults.cellDragHandleRenderer
+                        }
+                        CellEditorRenderer={rendererResults.cellEditorRenderer}
+                        CellInteractionRenderer={
+                            rendererResults.cellInteractionRenderer
+                        }
+                        DragTooltipRenderer={() => (
+                            <DragTooltip tooltip={tooltip.state} />
+                        )}
+                    />
+                );
+            })}
         </tr>
     );
 };

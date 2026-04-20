@@ -1,4 +1,6 @@
 import { TaskStatus } from "../../../types/db/task";
+import { TaskActualRow } from "../../../types/db/taskActual";
+import { TaskPlanRow } from "../../../types/db/taskPlan";
 
 export interface ProgressPageState {
     displayRange: DisplayRange;
@@ -19,29 +21,20 @@ export type TaskModel = {
 
     isCritical?: boolean;
 
-    plan: TaskPlan;
-    actual: TaskActual;
+    plan: TaskTimeline;
+    actual: TaskTimeline;
 };
 
-/** 計画情報 */
-export interface TaskPlan {
+export interface TaskTimeline {
     start?: string;
     end?: string;
     totalHours: number;
     progress: number;
-    cells: TaskMatrixValue[];
+    cells: Record<string, number>;
 }
 
-/** 実績情報 */
-export interface TaskActual {
-    start?: string;
-    end?: string;
-    totalHours: number;
-    progress: number;
-    cells: TaskMatrixValue[];
-}
-
-export type TaskMatrixValue = {
-    date: string;
-    value: number;
+export const toMap = (rows: TaskPlanRow[] | TaskActualRow[]) => {
+    const map: Record<string, number> = {};
+    rows.forEach(r => map[r.date] = r.hours);
+    return map;
 };

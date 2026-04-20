@@ -1,4 +1,4 @@
-import { TaskModel } from "../types/model";
+import { TaskModel } from "../../types/model";
 
 export const calcCriticalPath = (tasks: TaskModel[]) => {
     // フェーズごとにグループ化

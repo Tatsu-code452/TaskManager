@@ -1,23 +1,17 @@
 import { useCallback } from "react";
+import { formatDate, shiftDate, toFirstDateOnMonth } from "../../domain/utils/date";
 import { DisplayRange, ProgressPageState } from "../../types/model";
 
 export const useStateInitializer = () => {
-    const formatDate = (d: Date): string => d.toISOString().slice(0, 10);
 
     /**
     * 基準日の月に対応する、開始・終了日を返す
     */
     const initDisplayRange = useCallback((baseDate: string): DisplayRange => {
-        const baseDay = new Date(baseDate);
-        baseDay.setMonth(baseDay.getMonth() - 1);
-        baseDay.setDate(1);
-
+        const baseDay = toFirstDateOnMonth(new Date(baseDate));
         const firstDate = formatDate(baseDay);
-        const firstDay = new Date(firstDate);
-        firstDay.setMonth(firstDay.getMonth() + 3);
-        firstDay.setDate(0);
-        const lastDate = formatDate(firstDay);
-
+        const THREE_MONTHS = 90;
+        const lastDate = shiftDate(firstDate, THREE_MONTHS);
         return { from: firstDate, to: lastDate };
     }, []);
 

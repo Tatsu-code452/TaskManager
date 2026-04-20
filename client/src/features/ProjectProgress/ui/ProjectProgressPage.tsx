@@ -12,16 +12,10 @@ export const ProjectProgressPage = ({
     const {
         pageState,
         dates,
-        editTarget,
-        dispatch,
-        handleKeyDownCell,
-        handleChangeCell,
-        onDragMove,
-        onDragResize,
-        togglePhase,
-        toggleAllPhases,
-        allCollapsed,
-        collapsedPhases,
+        pageStateDispatch,
+        editDispatch,
+        collapseDispatch,
+        selectors,
     } = useProjectProgressController(projectId);
 
     return (
@@ -31,25 +25,34 @@ export const ProjectProgressPage = ({
 
                 {/* 日付レンジ設定 */}
                 <div className={styles.range_area}>
-                    <label>開始日</label>
+                    <label htmlFor="from">開始日</label>
                     <input
+                        id="from"
                         type="date"
                         value={pageState.displayRange.from}
-                        onChange={(e) => dispatch.setFrom(e.target.value)}
+                        onChange={(e) =>
+                            pageStateDispatch.setFrom(e.target.value)
+                        }
                     />
 
-                    <label>終了日</label>
+                    <label htmlFor="to">終了日</label>
                     <input
+                        id="to"
                         type="date"
                         value={pageState.displayRange.to}
-                        onChange={(e) => dispatch.setTo(e.target.value)}
+                        onChange={(e) =>
+                            pageStateDispatch.setTo(e.target.value)
+                        }
                     />
 
-                    <label>基準日</label>
+                    <label htmlFor="base">基準日</label>
                     <input
+                        id="base"
                         type="date"
                         value={pageState.baseDate}
-                        onChange={(e) => dispatch.setBaseDate(e.target.value)}
+                        onChange={(e) =>
+                            pageStateDispatch.setBaseDate(e.target.value)
+                        }
                     />
                 </div>
 
@@ -59,17 +62,11 @@ export const ProjectProgressPage = ({
                         dates={dates}
                         tasks={pageState.tasks}
                         baseDate={pageState.baseDate}
-                        editTarget={editTarget}
-                        handleKeyDownCell={handleKeyDownCell}
-                        handleChangeCell={handleChangeCell}
-                        startEdit={dispatch.startEdit}
-                        endEdit={dispatch.endEdit}
-                        onDragMove={onDragMove}
-                        onDragResize={onDragResize}
-                        collapsedPhases={collapsedPhases}
-                        togglePhase={togglePhase}
-                        toggleAllPhases={toggleAllPhases}
-                        allCollapsed={allCollapsed}
+                        projectId={projectId}
+                        pageStateDispatch={pageStateDispatch}
+                        editDispatch={editDispatch}
+                        collapseDispatch={collapseDispatch}
+                        selectors={selectors}
                     />
                 </div>
             </div>

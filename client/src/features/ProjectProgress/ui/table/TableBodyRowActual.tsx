@@ -1,60 +1,96 @@
+import { getDelayStatus } from "../../domain/service/delay";
+import { EditDispatch, GanttParams, RowSelectors } from "../../types/contract";
+import { TaskModel } from "../../types/model";
+import { GanttDragController } from "../../types/uiApi";
+import { DragTooltip } from "./cell/DragTooltip";
 import { MatrixCell } from "./cell/MatrixCell";
+import { createMatrixCellRenderers } from "./cell/MatrixCellRenderers";
 import styles from "./table.module.css";
 
+interface TableBodyRowActualProps {
+    dateList: string[];
+    task: TaskModel;
+    baseDate: string;
+    editDispatch: EditDispatch;
+    selectors: RowSelectors;
+    taskOrder: string[];
+    onPointerDown: GanttDragController["onPointerDown"];
+    tooltip: GanttDragController["tooltip"];
+}
+
 export const TableBodyRowActual = ({
+    dateList,
     task,
     baseDate,
-    actualRowCells,
-    editTarget,
-    handleKeyDownCell,
-    handleChangeCell,
-    startEdit,
-    endEdit,
-    onDragMove,
-    onDragResize,
-}) => {
+    editDispatch,
+    selectors,
+    taskOrder,
+    onPointerDown,
+    tooltip,
+}: TableBodyRowActualProps) => {
+    const delay = getDelayStatus(task);
+
+    const rowClass = delay.endDelayed
+        ? styles.delay_end
+        : delay.startDelayed
+          ? styles.delay_start
+          : delay.workloadDelayed
+            ? styles.delay_workload
+            : "";
+
     return (
-        <tr className={`${styles.task_row} ${styles[`status_${task.status}`]}`}>
+        <tr
+            className={`${styles.task_row} ${styles[`status_${task.status}`]} ${rowClass}`}
+        >
             <td>{task.actual.start}</td>
             <td>{task.actual.end}</td>
             <td>{task.actual.totalHours}</td>
 
-            {/* 実績進捗セル */}
             <td
                 data-type="actualProgress"
                 data-task-index={task.id}
                 className={styles.matrix_cell}
-                onKeyDown={handleKeyDownCell}
-                onClick={() =>
-                    handleChangeCell(
-                        { type: "actualProgress", taskIndex: task.id },
-                        task.actual.progress,
-                    )
-                }
             >
                 {task.actual.progress}%
             </td>
 
-            {actualRowCells.map((cell) => (
-                <MatrixCell
-                    key={task.id + "-" + cell.date}
-                    value={cell.value}
-                    task={task}
-                    baseDate={baseDate}
-                    editTarget={{
-                        type: "actualCell",
-                        taskIndex: task.id,
-                        date: cell.date,
-                    }}
-                    currentEditTarget={editTarget}
-                    handleKeyDownCell={handleKeyDownCell}
-                    handleChangeCell={handleChangeCell}
-                    startEdit={startEdit}
-                    endEdit={endEdit}
-                    onDragMove={onDragMove}
-                    onDragResize={onDragResize}
-                />
-            ))}
+            {dateList.map((date) => {
+                const params: GanttParams = {
+                    taskId: task.id,
+                    date,
+                    isPlan: false,
+                };
+
+                const rendererResults = createMatrixCellRenderers({
+                    params,
+                    value: task.actual.cells[date] ?? null,
+                    task,
+                    baseDate,
+                    onPointerDown,
+                });
+
+                return (
+                    <MatrixCell
+                        key={task.id + "-" + date}
+                        editDispatch={editDispatch}
+                        editTarget={selectors.editTarget}
+                        dateList={dateList}
+                        taskOrder={taskOrder}
+                        params={params}
+                        CellVisualRenderer={rendererResults.cellVisualRenderer}
+                        CellDragHandleRenderer={
+                            rendererResults.cellDragHandleRenderer
+                        }
+                        CellEditorRenderer={rendererResults.cellEditorRenderer}
+                        CellInteractionRenderer={
+                            rendererResults.cellInteractionRenderer
+                        }
+                        DragTooltipRenderer={() => (
+                            <DragTooltip tooltip={tooltip.state} />
+                        )}
+                    />
+                );
+            })}
         </tr>
     );
 };
