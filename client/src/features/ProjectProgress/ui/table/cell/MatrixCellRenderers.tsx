@@ -9,21 +9,34 @@ import CellDragHandle from "./CellDragHandle";
 import CellEditor from "./CellEditor";
 import CellInteraction from "./CellInteraction";
 import CellVisual from "./CellVisual";
+import MatrixCell from "./MatrixCell";
 
 export const createMatrixCellRenderers = ({
     params,
-    value,
     task,
     baseDate,
     onPointerDown,
+    registerCellRef,
+    onStartEdit,
+    isEditing,
+    onCommit,
+    onCellKeyDown,
 }: {
     params: GanttParams;
-    value: number | null;
     task: TaskModel;
     baseDate: string;
     onPointerDown: GanttDragController["onPointerDown"];
+    registerCellRef: MatrixCellController["registerCellRef"];
+    onStartEdit: MatrixCellController["onStartEdit"];
+    isEditing: MatrixCellController["isEditing"];
+    onCommit: MatrixCellController["onCommit"];
+    onCellKeyDown: MatrixCellController["onCellKeyDown"];
 }) => {
     const { date, isPlan } = params;
+    const timeline = isPlan ? task.plan : task.actual;
+    const startDate = timeline.start;
+    const endDate = timeline.end;
+    const value: number | null = timeline.cells[date] ?? null;
 
     const cellVisualRenderer = () => (
         <CellVisual
@@ -34,10 +47,6 @@ export const createMatrixCellRenderers = ({
         />
     );
 
-    const timeline = params.isPlan ? task.plan : task.actual;
-    const startDate = timeline.start;
-    const endDate = timeline.end;
-
     const cellDragHandleRenderer = ({ params }: { params: GanttParams }) => (
         <CellDragHandle
             params={params}
@@ -47,34 +56,33 @@ export const createMatrixCellRenderers = ({
         />
     );
 
-    const cellEditorRenderer = ({
-        params,
-        onCellKeyDown,
-    }: {
-        params: GanttParams;
-        onCellKeyDown: MatrixCellController["onCellKeyDown"];
-    }) => (
-        <CellEditor
-            initialValue={value}
+    const cellEditorRenderer = ({ params }: { params: GanttParams }) =>
+        isEditing(params) && (
+            <CellEditor
+                initialValue={value}
+                params={params}
+                onCellKeyDown={onCellKeyDown}
+                onCommit={onCommit}
+            />
+        );
+
+    const cellInteractionRenderer = ({ params }: { params: GanttParams }) => (
+        <CellInteraction
             params={params}
-            onCellKeyDown={onCellKeyDown}
+            ref={(el) => registerCellRef(params, el)}
+            onPointerDown={onPointerDown}
+            onKeyDown={onCellKeyDown}
+            onStartEdit={onStartEdit}
         />
     );
 
-    const cellInteractionRenderer = ({
-        params,
-        register,
-        onCellKeyDown,
-    }: {
-        params: GanttParams;
-        register: (el: HTMLElement | null) => void;
-        onCellKeyDown: MatrixCellController["onCellKeyDown"];
-    }) => (
-        <CellInteraction
+    const matrixCellRenderer = ({ params }: { params: GanttParams }) => (
+        <MatrixCell
             params={params}
-            ref={register}
-            onPointerDown={onPointerDown}
-            onKeyDown={onCellKeyDown}
+            CellVisualRenderer={cellVisualRenderer}
+            CellDragHandleRenderer={() => cellDragHandleRenderer({ params })}
+            CellEditorRenderer={() => cellEditorRenderer({ params })}
+            CellInteractionRenderer={() => cellInteractionRenderer({ params })}
         />
     );
 
@@ -83,6 +91,7 @@ export const createMatrixCellRenderers = ({
         cellDragHandleRenderer,
         cellEditorRenderer,
         cellInteractionRenderer,
+        matrixCellRenderer,
     };
 };
 

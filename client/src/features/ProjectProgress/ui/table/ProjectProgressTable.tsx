@@ -8,6 +8,7 @@ import {
 import { TaskModel } from "../../types/model";
 import { TableBody } from "./TableBody";
 import { TableHeader } from "./TableHeader";
+import { DragTooltip } from "./cell/DragTooltip";
 import styles from "./table.module.css";
 
 interface TableProps {
@@ -34,11 +35,12 @@ export const ProjectProgressTable = ({
     const dragController = useGanttDragController(
         projectId,
         tasks,
-        pageStateDispatch.init,
+        pageStateDispatch,
     );
 
     return (
         <div
+            data-testid="gantt_root"
             className={styles.gantt_root}
             onPointerMove={dragController.onGlobalPointerMove}
             onPointerUp={dragController.onGlobalPointerUp}
@@ -59,9 +61,11 @@ export const ProjectProgressTable = ({
                     editDispatch={editDispatch}
                     selectors={selectors}
                     onPointerDown={dragController.onPointerDown}
-                    tooltip={dragController.tooltip}
                 />
             </table>
+            {dragController.tooltip.state && (
+                <DragTooltip tooltip={dragController.tooltip.state} />
+            )}
         </div>
     );
 };

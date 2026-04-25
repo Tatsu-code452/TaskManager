@@ -1,0 +1,67 @@
+/* ============================
+   GridTable 基本レイアウト
+============================ */
+.grid_table {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============================
+   Header（複数行対応）
+============================ */
+.grid_header {
+    display: grid;
+    grid-auto-rows: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
+}
+
+/* Header の各行（Row1, Row2 など） */
+.header_row {
+    display: grid;
+}
+
+.header_children {
+    display: grid;
+    grid-auto-flow: column;
+}
+
+/* ============================
+   Body
+============================ */
+.grid_body {
+    display: grid;
+}
+
+.grid_row {
+    display: grid;
+}
+
+/* ============================
+   Cell（Header / Body 共通）
+============================ */
+.grid_cell {
+    position: relative;
+    outline: none;
+    white-space: nowrap;
+    background: white;
+}
+
+/* ============================
+   Sticky（左・右）
+============================ */
+.sticky_left {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background: inherit;
+}
+
+.sticky_right {
+    position: sticky;
+    right: 0;
+    z-index: 5;
+    background: inherit;
+}

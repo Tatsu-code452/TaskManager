@@ -24,7 +24,7 @@ export const TableHeader = ({
     const grouped = Object.entries(groupDates);
 
     return (
-        <thead>
+        <thead data-testid="table_header">
             <tr className={styles.head_row_1}>
                 <th rowSpan={2}>
                     フェーズ

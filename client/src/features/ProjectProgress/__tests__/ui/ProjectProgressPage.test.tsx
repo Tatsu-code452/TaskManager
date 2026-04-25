@@ -12,7 +12,7 @@ import {
     createCollapseDispatch,
     createEditDispatch,
     createPageStateDispatch,
-} from "./mockData";
+} from "../mockData";
 
 describe("ProjectProgressPage", () => {
     let pageStateDispatch;

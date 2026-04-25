@@ -2,6 +2,7 @@ import { fireEvent, render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { PlanCellTarget } from "../../types/types";
 import { MatrixCell } from "../../ui/table/cell/MatrixCell";
+import { editDispatch } from "../mockData";
 import {
     MockDragHandle,
     MockEditor,
@@ -9,7 +10,6 @@ import {
     MockTooltip,
     MockVisual,
 } from "./mockComponents";
-import { editDispatch } from "./mockData";
 
 describe("MatrixCell", () => {
     const baseProps = {

@@ -68,7 +68,6 @@ macro_rules! define_tauri_commands_composite {
             state: tauri::State<AppState>,
             $key1: String,
         ) -> Result<Vec<$table_type>, String> {
-            println!("task_id received = {}", $key1);
             let db = state.db.lock().unwrap();
             $command_name::list_impl(&db, $key1)
         }

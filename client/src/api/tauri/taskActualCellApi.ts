@@ -9,7 +9,10 @@ export const taskActualCellApi = {
         return await invoke("create_task_actual_cell", { payload });
     },
     update: async (taskId: string, date: string, hours: number) => {
-        return await invoke("update_task_actual_cell", { taskId, date, hours });
+        const payload: TaskActualRow = {
+            task_id: taskId, date, hours
+        }
+        return await invoke("update_task_actual_cell", { payload });
     },
     delete: async (taskId: string, date: string) => {
         return await invoke("delete_task_actual_cell", { taskId, date });

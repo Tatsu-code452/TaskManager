@@ -22,15 +22,12 @@ export const useTooltip = () => {
 
     const getDateFromPointer = (e: React.PointerEvent): string | null => {
         const el = document.elementFromPoint(e.clientX, e.clientY);
-        const cell = el?.closest("td[data-date]") as HTMLElement | null;
+        const cell = el?.closest("div[data-date]") as HTMLElement | null;
         return cell?.dataset.date ?? null;
     };
 
     const hide = () => {
-        setTooltip((t) => ({
-            ...t,
-            visible: false,
-        }));
+        setTooltip(null);
     };
 
     return {

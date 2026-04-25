@@ -1,6 +1,6 @@
 import { useProjectProgressController } from "../hooks/controller/useProjectProgressController";
 import styles from "./index.module.css";
-import { ProjectProgressTable } from "./table/ProjectProgressTable";
+import { ProjectProgressGrid } from "./table/ProjectProgressGrid";
 
 interface ProjectProgressPageProps {
     projectId: string;
@@ -19,12 +19,15 @@ export const ProjectProgressPage = ({
     } = useProjectProgressController(projectId);
 
     return (
-        <div className={styles.page_container}>
+        <div
+            data-testid="ProjectProgressPage"
+            className={styles.page_container}
+        >
             <div className={styles.section_card}>
                 <div className={styles.section_title}>ガントチャート</div>
 
                 {/* 日付レンジ設定 */}
-                <div className={styles.range_area}>
+                <div data-testid="range_area" className={styles.range_area}>
                     <label htmlFor="from">開始日</label>
                     <input
                         id="from"
@@ -58,7 +61,7 @@ export const ProjectProgressPage = ({
 
                 {/* ガントチャート本体 */}
                 <div className={styles.table_wrapper}>
-                    <ProjectProgressTable
+                    <ProjectProgressGrid
                         dates={dates}
                         tasks={pageState.tasks}
                         baseDate={pageState.baseDate}

@@ -22,8 +22,6 @@ export type DragAndDrop<D extends DragRef> = {
 export type PointerDragState<T> = {
     dragging: boolean;
     data: T | null;
-    startX: number;
-    startY: number;
 };
 
 export type PointerDrag<T> = {

@@ -29,6 +29,7 @@ fn main() {
             command::task::create_task,
             command::task::update_task,
             command::task::delete_task,
+            command::task::fetch_task_and_cells,
             // Issue
             command::issue::list_issues,
             command::issue::create_issue,

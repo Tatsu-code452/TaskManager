@@ -1,8 +1,8 @@
 // mockData.ts
 import { vi } from "vitest";
-import { TaskStatus } from "../../../../types/db/task";
-import { EditDispatch, PageStateDispatch } from "../../types/contract";
-import { TooltipApi } from "../../types/uiApi";
+import { TaskStatus } from "../../../types/db/task";
+import { EditDispatch, PageStateDispatch } from "../types/contract";
+import { TooltipApi } from "../types/uiApi";
 
 export const baseTask = {
     id: "t1",

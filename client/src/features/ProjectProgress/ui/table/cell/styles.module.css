@@ -10,7 +10,6 @@
     justify-content: center;
 
     font-size: 0.75rem;
-    pointer-events: none; /* ← 重要：ドラッグ操作を邪魔しない */
 }
 
 .plan_bar {

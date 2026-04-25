@@ -55,7 +55,7 @@ export const useProjectProgressStates = () => {
         editTarget,
         isEditing: !!editTarget,
         collapsedPhases,
-        allCollapsed: Object.values(collapsedPhases).every(v => v),
+        allCollapsed: Object.values(collapsedPhases).length > 0 ? false : Object.values(collapsedPhases).every(v => v),
     }), [editTarget, collapsedPhases]);
 
     return {

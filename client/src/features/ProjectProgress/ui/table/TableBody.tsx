@@ -17,7 +17,6 @@ interface TableBodyProps {
     collapseDispatch: CollapseDispatch;
     selectors: RowSelectors;
     onPointerDown: GanttDragController["onPointerDown"];
-    tooltip: GanttDragController["tooltip"];
 }
 
 export const TableBody = ({
@@ -28,13 +27,12 @@ export const TableBody = ({
     collapseDispatch,
     selectors,
     onPointerDown,
-    tooltip,
 }: TableBodyProps) => {
     const taskOrder = tasks.map((t) => t.id);
     const dateList = dates;
 
     return (
-        <tbody>
+        <tbody data-testid="table_body">
             {tasks.map((task, index) => {
                 const isCollapsed = selectors.collapsedPhases[task.phase];
                 const isFirstTaskInPhase =
@@ -69,7 +67,6 @@ export const TableBody = ({
                                     taskOrder={taskOrder}
                                     dateList={dateList}
                                     onPointerDown={onPointerDown}
-                                    tooltip={tooltip}
                                 />
 
                                 <TableBodyRowActual
@@ -80,7 +77,6 @@ export const TableBody = ({
                                     taskOrder={taskOrder}
                                     dateList={dateList}
                                     onPointerDown={onPointerDown}
-                                    tooltip={tooltip}
                                 />
                             </>
                         )}

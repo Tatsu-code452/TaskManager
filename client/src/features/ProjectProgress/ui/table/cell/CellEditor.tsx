@@ -7,12 +7,14 @@ interface CellEditorProps {
     initialValue: number | null;
     params: GanttParams;
     onCellKeyDown: MatrixCellController["onCellKeyDown"];
+    onCommit: MatrixCellController["onCommit"];
 }
 
 export const CellEditor = ({
     initialValue,
     params,
     onCellKeyDown,
+    onCommit,
 }: CellEditorProps) => {
     const ref = useRef<HTMLInputElement>(null);
 
@@ -28,6 +30,7 @@ export const CellEditor = ({
             className={styles.cell_editor}
             defaultValue={initialValue ?? ""}
             onKeyDown={(e) => onCellKeyDown(params, e)}
+            onBlur={(e) => onCommit(params, Number(e.target.value))}
         />
     );
 };

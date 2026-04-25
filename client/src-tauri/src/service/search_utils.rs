@@ -24,11 +24,20 @@ pub struct JoinExpr<T, U> {
 pub struct SearchBuilder<T> {
     items: Vec<T>,
     filters: Vec<FilterExpr<T>>,
-    #[allow(dead_code)]
-    joins: Vec<Box<dyn std::any::Any>>, // 将来 SQL 化のための AST 保持
     order_fns: Vec<Box<dyn Fn(&T, &T) -> std::cmp::Ordering>>,
     limit: Option<usize>,
     offset: Option<usize>,
+}
+
+pub struct JoinPlan<T, U> {
+    pub join_type: JoinType,
+    pub items: Vec<U>,
+    pub on: Box<dyn Fn(&T, &U) -> bool>,
+}
+#[derive(Clone)]
+pub struct Joined<T, U> {
+    pub left: T,
+    pub right: Vec<U>,
 }
 
 impl<T> SearchBuilder<T>
@@ -39,7 +48,6 @@ where
         Self {
             items,
             filters: vec![],
-            joins: vec![],
             order_fns: vec![],
             limit: None,
             offset: None,
@@ -62,6 +70,48 @@ where
             self.filters.push(FilterExpr::Predicate(Box::new(f)));
         }
         self
+    }
+
+    pub fn join<U, F>(
+        self,
+        join_type: JoinType,
+        right_items: Vec<U>,
+        on: F,
+    ) -> SearchBuilder<Joined<T, U>>
+    where
+        U: Clone + 'static,
+        F: Fn(&T, &U) -> bool + 'static,
+    {
+        let mut out = vec![];
+
+        for t in self.items {
+            let matches: Vec<U> = right_items.iter().filter(|u| on(&t, u)).cloned().collect();
+
+            match join_type {
+                JoinType::Inner => {
+                    if !matches.is_empty() {
+                        out.push(Joined {
+                            left: t,
+                            right: matches,
+                        });
+                    }
+                }
+                JoinType::Left => {
+                    out.push(Joined {
+                        left: t,
+                        right: matches,
+                    });
+                }
+            }
+        }
+
+        SearchBuilder {
+            items: out,
+            filters: vec![],
+            order_fns: vec![],
+            limit: None,
+            offset: None,
+        }
     }
 
     pub fn and_filter<F>(mut self, f: F) -> Self

@@ -65,11 +65,10 @@ export const useMatrixCellController = (
 
         e.preventDefault();
 
-        const kb = keyboardBind({
+        keyboardBind({
             ...editKeys(params),
             ...moveKeys(params),
-        });
-        kb.handleKeyDown(e);
+        }).handleKeyDown(e);
     };
 
     const editKeys = (params: GanttParams) => ({

@@ -7,7 +7,7 @@ import {
     createEditDispatch,
     createPageStateDispatch,
     createSelectors,
-} from "./mockData";
+} from "../mockData";
 
 describe("ProjectProgressTable", () => {
     let pageStateDispatch;

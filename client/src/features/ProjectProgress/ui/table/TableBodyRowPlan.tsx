@@ -2,7 +2,6 @@ import { getDelayStatus } from "../../domain/service/delay";
 import { EditDispatch, GanttParams, RowSelectors } from "../../types/contract";
 import { TaskModel } from "../../types/model";
 import { GanttDragController } from "../../types/uiApi";
-import { DragTooltip } from "./cell/DragTooltip";
 import { MatrixCell } from "./cell/MatrixCell";
 import { createMatrixCellRenderers } from "./cell/MatrixCellRenderers";
 import styles from "./table.module.css";
@@ -15,7 +14,6 @@ interface TableBodyRowPlanProps {
     selectors: RowSelectors;
     taskOrder: string[];
     onPointerDown: GanttDragController["onPointerDown"];
-    tooltip: GanttDragController["tooltip"];
 }
 
 export const TableBodyRowPlan = ({
@@ -26,7 +24,6 @@ export const TableBodyRowPlan = ({
     selectors,
     taskOrder,
     onPointerDown,
-    tooltip,
 }: TableBodyRowPlanProps) => {
     const delay = getDelayStatus(task);
 
@@ -80,9 +77,6 @@ export const TableBodyRowPlan = ({
                         CellInteractionRenderer={
                             rendererResults.cellInteractionRenderer
                         }
-                        DragTooltipRenderer={() => (
-                            <DragTooltip tooltip={tooltip.state} />
-                        )}
                     />
                 );
             })}
