@@ -22,31 +22,40 @@ export const useGanttDragController = (
     const apiTask = taskApi;
 
     const onPointerDown = (params: GanttDrag, e: React.PointerEvent) => {
-        drag.onPointerDown(params, e,);
+        drag.onPointerDown(params, e);
     };
 
+
+    const updateCurrentDate = (date: string) => {
+        const dragState = drag.state.current;
+        if (!dragState.dragging) return;
+        if (!dragState.data) return;
+        dragState.data.currentDate = date;
+    };
     const onGlobalPointerMove = (e: React.PointerEvent) => {
         drag.onPointerMove((dragData, ev) => {
+            const currentDate = tooltip.getDateFromPointer(ev);
+            if (!currentDate) return;
+
+            // ここで dragData に紐づける
+            dragData.currentDate = currentDate;
             tooltip.preview(dragData, ev);
         }, e);
     };
 
     const onGlobalPointerUp = (e: React.PointerEvent) => {
-        drag.onPointerUp((dragData, ev) => {
-            handleDrop(dragData, ev);
-            tooltip.hide();
+        drag.onPointerUp((dragData) => {
+            queueMicrotask(() => handleDrop(dragData));
+
+            // tooltip の非表示は “次のフレーム” に回す
+            requestAnimationFrame(() => {
+                tooltip.hide();
+            });
         }, e);
     };
 
-
-    const handleDrop = async (dragData: GanttDrag, e: React.PointerEvent) => {
-        const target = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
-        if (!target) return;
-
-        const cell = target.closest("div[data-task-id][data-date]") as HTMLElement | null;
-        if (!cell) return;
-        console.log(cell.textContent);
-        const dropDate = cell.dataset.date;
+    const handleDrop = async (dragData: GanttDrag) => {
+        const dropDate = dragData.currentDate;
         if (!dropDate) return;
 
         const task = taskMap[dragData.taskId];
@@ -54,10 +63,6 @@ export const useGanttDragController = (
 
         const diff = calcDiffDays(dragData.date, dropDate);
         let params: Partial<TaskPayload> = {};
-        console.log(task.plan.start);
-        console.log(task.actual.start);
-        console.log(diff);
-        console.log(dragData.mode);
         if (dragData.mode === "move") {
             params = dragData.isPlan
                 ? {
@@ -94,5 +99,6 @@ export const useGanttDragController = (
         onGlobalPointerMove,
         onGlobalPointerUp,
         tooltip,
+        updateCurrentDate,
     };
 };

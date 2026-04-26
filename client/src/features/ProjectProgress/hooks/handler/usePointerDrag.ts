@@ -7,10 +7,12 @@ export const usePointerDrag = <T extends DragRef>() => {
         dragging: false,
         data: null,
     });
+    const frameRequested = useRef(false);
+    const lastEvent = useRef<React.PointerEvent | null>(null);
 
     const onPointerDown = useCallback(
         (data: T, e: React.PointerEvent) => {
-            (e.target as HTMLElement).setPointerCapture(e.pointerId);
+            (e.target as HTMLElement).parentElement.parentElement.setPointerCapture(e.pointerId);
 
             state.current = {
                 dragging: true,
@@ -29,7 +31,21 @@ export const usePointerDrag = <T extends DragRef>() => {
     const onPointerMove = useCallback(
         (handler: (data: T, e: React.PointerEvent) => void, e: React.PointerEvent) => {
             if (!state.current.dragging || !state.current.data) return;
-            handler?.(state.current.data, e);
+            // 最新のイベントだけ保持
+            lastEvent.current = e;
+
+            // すでに rAF が予約されていれば何もしない
+            if (frameRequested.current) return;
+            frameRequested.current = true;
+
+            requestAnimationFrame(() => {
+                frameRequested.current = false;
+
+                if (!state.current.dragging || !state.current.data) return;
+                if (!lastEvent.current) return;
+
+                handler(state.current.data, lastEvent.current);
+            });
         },
         [],
     );
@@ -45,12 +61,13 @@ export const usePointerDrag = <T extends DragRef>() => {
                 data: null,
             };
 
-            (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+            (e.target as HTMLElement).parentElement.parentElement.releasePointerCapture(e.pointerId);
         },
         [],
     );
 
     return {
+        state,
         onPointerDown,
         onPointerMove,
         onPointerUp,

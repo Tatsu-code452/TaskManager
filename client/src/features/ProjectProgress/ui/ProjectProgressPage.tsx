@@ -1,6 +1,6 @@
 import { useProjectProgressController } from "../hooks/controller/useProjectProgressController";
 import styles from "./index.module.css";
-import { ProjectProgressGrid } from "./table/ProjectProgressGrid";
+import { ProjectProgressGrid } from "./table/grid/ProjectProgressGrid";
 
 interface ProjectProgressPageProps {
     projectId: string;
@@ -9,14 +9,8 @@ interface ProjectProgressPageProps {
 export const ProjectProgressPage = ({
     projectId,
 }: ProjectProgressPageProps) => {
-    const {
-        pageState,
-        dates,
-        pageStateDispatch,
-        editDispatch,
-        collapseDispatch,
-        selectors,
-    } = useProjectProgressController(projectId);
+    const { pageState, dates, pageStateDispatch, editDispatch, selectors } =
+        useProjectProgressController(projectId);
 
     return (
         <div
@@ -68,7 +62,6 @@ export const ProjectProgressPage = ({
                         projectId={projectId}
                         pageStateDispatch={pageStateDispatch}
                         editDispatch={editDispatch}
-                        collapseDispatch={collapseDispatch}
                         selectors={selectors}
                     />
                 </div>

@@ -43,9 +43,13 @@ export const useProjectProgressStates = () => {
         },
         toggleAllPhases: (tasks: TaskModel[]) => {
             setCollapsedPhases(prev => {
-                const allCollapsed = Object.values(prev).every(v => v === true);
                 const next: Record<string, boolean> = {};
-                tasks.forEach(t => next[t.phase] = !allCollapsed);
+                if (Object.values(prev).length === 0) {
+                    tasks.forEach(t => next[t.phase] = false);
+                } else {
+                    const allCollapsed = Object.values(prev).every(v => v === true);
+                    tasks.forEach(t => next[t.phase] = !allCollapsed);
+                }
                 return next;
             });
         },
@@ -55,7 +59,7 @@ export const useProjectProgressStates = () => {
         editTarget,
         isEditing: !!editTarget,
         collapsedPhases,
-        allCollapsed: Object.values(collapsedPhases).length > 0 ? false : Object.values(collapsedPhases).every(v => v),
+        allCollapsed: Object.values(collapsedPhases).length === 0 ? false : Object.values(collapsedPhases).every(v => v),
     }), [editTarget, collapsedPhases]);
 
     return {

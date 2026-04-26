@@ -21,6 +21,7 @@ export const createMatrixCellRenderers = ({
     isEditing,
     onCommit,
     onCellKeyDown,
+    updateCurrentDate,
 }: {
     params: GanttParams;
     task: TaskModel;
@@ -31,6 +32,7 @@ export const createMatrixCellRenderers = ({
     isEditing: MatrixCellController["isEditing"];
     onCommit: MatrixCellController["onCommit"];
     onCellKeyDown: MatrixCellController["onCellKeyDown"];
+    updateCurrentDate: (date: string) => void; // ★ dragData を更新する関数
 }) => {
     const { date, isPlan } = params;
     const timeline = isPlan ? task.plan : task.actual;
@@ -53,6 +55,7 @@ export const createMatrixCellRenderers = ({
             isStart={date === startDate}
             isEnd={date === endDate}
             onPointerDown={onPointerDown}
+            updateCurrentDate={updateCurrentDate}
         />
     );
 
@@ -73,6 +76,7 @@ export const createMatrixCellRenderers = ({
             onPointerDown={onPointerDown}
             onKeyDown={onCellKeyDown}
             onStartEdit={onStartEdit}
+            updateCurrentDate={updateCurrentDate}
         />
     );
 

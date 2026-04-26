@@ -6,12 +6,9 @@ export const useTooltip = () => {
     const [tooltip, setTooltip] = useState<TooltipState>(null);
 
     const preview = (drag: GanttDrag, e: React.PointerEvent) => {
-        const currentDate = getDateFromPointer(e);
-        if (!currentDate) return;
-
         setTooltip({
             from: drag.date,
-            to: currentDate,
+            to: drag.currentDate,
             mode: drag.mode,
             edge: drag.edge,
             x: e.clientX + 12,
@@ -32,6 +29,7 @@ export const useTooltip = () => {
 
     return {
         state: tooltip,
-        preview, hide
+        preview, hide,
+        getDateFromPointer
     }
 }

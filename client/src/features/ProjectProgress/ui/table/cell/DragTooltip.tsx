@@ -1,14 +1,22 @@
+import React from "react";
 import { TooltipState } from "../../../types/uiApi";
 
 export const DragTooltip = ({ tooltip }: { tooltip: TooltipState }) => {
     if (!tooltip) return null;
+    const prefixResize =
+        tooltip.mode === "move"
+            ? ""
+            : tooltip.edge === "start"
+              ? "開始:"
+              : "終了:";
+    const text = `${prefixResize}${tooltip.from} → ${tooltip.to}`;
 
     return (
         <div
             style={{
-                position: "fixed",
                 top: tooltip.y,
                 left: tooltip.x,
+                position: "fixed",
                 background: "rgba(0,0,0,0.75)",
                 color: "white",
                 padding: "4px 8px",
@@ -18,17 +26,9 @@ export const DragTooltip = ({ tooltip }: { tooltip: TooltipState }) => {
                 zIndex: 9999,
             }}
         >
-            {tooltip.mode === "move" && (
-                <div>
-                    {tooltip.from} → {tooltip.to}
-                </div>
-            )}
-            {tooltip.mode === "resize" && (
-                <div>
-                    {tooltip.edge === "start" ? "開始" : "終了"}:{tooltip.from}{" "}
-                    → {tooltip.to}
-                </div>
-            )}
+            <div>{text}</div>
         </div>
     );
 };
+
+export default React.memo(DragTooltip);

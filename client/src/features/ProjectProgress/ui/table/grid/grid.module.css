@@ -92,3 +92,22 @@
 .body_row2 {
     grid-row: 2;
 }
+
+/* ===========================
+   ステータス別の行色
+=========================== */
+.status_NotStarted {
+    background-color: rgba(200, 200, 200, 0.25);
+}
+
+.status_InProgress {
+    background-color: rgba(0, 120, 212, 0.15);
+}
+
+.status_Done {
+    background-color: rgba(40, 167, 69, 0.15);
+}
+
+.status_Delayed {
+    background-color: rgba(220, 53, 69, 0.15);
+}

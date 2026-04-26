@@ -2,6 +2,7 @@ import React from "react";
 import { GanttParams } from "./contract";
 import { GanttDrag } from "./hooks";
 
+export const START_GANTT = 3;
 
 export type TooltipState = {
     from: string;

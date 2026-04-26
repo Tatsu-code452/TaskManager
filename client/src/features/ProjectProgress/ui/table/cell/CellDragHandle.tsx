@@ -8,6 +8,7 @@ interface CellDragHandleProps {
     isStart: boolean; // このセルがバーの開始日か
     isEnd: boolean; // このセルがバーの終了日か
     onPointerDown: GanttDragController["onPointerDown"];
+    updateCurrentDate: (date: string) => void; // ★ dragData を更新する関数
 }
 
 export const CellDragHandle = ({
@@ -15,6 +16,7 @@ export const CellDragHandle = ({
     isStart,
     isEnd,
     onPointerDown,
+    updateCurrentDate,
 }: CellDragHandleProps) => {
     return (
         <>
@@ -22,6 +24,7 @@ export const CellDragHandle = ({
                 <div
                     data-edge="start-edge"
                     className={styles.handle_left}
+                    onPointerEnter={() => updateCurrentDate(params.date)}
                     onPointerDown={(e) =>
                         onPointerDown(
                             {
@@ -38,6 +41,7 @@ export const CellDragHandle = ({
                 <div
                     data-edge="end-edge"
                     className={styles.handle_right}
+                    onPointerEnter={() => updateCurrentDate(params.date)}
                     onPointerDown={(e) =>
                         onPointerDown(
                             {
