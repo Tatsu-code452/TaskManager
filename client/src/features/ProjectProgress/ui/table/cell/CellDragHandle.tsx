@@ -1,59 +1,49 @@
 import React from "react";
-import { GanttParams } from "../../../types/contract";
-import { GanttDragController } from "../../../types/uiApi";
+import { Edge, HandleConfig } from "../../../types/gantt";
 import styles from "./styles.module.css";
 
 interface CellDragHandleProps {
-    params: GanttParams;
-    isStart: boolean; // このセルがバーの開始日か
-    isEnd: boolean; // このセルがバーの終了日か
-    onPointerDown: GanttDragController["onPointerDown"];
-    updateCurrentDate: (date: string) => void; // ★ dragData を更新する関数
+    isStart: boolean;
+    isEnd: boolean;
+    onPointerDown: (edge: Edge, e: React.PointerEvent) => void;
+    onPointerEnter: () => void;
 }
 
+const HANDLE_CONFIGS: Record<Edge, HandleConfig> = {
+    start: {
+        edge: "start" as const,
+        dataEdge: "start-edge",
+        className: styles.handle_left,
+    },
+    end: {
+        edge: "end" as const,
+        dataEdge: "end-edge",
+        className: styles.handle_right,
+    },
+};
+
 export const CellDragHandle = ({
-    params,
     isStart,
     isEnd,
     onPointerDown,
-    updateCurrentDate,
+    onPointerEnter,
 }: CellDragHandleProps) => {
+    const handles = [
+        isStart ? HANDLE_CONFIGS.start : null,
+        isEnd ? HANDLE_CONFIGS.end : null,
+    ].filter((x): x is HandleConfig => x !== null);
+
     return (
         <>
-            {isStart && (
+            {handles.map((cfg) => (
                 <div
-                    data-edge="start-edge"
-                    className={styles.handle_left}
-                    onPointerEnter={() => updateCurrentDate(params.date)}
-                    onPointerDown={(e) =>
-                        onPointerDown(
-                            {
-                                ...params,
-                                mode: "resize",
-                                edge: "start",
-                            },
-                            e,
-                        )
-                    }
+                    key={cfg.edge}
+                    data-edge={cfg.dataEdge}
+                    className={cfg.className}
+                    onPointerEnter={onPointerEnter}
+                    onPointerDown={(e) => onPointerDown(cfg.edge, e)}
                 />
-            )}
-            {isEnd && (
-                <div
-                    data-edge="end-edge"
-                    className={styles.handle_right}
-                    onPointerEnter={() => updateCurrentDate(params.date)}
-                    onPointerDown={(e) =>
-                        onPointerDown(
-                            {
-                                ...params,
-                                mode: "resize",
-                                edge: "end",
-                            },
-                            e,
-                        )
-                    }
-                />
-            )}
+            ))}
         </>
     );
 };

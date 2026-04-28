@@ -1,35 +1,33 @@
-import { useState } from "react";
-import { GanttDrag } from "../../types/hooks";
+import { useRef } from "react";
+import { GanttDrag } from "../../types/gantt";
 import { TooltipState } from "../../types/uiApi";
 
 export const useTooltip = () => {
-    const [tooltip, setTooltip] = useState<TooltipState>(null);
-
+    const tooltipRef = useRef<HTMLDivElement | null>(null);
+    const dataRef = useRef<TooltipState | null>(null);
     const preview = (drag: GanttDrag, e: React.PointerEvent) => {
-        setTooltip({
+        dataRef.current = {
             from: drag.date,
-            to: drag.currentDate,
+            to: drag.currentDate ?? drag.date,
             mode: drag.mode,
             edge: drag.edge,
             x: e.clientX + 12,
             y: e.clientY + 12,
-            visible: true
-        });
-    };
+            visible: true,
+        };
 
-    const getDateFromPointer = (e: React.PointerEvent): string | null => {
-        const el = document.elementFromPoint(e.clientX, e.clientY);
-        const cell = el?.closest("div[data-date]") as HTMLElement | null;
-        return cell?.dataset.date ?? null;
+        const el = tooltipRef.current;
+        if (!el) return;
+
+        el.style.transform = `translate(${dataRef.current.x}px, ${dataRef.current.y}px)`;
+        el.style.display = "block";
+        el.textContent = `${drag.date} → ${drag.currentDate}`;
     };
 
     const hide = () => {
-        setTooltip(null);
+        const el = tooltipRef.current;
+        if (el) el.style.display = "none";
     };
 
-    return {
-        state: tooltip,
-        preview, hide,
-        getDateFromPointer
-    }
-}
+    return { state: tooltipRef, preview, hide };
+};

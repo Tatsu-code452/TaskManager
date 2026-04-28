@@ -26,8 +26,8 @@ export type TaskModel = {
 };
 
 export interface TaskTimeline {
-    start?: string;
-    end?: string;
+    start: string;
+    end: string;
     totalHours: number;
     progress: number;
     cells: Record<string, number>;

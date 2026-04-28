@@ -1,74 +1,66 @@
-import { CellPos } from "../../../../../../components/grid-table/types";
+import { useCallback, useMemo } from "react";
 import { useGanttDragController } from "../../../../hooks/controller/useGanttDragController";
-import { EditDispatch, GanttParams, PageStateDispatch, RowSelectors } from "../../../../types/contract";
+import { EditDispatch, RowSelectors } from "../../../../types/contract";
 import { TaskModel } from "../../../../types/model";
-import { START_GANTT } from "../../../../types/uiApi";
 import styles from "../grid.module.css";
 import { useCellRenderer } from "./createCellRenderer";
 import { createColumns } from "./createColumns";
 
 interface Props {
-    dates: string[];
     projectId: string;
     tasks: TaskModel[];
     baseDate: string;
-    pageStateDispatch: PageStateDispatch;
+    dates: string[];
     editDispatch: EditDispatch;
     selectors: RowSelectors;
+    onLoadTasks: () => Promise<void>;
 }
+
 export const useCreateGridProps = ({
-    dates,
+    projectId,
     tasks,
     baseDate,
-    projectId,
-    pageStateDispatch,
+    dates,
     editDispatch,
     selectors,
+    onLoadTasks,
 }: Props) => {
-    const drag = useGanttDragController(projectId, tasks, pageStateDispatch);
+    const {
+        onPointerDown,
+        onGlobalPointerMove,
+        onGlobalPointerUp,
+        tooltip,
+        onUpdateCurrentDate,
+    } = useGanttDragController(projectId, tasks, onLoadTasks);
 
-    const { cellRenderer, monthEntries, onCellKeyDown } = useCellRenderer({
+    const { cellRenderer, monthEntries } = useCellRenderer({
         tasks,
         baseDate,
         editDispatch,
         selectors,
         dates,
-        onPointerDown: drag.onPointerDown,
-        updateCurrentDate: drag.updateCurrentDate,
+        onPointerDown,
+        onUpdateCurrentDate,
+        onLoadTasks,
     });
 
-    const columns = createColumns({
+    const columns = useMemo(() => createColumns({
         monthEntries,
-    });
+    }), [monthEntries]);
 
-    const bodyRowStyle = (row: number) => {
+    const bodyRowStyle = useCallback((row: number) => {
         const task = tasks[Math.floor(row / 2)];
         return task
             ? { className: styles[`status_${task.status}`] }
             : {};
-    };
-
-    const onKeyDown = (pos: CellPos, e: React.KeyboardEvent) => {
-        const rowIndex = Math.floor(pos.row / 2);
-        const colIndex = pos.col - START_GANTT;
-
-        if (colIndex < 0) return;
-
-        const params: GanttParams = {
-            taskId: tasks[rowIndex].id,
-            date: dates[pos.col - START_GANTT],
-            isPlan: pos.row % 2 === 1,
-        };
-        onCellKeyDown(params, e);
-    };
+    }, [tasks]);
 
     return {
         columns,
         cellRenderer,
-        onKeyDown,
         bodyRowStyle,
-        tooltip: drag.tooltip,
-        onGlobalPointerMove: drag.onGlobalPointerMove,
-        onGlobalPointerUp: drag.onGlobalPointerUp,
+        tooltip,
+        onGlobalPointerMove,
+        onGlobalPointerUp,
     };
 };

@@ -30,6 +30,6 @@
 }
 
 .table_wrapper {
-    overflow-x: auto;
+    /* overflow-x: auto; */
     padding-bottom: 1rem;
 }

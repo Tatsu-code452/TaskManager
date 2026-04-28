@@ -5,8 +5,8 @@ import { useStateInitializer } from "./useStateInitializer";
 import { useStateReducer } from "./useStateReducer";
 
 export const useProjectProgressStates = () => {
-    const [editTarget, setEditTarget] = useState<EditTarget>(null);
     const [collapsedPhases, setCollapsedPhases] = useState<Record<string, boolean>>({});
+    const [editTarget, setEditTarget] = useState<EditTarget>(null);
 
     const { initProgressPageState } = useStateInitializer();
     const { createProgressReducer } = useStateReducer();
@@ -57,7 +57,7 @@ export const useProjectProgressStates = () => {
 
     const selectors = useMemo(() => ({
         editTarget,
-        isEditing: !!editTarget,
+        isEditing: editTarget !== null,
         collapsedPhases,
         allCollapsed: Object.values(collapsedPhases).length === 0 ? false : Object.values(collapsedPhases).every(v => v),
     }), [editTarget, collapsedPhases]);

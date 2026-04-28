@@ -1,23 +1,22 @@
-import { useMemo } from "react";
-import { useMatrixCellController } from "../../../../hooks/controller/useMatrixCellController";
+import React, { useCallback, useMemo } from "react";
 import {
     EditDispatch,
-    GanttParams,
-    RowSelectors,
+    RowSelectors
 } from "../../../../types/contract";
+import { GanttParams } from "../../../../types/gantt";
 import { TaskModel } from "../../../../types/model";
 import { GanttDragController } from "../../../../types/uiApi";
-import { createMatrixCellRenderers } from "../../cell/MatrixCellRenderers";
+import { CreateCellRenderers } from "../../cell/CreateCellRenderers";
 import styles from "../grid.module.css";
 
 interface Props {
-    tasks: TaskModel[];
     baseDate: string;
+    dates: string[];
     editDispatch: EditDispatch;
     selectors: RowSelectors;
-    dates: string[];
     onPointerDown: GanttDragController["onPointerDown"];
-    updateCurrentDate: (date: string) => void; // ★ dragData を更新する関数
+    onUpdateCurrentDate: (date: string) => void;
+    onLoadTasks: () => void;
 }
 
 // 月ごとにグループ化
@@ -32,71 +31,81 @@ const groupDatesByMonth = (dates: string[]) => {
 };
 
 export const useGanttRenderer = ({
-    tasks,
     baseDate,
+    dates,
     editDispatch,
     selectors,
-    dates,
     onPointerDown,
-    updateCurrentDate,
+    onUpdateCurrentDate,
+    onLoadTasks,
 }: Props) => {
     const monthEntries = useMemo(() => groupDatesByMonth(dates), [dates]);
 
-    const { onCellKeyDown, registerCellRef, onStartEdit, isEditing, onCommit } =
-        useMatrixCellController(
+    const createCellRenderers = useCallback(
+        (task: TaskModel, params: GanttParams) => {
+            return CreateCellRenderers({
+                params,
+                task,
+                baseDate,
+                dates,
+                editDispatch,
+                editTarget: selectors.editTarget,
+                onPointerDown,
+                onUpdateCurrentDate,
+                onLoadTasks,
+            });
+        },
+        [
+            baseDate,
+            dates,
             editDispatch,
             selectors.editTarget,
-            tasks.map((t) => t.id),
-            dates,
-        );
-
-    const renderMatrixCell = (
-        task: TaskModel,
-        date: string,
-        isPlan: boolean,
-    ) => {
-        const params: GanttParams = {
-            taskId: task.id,
-            date,
-            isPlan,
-        };
-
-        const { matrixCellRenderer } = createMatrixCellRenderers({
-            params,
-            task,
-            baseDate,
             onPointerDown,
-            registerCellRef,
-            onStartEdit,
-            isEditing,
-            onCommit,
-            onCellKeyDown,
-            updateCurrentDate,
-        });
+            onUpdateCurrentDate,
+            onLoadTasks,
+        ],
+    );
 
-        const className = isPlan
-            ? `${styles.body_gantt_row1} ${styles.row1}`
-            : `${styles.body_gantt_row2} ${styles.row2}`;
+    const GanttRenderer = React.useCallback(
+        (task: TaskModel, date: string, isPlan: boolean) => {
+            const params: GanttParams = {
+                taskId: task.id,
+                date,
+                isPlan,
+            };
 
-        return (
-            <div className={className}>{matrixCellRenderer({ params })}</div>
-        );
-    };
+            const { matrixCellRenderer } = createCellRenderers(task, params);
 
-    const rendererGantt = (task: TaskModel, [ym, days]: [string, string[]]) => {
-        return (
-            <>
-                {days.map((date) => {
-                    const targetDate = `${ym}-${date}`;
-                    return (
-                        <div key={`${task.id}-${targetDate}`}>
-                            {renderMatrixCell(task, targetDate, true)}
-                            {renderMatrixCell(task, targetDate, false)}
-                        </div>
-                    );
-                })}
-            </>
-        );
-    };
-    return { rendererGantt, monthEntries, onCellKeyDown };
+            const className = isPlan
+                ? `${styles.body_gantt_row1} ${styles.row1}`
+                : `${styles.body_gantt_row2} ${styles.row2}`;
+
+            return (
+                <div className={className}>
+                    {matrixCellRenderer({ params })}
+                </div>
+            );
+        },
+        [createCellRenderers],
+    );
+
+    const rendererGantt = React.useCallback(
+        (task: TaskModel, [ym, days]: [string, string[]]) => {
+            return (
+                <>
+                    {days.map((date) => {
+                        const targetDate = `${ym}-${date}`;
+                        return (
+                            <div key={`${task.id}-${targetDate}`}>
+                                {GanttRenderer(task, targetDate, true)}
+                                {GanttRenderer(task, targetDate, false)}
+                            </div>
+                        );
+                    })}
+                </>
+            );
+        },
+        [GanttRenderer],
+    );
+    return { rendererGantt, monthEntries };
 };

@@ -24,9 +24,4 @@ export type RowSelectors = {
     allCollapsed: boolean;
 };
 
-export type GanttParams = {
-    taskId: string,
-    date: string,
-    isPlan: boolean,
-    currentDate?: string;
-};
+

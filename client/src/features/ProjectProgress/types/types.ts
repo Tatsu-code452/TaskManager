@@ -10,33 +10,9 @@ export type ProgressAction =
 /**
  * 編集対象情報
  */
-export type PlanCellTarget = { type: "planCell"; taskIndex: string; date: string; pressedKey?: string; };
-export type ActualCellTarget = { type: "actualCell"; taskIndex: string; date: string; pressedKey?: string; };
-export type ActualProgressTarget = { type: "actualProgress"; taskIndex: string; projectId: string; pressedKey?: string; };
+export type PlanCellTarget = { type: "planCell"; taskId: string; date: string; };
+export type ActualCellTarget = { type: "actualCell"; taskId: string; date: string; };
 
 export type EditTarget =
     | PlanCellTarget
     | ActualCellTarget
-    | ActualProgressTarget;
-
-export type EditAction =
-    | {
-        type: "UPDATE_PLAN_CELL";
-        task: TaskModel;
-        baseDate: string;
-        date: string;
-        newValue: number;
-    }
-    | {
-        type: "UPDATE_ACTUAL_CELL";
-        task: TaskModel;
-        baseDate: string;
-        date: string;
-        newValue: number;
-    }
-    | {
-        type: "UPDATE_ACTUAL_PROGRESS";
-        task: TaskModel;
-        baseDate: string;
-        newValue: number;
-    }

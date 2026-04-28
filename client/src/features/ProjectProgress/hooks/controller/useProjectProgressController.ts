@@ -5,7 +5,8 @@ import { formatDate } from "../../domain/utils/date";
 import { useProjectProgressStates } from "../state/useProjectProgressStates";
 
 export const useProjectProgressController = (projectId: string) => {
-    const { pageState,
+    const {
+        pageState,
         pageStateDispatch,
         editDispatch,
         collapseDispatch,
@@ -15,7 +16,7 @@ export const useProjectProgressController = (projectId: string) => {
     // -------------------------
     // TaskModel[] を読み込む
     // -------------------------
-    const loadTasks = useCallback(async () => {
+    const onLoadTasks = useCallback(async () => {
         const tasks = await fetchTaskModelList(projectId);
         pageStateDispatch.setTasks(tasks);
     }, [projectId, pageStateDispatch]);
@@ -44,10 +45,10 @@ export const useProjectProgressController = (projectId: string) => {
         if (loadingRef.current) return;
         loadingRef.current = true;
 
-        loadTasks().finally(() => {
+        onLoadTasks().finally(() => {
             loadingRef.current = false;
         });
-    }, [loadTasks]);
+    }, [onLoadTasks]);
 
     return {
         pageState,
@@ -57,6 +58,6 @@ export const useProjectProgressController = (projectId: string) => {
         collapseDispatch,
         selectors,
 
-        loadTasks,
+        onLoadTasks,
     };
 };

@@ -1,20 +1,16 @@
 import React, { useEffect, useRef } from "react";
-import { GanttParams } from "../../../types/contract";
-import { MatrixCellController } from "../../../types/uiApi";
 import styles from "./styles.module.css";
 
 interface CellEditorProps {
     initialValue: number | null;
-    params: GanttParams;
-    onCellKeyDown: MatrixCellController["onCellKeyDown"];
-    onCommit: MatrixCellController["onCommit"];
+    onCellKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export const CellEditor = ({
     initialValue,
-    params,
     onCellKeyDown,
-    onCommit,
+    onBlur,
 }: CellEditorProps) => {
     const ref = useRef<HTMLInputElement>(null);
 
@@ -29,8 +25,8 @@ export const CellEditor = ({
             type="number"
             className={styles.cell_editor}
             defaultValue={initialValue ?? ""}
-            onKeyDown={(e) => onCellKeyDown(params, e)}
-            onBlur={(e) => onCommit(params, Number(e.target.value))}
+            onKeyDown={onCellKeyDown}
+            onBlur={onBlur}
         />
     );
 };

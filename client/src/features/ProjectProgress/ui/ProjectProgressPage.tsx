@@ -9,8 +9,14 @@ interface ProjectProgressPageProps {
 export const ProjectProgressPage = ({
     projectId,
 }: ProjectProgressPageProps) => {
-    const { pageState, dates, pageStateDispatch, editDispatch, selectors } =
-        useProjectProgressController(projectId);
+    const {
+        pageState,
+        dates,
+        pageStateDispatch,
+        editDispatch,
+        selectors,
+        onLoadTasks,
+    } = useProjectProgressController(projectId);
 
     return (
         <div
@@ -60,9 +66,9 @@ export const ProjectProgressPage = ({
                         tasks={pageState.tasks}
                         baseDate={pageState.baseDate}
                         projectId={projectId}
-                        pageStateDispatch={pageStateDispatch}
                         editDispatch={editDispatch}
                         selectors={selectors}
+                        onLoadTasks={onLoadTasks}
                     />
                 </div>
             </div>

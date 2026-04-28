@@ -1,12 +1,5 @@
 import React from "react";
-import { GanttParams } from "./contract";
-
-export type DragRef = {
-    pos?: {
-        x: number,
-        y: number
-    }
-};
+import { DragRef } from "./gantt";
 
 export type DragAndDrop<D extends DragRef> = {
     dragRef: React.MutableRefObject<D>;
@@ -30,7 +23,3 @@ export type PointerDrag<T> = {
     onPointerUp: (handler: (data: T, e: React.PointerEvent) => void, e: React.PointerEvent) => void;
 }
 
-export type GanttDrag = GanttParams & {
-    mode: "move" | "resize";
-    edge?: "start" | "end";
-} & DragRef;

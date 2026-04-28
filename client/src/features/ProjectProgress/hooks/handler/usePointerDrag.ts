@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
-import { DragRef, PointerDragState } from "../../types/hooks";
-
+import { DragRef } from "../../types/gantt";
+import { PointerDragState } from "../../types/hooks";
 
 export const usePointerDrag = <T extends DragRef>() => {
     const state = useRef<PointerDragState<T>>({
@@ -12,8 +12,6 @@ export const usePointerDrag = <T extends DragRef>() => {
 
     const onPointerDown = useCallback(
         (data: T, e: React.PointerEvent) => {
-            (e.target as HTMLElement).parentElement.parentElement.setPointerCapture(e.pointerId);
-
             state.current = {
                 dragging: true,
                 data: {
@@ -44,6 +42,9 @@ export const usePointerDrag = <T extends DragRef>() => {
                 if (!state.current.dragging || !state.current.data) return;
                 if (!lastEvent.current) return;
 
+                const ev = lastEvent.current;
+                state.current.data.pos = { x: ev.clientX, y: ev.clientY };
+
                 handler(state.current.data, lastEvent.current);
             });
         },
@@ -54,14 +55,12 @@ export const usePointerDrag = <T extends DragRef>() => {
         (handler: (data: T, e: React.PointerEvent) => void, e: React.PointerEvent) => {
             if (!state.current.dragging || !state.current.data) return;
 
-            handler?.(state.current.data, e);
+            handler(state.current.data, e);
 
             state.current = {
                 dragging: false,
                 data: null,
             };
-
-            (e.target as HTMLElement).parentElement.parentElement.releasePointerCapture(e.pointerId);
         },
         [],
     );

@@ -14,19 +14,16 @@ export const CellVisual = ({
     isToday,
     isDelayed,
 }: CellVisualProps) => {
-    const styleList = [styles.bar_base];
+    const classList = [
+        styles.bar_base,
+        value ? (isPlan ? styles.plan_bar : styles.actual_bar) : "",
+        isToday ? styles.today : "",
+        isDelayed ? styles.delay_bar : "",
+    ]
+        .filter(Boolean)
+        .join(" ");
 
-    if (value) {
-        styleList.push(isPlan ? styles.plan_bar : styles.actual_bar);
-    }
-    if (isToday) styleList.push(styles.today);
-    if (isDelayed) styleList.push(styles.delay_bar);
-
-    return (
-        <div className={styleList.join(" ")}>
-            {value !== undefined && value !== null ? value : ""}
-        </div>
-    );
+    return <div className={classList}>{value ?? ""}</div>;
 };
 
 export default React.memo(CellVisual);

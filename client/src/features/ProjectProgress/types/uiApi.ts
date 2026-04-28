@@ -1,6 +1,5 @@
 import React from "react";
-import { GanttParams } from "./contract";
-import { GanttDrag } from "./hooks";
+import { GanttDrag, GanttParams } from "./gantt";
 
 export const START_GANTT = 3;
 
@@ -22,9 +21,9 @@ export type TooltipApi = {
 
 export type MatrixCellController = {
     onStartEdit: (params: GanttParams) => void;
-    onCommit: (params: GanttParams, value: number | null) => Promise<void>;
+    onCommit: (params: GanttParams, value: number | null, initialValue: number | null) => Promise<void>;
     onCancelEdit: () => void;
-    onCellKeyDown: (params: GanttParams, e: React.KeyboardEvent) => void;
+    onCellKeyDown: (params: GanttParams, e: React.KeyboardEvent, initialValue: number | null) => void;
     registerCellRef: (params: GanttParams, el: HTMLElement | null) => void;
     isEditing: (params: GanttParams) => boolean;
 }
@@ -33,9 +32,5 @@ export type GanttDragController = {
     onPointerDown: (params: GanttDrag, e: React.PointerEvent) => void;
     onGlobalPointerMove: (e: React.PointerEvent) => void;
     onGlobalPointerUp: (e: React.PointerEvent) => void;
-    tooltip: {
-        state: TooltipState;
-        preview: (drag: GanttDrag, e: React.PointerEvent) => void;
-        hide: () => void;
-    };
+    updateCurrentDate: (date: string) => void
 }
