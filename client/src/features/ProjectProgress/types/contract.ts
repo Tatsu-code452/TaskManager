@@ -1,13 +1,4 @@
-import { TaskModel } from "./model";
-import { EditTarget } from "./types";
-
-export type PageStateDispatch = {
-    init: () => void;
-    setTasks: (tasks: TaskModel[]) => void;
-    setFrom: (from: string) => void;
-    setTo: (to: string) => void;
-    setBaseDate: (baseDate: string) => void;
-};
+import { EditTarget, TaskModel } from "../components/cell";
 
 export type EditDispatch = {
     startEdit: (editTarget: EditTarget) => void;

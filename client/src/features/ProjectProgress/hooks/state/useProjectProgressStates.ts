@@ -1,6 +1,5 @@
 import { useMemo, useReducer, useState } from "react";
-import { TaskModel } from "../../types/model";
-import { EditTarget } from "../../types/types";
+import { EditTarget, TaskModel } from "../../components/cell";
 import { useStateInitializer } from "./useStateInitializer";
 import { useStateReducer } from "./useStateReducer";
 

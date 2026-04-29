@@ -1,4 +1,4 @@
-import { TaskModel } from "../../types/model";
+import { TaskModel } from "../../components/cell";
 import { toDate } from "../utils/date";
 
 export const isCellDelayed = (

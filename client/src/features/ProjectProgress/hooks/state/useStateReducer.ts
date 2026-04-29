@@ -1,5 +1,13 @@
+import { TaskModel } from "../../components/cell";
 import { ProgressPageState } from "../../types/model";
-import { ProgressAction } from "../../types/types";
+
+type ProgressAction =
+    | { type: "INIT" }
+    | { type: "SET_TASKS"; tasks: TaskModel[]; }
+    | { type: "SET_FROM"; from: string; }
+    | { type: "SET_TO"; to: string; }
+    | { type: "SET_BASE_DATE"; baseDate: string; }
+
 
 export const useStateReducer = () => {
     /**

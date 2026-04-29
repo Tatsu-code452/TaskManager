@@ -1,13 +1,9 @@
-// src/hooks/controller/useGanttDragController.ts
 import { useCallback, useMemo } from "react";
 import { taskApi } from "../../../../api/tauri/taskApi";
 import { TaskPayload } from "../../../../types/db/task";
+import { GanttDrag, TaskModel, usePointerDrag } from "../../components/cell";
+import { useTooltip } from "../../components/tooltip";
 import { calcDiffDays, shiftDate } from "../../domain/utils/date";
-import { GanttDrag } from "../../types/gantt";
-import { TaskModel } from "../../types/model";
-import { usePointerDrag } from "../handler/usePointerDrag";
-import { useTooltip } from "../handler/useTooltip";
-
 
 export const useGanttDragController = (
     projectId: string,

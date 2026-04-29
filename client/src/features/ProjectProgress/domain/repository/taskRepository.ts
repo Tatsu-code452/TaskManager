@@ -1,5 +1,5 @@
 import { taskApi } from "../../../../api/tauri/taskApi";
-import { TaskModel } from "../../types/model";
+import { TaskModel } from "../../components/cell";
 import { toTaskModelFromRows } from "../model/toTaskModelFromRows";
 import { calcCriticalPath } from "../service/criticalPath";
 

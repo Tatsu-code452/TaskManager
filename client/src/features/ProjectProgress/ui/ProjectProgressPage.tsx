@@ -1,6 +1,6 @@
 import { useProjectProgressController } from "../hooks/controller/useProjectProgressController";
+import { ProjectProgressGrid } from "./grid/ProjectProgressGrid";
 import styles from "./index.module.css";
-import { ProjectProgressGrid } from "./table/grid/ProjectProgressGrid";
 
 interface ProjectProgressPageProps {
     projectId: string;

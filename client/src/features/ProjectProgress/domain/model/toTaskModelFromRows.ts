@@ -1,7 +1,13 @@
 import { TaskRow } from "../../../../types/db/task";
 import { TaskActualRow } from "../../../../types/db/taskActual";
 import { TaskPlanRow } from "../../../../types/db/taskPlan";
-import { TaskModel, toMap } from "../../types/model";
+import { TaskModel } from "../../components/cell";
+
+const toMap = (rows: TaskPlanRow[] | TaskActualRow[]) => {
+    const map: Record<string, number> = {};
+    rows.forEach(r => map[r.date] = r.hours);
+    return map;
+};
 
 export const toTaskModelFromRows = (
     task: TaskRow,
