@@ -3,8 +3,9 @@ import { TaskModel } from "../../../components/cell";
 import { useGanttDragController } from "../../../hooks/controller/useGanttDragController";
 import { EditDispatch, RowSelectors } from "../../../types/contract";
 import styles from "../grid.module.css";
-import { createColumns } from "./createColumns";
-import { useCellRenderer } from "./renderer/createCellRenderer";
+import { createColumns } from "./renderer/createColumns";
+import { useGanttRenderer } from "./renderer/createGanttRenderer";
+import { useWbsRenderer } from "./renderer/createWbsRenderer";
 
 interface Props {
     projectId: string;
@@ -33,7 +34,7 @@ export const useCreateGridProps = ({
         onUpdateCurrentDate,
     } = useGanttDragController(projectId, tasks, onLoadTasks);
 
-    const { cellRenderer, monthEntries } = useCellRenderer({
+    const { cellRenderer: ganttRenderer, monthEntries } = useGanttRenderer({
         tasks,
         baseDate,
         editDispatch,
@@ -44,7 +45,9 @@ export const useCreateGridProps = ({
         onLoadTasks,
     });
 
-    const columns = useMemo(() => createColumns({
+    const { cellRenderer: wbsRenderer } = useWbsRenderer({ tasks });
+
+    const { ganttColumnsDef, wbsColumnsDef } = useMemo(() => createColumns({
         monthEntries,
     }), [monthEntries]);
 
@@ -56,8 +59,10 @@ export const useCreateGridProps = ({
     }, [tasks]);
 
     return {
-        columns,
-        cellRenderer,
+        wbsColumnsDef,
+        ganttColumnsDef,
+        wbsRenderer,
+        ganttRenderer,
         bodyRowStyle,
         tooltip,
         onGlobalPointerMove,

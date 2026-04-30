@@ -12,9 +12,9 @@ export const ProjectProgressPage = ({
     const {
         pageState,
         dates,
-        pageStateDispatch,
         editDispatch,
         selectors,
+        inputDataDef,
         onLoadTasks,
     } = useProjectProgressController(projectId);
 
@@ -28,39 +28,21 @@ export const ProjectProgressPage = ({
 
                 {/* 日付レンジ設定 */}
                 <div data-testid="range_area" className={styles.range_area}>
-                    <label htmlFor="from">開始日</label>
-                    <input
-                        id="from"
-                        type="date"
-                        value={pageState.displayRange.from}
-                        onChange={(e) =>
-                            pageStateDispatch.setFrom(e.target.value)
-                        }
-                    />
-
-                    <label htmlFor="to">終了日</label>
-                    <input
-                        id="to"
-                        type="date"
-                        value={pageState.displayRange.to}
-                        onChange={(e) =>
-                            pageStateDispatch.setTo(e.target.value)
-                        }
-                    />
-
-                    <label htmlFor="base">基準日</label>
-                    <input
-                        id="base"
-                        type="date"
-                        value={pageState.baseDate}
-                        onChange={(e) =>
-                            pageStateDispatch.setBaseDate(e.target.value)
-                        }
-                    />
+                    {inputDataDef.map((v) => (
+                        <div key={v.id}>
+                            <label htmlFor={v.id}>{v.label}</label>
+                            <input
+                                id={v.id}
+                                type="date"
+                                value={v.value}
+                                onChange={v.onChange}
+                            />
+                        </div>
+                    ))}
                 </div>
 
                 {/* ガントチャート本体 */}
-                <div className={styles.table_wrapper}>
+                <div>
                     <ProjectProgressGrid
                         dates={dates}
                         tasks={pageState.tasks}

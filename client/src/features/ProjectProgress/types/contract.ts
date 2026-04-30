@@ -15,4 +15,10 @@ export type RowSelectors = {
     allCollapsed: boolean;
 };
 
+export type InputData = {
+    id: string;
+    label: string;
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
 

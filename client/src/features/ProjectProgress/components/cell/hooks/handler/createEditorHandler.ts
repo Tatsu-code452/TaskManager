@@ -1,14 +1,14 @@
-import { EditTarget, GanttParams, TaskModel } from "../../types/type";
+import { CellParams, EditTarget, TaskModel } from "../../types/type";
 import { useResolveCellParams } from "../resolveCellParams";
 
 export const useEditorHandler = (
-    editor: (params: GanttParams, initialValue: number | null, isEditing: (params: GanttParams) => boolean, onCellKeyDown: (params: GanttParams, e: React.KeyboardEvent) => void, handleCellBlur: (e: React.FocusEvent<HTMLInputElement>) => void) => JSX.Element,
-    handleCellBlur: (params: GanttParams, initialValue: number | null, e: React.FocusEvent<HTMLInputElement>) => void,
-    isEditing: (editTarget: EditTarget | null, params: GanttParams) => boolean,
-    onCellKeyDown: (params: GanttParams, initialValue: number | null, e: React.KeyboardEvent) => void,
+    editor: (params: CellParams, initialValue: number | null, isEditing: (params: CellParams) => boolean, onCellKeyDown: (params: CellParams, e: React.KeyboardEvent) => void, handleCellBlur: (e: React.FocusEvent<HTMLInputElement>) => void) => JSX.Element,
+    handleCellBlur: (params: CellParams, initialValue: number | null, e: React.FocusEvent<HTMLInputElement>) => void,
+    isEditing: (editTarget: EditTarget | null, params: CellParams) => boolean,
+    onCellKeyDown: (params: CellParams, initialValue: number | null, e: React.KeyboardEvent) => void,
     resolver: ReturnType<typeof useResolveCellParams>,
 ) => (
-    params: GanttParams,
+    params: CellParams,
     task: TaskModel,
     editTarget: EditTarget | null,
 ) =>

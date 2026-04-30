@@ -1,6 +1,6 @@
 import { TaskStatus } from "../../../../../types/db/task";
 
-export type GanttParams = {
+export type CellParams = {
     taskId: string;
     date: string;
     isPlan: boolean;
@@ -14,12 +14,12 @@ export type HandleConfig = {
     className: string;
 };
 
-export type GanttDrag = GanttParams & GanttDragState & {
+export type CellDrag = CellParams & CellDragState & {
     mode: "move" | "resize";
     edge?: "start" | "end";
 } & DragRef;
 
-export type GanttDragState = {
+export type CellDragState = {
     currentDate?: string;
 };
 

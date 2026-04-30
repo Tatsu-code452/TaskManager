@@ -1,12 +1,12 @@
-import { GanttDrag, GanttParams, TaskModel } from "../../types/type";
+import { CellDrag, CellParams, TaskModel } from "../../types/type";
 import { useResolveCellParams } from "../resolveCellParams";
 
 export const useDragHandler = (
     drag: (date: string, startDate: string, endDate: string, handlePointerDown: (edge: "start" | "end", e: React.PointerEvent<Element>) => void, handleUpdateCurrentData: () => void) => JSX.Element,
-    handlePointerDown: (params: GanttDrag, e: React.PointerEvent) => void,
+    handlePointerDown: (params: CellDrag, e: React.PointerEvent) => void,
     handleUpdateCurrentData: (date: string) => void,
     resolver: ReturnType<typeof useResolveCellParams>,
-) => (params: GanttParams, task: TaskModel) =>
+) => (params: CellParams, task: TaskModel) =>
         drag(
             params.date,
             resolver.startDate({ ...params, task }),

@@ -1,11 +1,11 @@
-import { ColumnDef } from "../../../../../components/grid-table/types";
-import styles from "../grid.module.css";
+import { ColumnDef } from "../../../../../../components/grid-table/types";
+import styles from "../../grid.module.css";
 
 interface Props {
     monthEntries: [string, string[]][];
 }
 
-export const createColumns = ({ monthEntries }: Props): ColumnDef[] => {
+export const createColumns = ({ monthEntries }: Props) => {
     const progressChildren: ColumnDef[] = [
         { id: "start", header: "開始" },
         { id: "end", header: "終了" },
@@ -18,7 +18,7 @@ export const createColumns = ({ monthEntries }: Props): ColumnDef[] => {
         },
     }));
 
-    const ganttColumns: ColumnDef[] = monthEntries.map(([month, days]) => ({
+    const ganttColumnsDef: ColumnDef[] = monthEntries.map(([month, days]) => ({
         id: month,
         width: 40 * days.length,
         header: (
@@ -42,18 +42,16 @@ export const createColumns = ({ monthEntries }: Props): ColumnDef[] => {
         })),
     }));
 
-    return [
+    const wbsColumnsDef = [
         {
             id: "phase",
             width: 120,
             header: "フェーズ",
             headerCellStyle: {
                 className: styles.header_cell,
-                style: { position: "sticky", left: 0, zIndex: 50 },
             },
             bodyCellStyle: {
                 className: styles.body_cell,
-                style: { position: "sticky", left: 0, zIndex: 1 },
             },
         },
         {
@@ -62,11 +60,9 @@ export const createColumns = ({ monthEntries }: Props): ColumnDef[] => {
             header: "タスク名",
             headerCellStyle: {
                 className: styles.header_cell,
-                style: { position: "sticky", left: 120, zIndex: 1 },
             },
             bodyCellStyle: {
                 className: styles.body_cell,
-                style: { position: "sticky", left: 120, zIndex: 1 },
             },
         },
         {
@@ -79,14 +75,16 @@ export const createColumns = ({ monthEntries }: Props): ColumnDef[] => {
             ),
             headerCellStyle: {
                 className: styles.grid_progress,
-                style: { position: "sticky", left: 320, zIndex: 1 },
             },
             bodyCellStyle: {
                 className: styles.grid_progress,
-                style: { position: "sticky", left: 320, zIndex: 1 },
             },
             children: progressChildren,
         },
-        ...ganttColumns,
     ];
+
+    return {
+        wbsColumnsDef,
+        ganttColumnsDef,
+    };
 };

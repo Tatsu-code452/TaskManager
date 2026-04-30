@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import commonStyles from "../../../common.module.css";
 import { Button } from "../../../components";
 import { ProjectProgressPage } from "../../ProjectProgress/ui/ProjectProgressPage";
@@ -41,9 +41,12 @@ export const ProjectDetail = () => {
     const issueStates = useIssueStates();
     const defectStates = useDefectStates();
 
+    const navigation = useNavigate();
+
     return (
         <div className={commonStyles.container}>
             <div className={styles.tabs}>
+                <Button onClick={() => navigation(`/`)}>案件一覧</Button>
                 {TABS.map((t) => (
                     <Button
                         key={t}
@@ -56,6 +59,7 @@ export const ProjectDetail = () => {
             </div>
 
             <div className={styles.content}>
+
                 {/* {tab === "overview" && <OverviewTab />} */}
                 {tab === "milestone" && (
                     <MilestoneTab

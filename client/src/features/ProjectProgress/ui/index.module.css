@@ -27,9 +27,5 @@
 
 .range_area label {
     font-weight: bold;
-}
-
-.table_wrapper {
-    /* overflow-x: auto; */
-    padding-bottom: 1rem;
+    margin-right: 0.5rem;
 }

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { taskApi } from "../../../../api/tauri/taskApi";
 import { TaskPayload } from "../../../../types/db/task";
-import { GanttDrag, TaskModel, usePointerDrag } from "../../components/cell";
+import { CellDrag, TaskModel, usePointerDrag } from "../../components/cell";
 import { useTooltip } from "../../components/tooltip";
 import { calcDiffDays, shiftDate } from "../../domain/utils/date";
 
@@ -16,7 +16,7 @@ export const useGanttDragController = (
     );
 
     const handleDrop = useCallback(
-        async (dragData: GanttDrag) => {
+        async (dragData: CellDrag) => {
             const dropDate = dragData.currentDate;
             if (!dropDate) return;
 
@@ -58,11 +58,11 @@ export const useGanttDragController = (
         [taskMap, projectId, onLoadTasks],
     );
 
-    const drag = usePointerDrag<GanttDrag>();
+    const drag = usePointerDrag<CellDrag>();
     const tooltip = useTooltip();
 
     const onPointerDown = useCallback(
-        (params: GanttDrag, e: React.PointerEvent) => {
+        (params: CellDrag, e: React.PointerEvent) => {
             drag.onPointerDown(params, e);
         },
         [drag],

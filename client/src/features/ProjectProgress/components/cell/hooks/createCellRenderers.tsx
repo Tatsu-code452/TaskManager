@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import GanttCell from "../GanttCell";
-import { EditTarget, GanttDrag, GanttParams, TaskModel } from "../types/type";
+import Cell from "../Cell";
+import { CellDrag, CellParams, EditTarget, TaskModel } from "../types/type";
 import { useCellController } from "./controller/useCellController";
 import { useCellKeyboard } from "./controller/useCellKeyboard";
 import { useCellUIFactories } from "./createCellUIFactories";
@@ -12,7 +12,7 @@ import {
 } from "./handler";
 import { useResolveCellParams } from "./resolveCellParams";
 
-export const CreateUseCellRenderers = ({
+export const useCellRenderers = ({
     baseDate,
     dates,
     startEdit,
@@ -25,7 +25,7 @@ export const CreateUseCellRenderers = ({
     dates: string[];
     startEdit: (editTarget: EditTarget) => void;
     endEdit: () => void;
-    onPointerDown: (params: GanttDrag, e: React.PointerEvent) => void;
+    onPointerDown: (params: CellDrag, e: React.PointerEvent) => void;
     onUpdateCurrentDate: (date: string) => void;
     onLoadTasks: () => void;
 }) => {
@@ -68,13 +68,13 @@ export const CreateUseCellRenderers = ({
         controller.handleStartEdit,
     );
 
-    const gnttCellRenderer = useCallback(
+    const cellRenderer = useCallback(
         (
-            params: GanttParams,
+            params: CellParams,
             task: TaskModel,
             editTarget: EditTarget | null,
         ) => (
-            <GanttCell
+            <Cell
                 params={params}
                 CellVisualRenderer={() => visualHandler(params, task)}
                 CellDragHandleRenderer={() => dragHandler(params, task)}
@@ -88,6 +88,6 @@ export const CreateUseCellRenderers = ({
     );
 
     return {
-        gnttCellRenderer,
+        cellRenderer,
     };
 };

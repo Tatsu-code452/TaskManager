@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 
 const CELL_WIDTH = 40;
-const LEFT_CELLS_WIDTH = 640;
+const LEFT_CELLS_WIDTH = 40 * 20;
+const BUFFER_CELL_NUM = 50;
 
 export const useGanttScrollController = (dates: string[]) => {
     const [scrollLeft, setScrollLeft] = useState(0);
@@ -23,7 +24,15 @@ export const useGanttScrollController = (dates: string[]) => {
     );
 
     const visibleDates = useMemo(
-        () => dates.slice(startIndex, startIndex + 50),
+        () => {
+            const endIndex = Math.min(dates.length, startIndex + BUFFER_CELL_NUM);
+            if (dates.length < startIndex) {
+                setScrollLeft(0);
+                setStartIndex(0);
+                return dates.slice(0, endIndex)
+            }
+            return dates.slice(startIndex, endIndex)
+        },
         [dates, startIndex],
     );
     const offsetPx = startIndex * CELL_WIDTH;

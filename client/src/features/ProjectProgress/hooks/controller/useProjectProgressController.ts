@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import { fetchTaskModelList } from "../../domain/repository/taskRepository";
 import { formatDate } from "../../domain/utils/date";
+import { InputData } from "../../types/contract";
 import { useProjectProgressStates } from "../state/useProjectProgressStates";
 
 export const useProjectProgressController = (projectId: string) => {
@@ -50,6 +51,28 @@ export const useProjectProgressController = (projectId: string) => {
         });
     }, [onLoadTasks]);
 
+    const inputDataDef: InputData[] = [
+        {
+            id: "from",
+            label: "開始日",
+            value: pageState.displayRange.from,
+            onChange: (e) => pageStateDispatch.setFrom(e.target.value),
+        },
+        {
+            id: "to",
+            label: "終了日",
+            value: pageState.displayRange.to,
+            onChange: (e) => pageStateDispatch.setTo(e.target.value),
+        },
+        {
+            id: "base",
+            label: "基準日",
+            value: pageState.baseDate,
+            onChange: (e) => pageStateDispatch.setBaseDate(e.target.value),
+        },
+    ];
+
+
     return {
         pageState,
         dates,
@@ -57,6 +80,7 @@ export const useProjectProgressController = (projectId: string) => {
         editDispatch,
         collapseDispatch,
         selectors,
+        inputDataDef,
 
         onLoadTasks,
     };

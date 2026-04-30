@@ -1,7 +1,7 @@
-export { default as GanttCell } from "./GanttCell";
+export { default as Cell } from "./Cell";
 
 // hooks（外部に公開したいものだけ）
-export { CreateUseCellRenderers } from "./hooks/createCellRenderers";
+export { useCellRenderers } from "./hooks/createCellRenderers";
 export { usePointerDrag } from "./hooks/handler/usePointerDrag";
 
 // types

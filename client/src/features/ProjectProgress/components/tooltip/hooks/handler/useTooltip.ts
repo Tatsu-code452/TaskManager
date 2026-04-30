@@ -1,11 +1,11 @@
 import { useRef } from "react";
-import { GanttDrag } from "../../../cell";
+import { CellDrag } from "../../../cell";
 import { TooltipState } from "../../types/type";
 
 export const useTooltip = () => {
     const tooltipRef = useRef<HTMLDivElement | null>(null);
     const dataRef = useRef<TooltipState | null>(null);
-    const preview = (drag: GanttDrag, e: React.PointerEvent) => {
+    const preview = (drag: CellDrag, e: React.PointerEvent) => {
         dataRef.current = {
             from: drag.date,
             to: drag.currentDate ?? drag.date,

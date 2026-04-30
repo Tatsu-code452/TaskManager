@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { EditTarget, GanttDrag, GanttParams } from "../../types/type";
+import { CellDrag, CellParams, EditTarget } from "../../types/type";
 import { useCellEdit } from "../handler/";
 
 export const useCellController = ({
@@ -12,7 +12,7 @@ export const useCellController = ({
     startEdit: (editTarget: EditTarget) => void;
     endEdit: () => void;
     onLoadTasks: () => void;
-    onPointerDown: (params: GanttDrag, e: React.PointerEvent) => void;
+    onPointerDown: (params: CellDrag, e: React.PointerEvent) => void;
     onUpdateCurrentDate: (date: string) => void;
 }) => {
     const { onStartEdit, onCommit, isEditing, focusCell, registerCellRef } =
@@ -27,19 +27,19 @@ export const useCellController = ({
     }, [onUpdateCurrentDate]);
 
     const handlePointerDown = useCallback(
-        (params: GanttDrag, e: React.PointerEvent) => {
+        (params: CellDrag, e: React.PointerEvent) => {
             onPointerDown(params, e);
         },
         [onPointerDown],
     );
 
     const handleStartEdit = useCallback(
-        (params: GanttParams) => onStartEdit(params),
+        (params: CellParams) => onStartEdit(params),
         [onStartEdit],
     );
 
     const handleCellBlur = React.useCallback(
-        (params: GanttParams, initialValue: number | null, e: React.FocusEvent<HTMLInputElement>) => {
+        (params: CellParams, initialValue: number | null, e: React.FocusEvent<HTMLInputElement>) => {
             const raw = e.target.value;
             const value = raw === "" ? null : Number(raw);
             onCommit(params, value, initialValue);
@@ -48,7 +48,7 @@ export const useCellController = ({
     );
 
     const createRef = useCallback(
-        (params: GanttParams, el: HTMLDivElement) => registerCellRef(params, el),
+        (params: CellParams, el: HTMLDivElement) => registerCellRef(params, el),
         [registerCellRef],
     );
 

@@ -3,6 +3,7 @@ import GridTable from "../../../../components/grid-table/GridTable";
 import { TaskModel } from "../../components/cell";
 import { Tooltip } from "../../components/tooltip";
 import { useGanttScrollController } from "../../hooks/controller/useGanttScrollController";
+import { useGridScrollContrpller } from "../../hooks/controller/useGridScrollContrpller";
 import { EditDispatch, RowSelectors } from "../../types/contract";
 import styles from "./grid.module.css";
 import { useCreateGridProps } from "./logic/createGridProps";
@@ -28,9 +29,14 @@ export const ProjectProgressGrid = ({
 }: Props) => {
     const { handleScroll, offsetPx, visibleDates } =
         useGanttScrollController(dates);
+
+    const { ganttRef, wbsRef } = useGridScrollContrpller();
+
     const {
-        columns,
-        cellRenderer,
+        ganttColumnsDef,
+        wbsColumnsDef,
+        wbsRenderer,
+        ganttRenderer,
         bodyRowStyle,
         tooltip,
         onGlobalPointerMove,
@@ -52,17 +58,33 @@ export const ProjectProgressGrid = ({
                 className={styles.gantt_root}
                 onPointerMove={onGlobalPointerMove}
                 onPointerUp={onGlobalPointerUp}
-                onScroll={handleScroll}
             >
-                <div style={{ transform: `translateX(${offsetPx}px)` }}>
+                <div className={styles.wbs_area} ref={wbsRef}>
                     <GridTable
-                        columns={columns}
+                        columns={wbsColumnsDef}
                         rowCount={tasks.length * 2}
-                        cellRenderer={cellRenderer}
+                        cellRenderer={wbsRenderer}
                         headerRowStyle={{ className: styles.header_row }}
                         bodyRowStyle={bodyRowStyle}
                     />
                 </div>
+
+                <div
+                    className={styles.gantt_area}
+                    onScroll={handleScroll}
+                    ref={ganttRef}
+                >
+                    <div style={{ transform: `translateX(${offsetPx}px)` }}>
+                        <GridTable
+                            columns={ganttColumnsDef}
+                            rowCount={tasks.length * 2}
+                            cellRenderer={ganttRenderer}
+                            headerRowStyle={{ className: styles.header_row }}
+                            bodyRowStyle={bodyRowStyle}
+                        />
+                    </div>
+                </div>
+
                 <Tooltip ref={tooltip.state} />
             </div>
         </div>

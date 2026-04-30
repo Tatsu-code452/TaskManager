@@ -1,6 +1,6 @@
 import { taskActualCellApi } from "../../../../../../api/tauri/taskActualCellApi";
 import { taskPlanCellApi } from "../../../../../../api/tauri/taskPlanCellApi";
-import { EditTarget, GanttParams } from "../../types/type";
+import { CellParams, EditTarget } from "../../types/type";
 import { useCellRef } from "./useCellRef";
 
 export const useCellEdit = (
@@ -14,7 +14,7 @@ export const useCellEdit = (
     // -----------------------------
     // 編集開始・終了
     // -----------------------------
-    const onStartEdit = (params: GanttParams) => {
+    const onStartEdit = (params: CellParams) => {
         startEdit({
             taskId: params.taskId,
             date: params.date,
@@ -25,7 +25,7 @@ export const useCellEdit = (
 
     const onCancelEdit = () => endEdit();
 
-    const onCommit = async (params: GanttParams, value: number | null, initValue: number | null) => {
+    const onCommit = async (params: CellParams, value: number | null, initValue: number | null) => {
         const { taskId, date, isPlan } = params;
         const targetApi = isPlan ? apiTaskPlan : apiTaskActual;
 
@@ -49,7 +49,7 @@ export const useCellEdit = (
     // -----------------------------
     // 編集中判定
     // -----------------------------
-    const isEditing = (editTarget: EditTarget | null, params: GanttParams) => {
+    const isEditing = (editTarget: EditTarget | null, params: CellParams) => {
         const { taskId, date, isPlan } = params;
 
         if (!editTarget) return false;

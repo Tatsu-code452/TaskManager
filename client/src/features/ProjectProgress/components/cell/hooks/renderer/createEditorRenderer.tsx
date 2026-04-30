@@ -1,15 +1,15 @@
 import React, { useCallback } from "react";
-import { GanttParams } from "../../types/type";
+import { CellParams } from "../../types/type";
 import CellEditor from "../../ui/CellEditor";
 
 export const useEditorRenderer = () =>
     useCallback(
         (
-            params: GanttParams,
+            params: CellParams,
             initialValue: number | null,
-            isEditing: (params: GanttParams) => boolean,
+            isEditing: (params: CellParams) => boolean,
             onCellKeyDown: (
-                params: GanttParams,
+                params: CellParams,
                 e: React.KeyboardEvent,
             ) => void,
             handleCellBlur: (e: React.FocusEvent<HTMLInputElement>) => void,

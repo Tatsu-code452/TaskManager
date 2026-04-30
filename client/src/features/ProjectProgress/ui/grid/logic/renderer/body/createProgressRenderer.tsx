@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { TaskModel, TaskTimeline } from "../../../components/cell";
-import styles from "../grid.module.css";
+import { TaskModel, TaskTimeline } from "../../../../../components/cell";
+import styles from "../../../grid.module.css";
 
 export const useProgressRenderer = () => {
     return useMemo(() => {

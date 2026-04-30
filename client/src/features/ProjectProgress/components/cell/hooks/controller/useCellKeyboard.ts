@@ -1,9 +1,9 @@
-import { GanttParams } from "../../types/type";
+import { CellParams } from "../../types/type";
 import { useKeyboardBind } from "../handler";
 
 export const useCellKeyboard = (
-    onCommit: (params: GanttParams, value: number | null, initialValue: number | null) => Promise<void>,
-    onFocusCell: (params: GanttParams) => void,
+    onCommit: (params: CellParams, value: number | null, initialValue: number | null) => Promise<void>,
+    onFocusCell: (params: CellParams) => void,
     dates: string[],
 ) => {
     // -----------------------------
@@ -11,7 +11,7 @@ export const useCellKeyboard = (
     // -----------------------------
     const keyboard = useKeyboardBind();
 
-    const onCellKeyDown = (params: GanttParams, initialValue: number | null, e: React.KeyboardEvent) => {
+    const onCellKeyDown = (params: CellParams, initialValue: number | null, e: React.KeyboardEvent) => {
         const allowInputKeys = [
             "Backspace",
             "Delete",
@@ -31,7 +31,7 @@ export const useCellKeyboard = (
         }, e);
     };
 
-    const bindKeys = (params: GanttParams, initialValue: number | null) => ({
+    const bindKeys = (params: CellParams, initialValue: number | null) => ({
         Enter: () => move(params, "right"),
         Escape: () => onCommit(params, null, initialValue),
         Tab: () => move(params, "right"),
@@ -40,15 +40,15 @@ export const useCellKeyboard = (
         ArrowRight: () => move(params, "right"),
     });
 
-    const move = (params: GanttParams, direction: "left" | "right") => {
+    const move = (params: CellParams, direction: "left" | "right") => {
         const next = getNextCell(params, direction);
         if (next) onFocusCell(next);
     }
 
     const getNextCell = (
-        params: GanttParams,
+        params: CellParams,
         direction: "left" | "right"
-    ): GanttParams | null => {
+    ): CellParams | null => {
         const dateIndex = dates.indexOf(params.date);
         const nextDateIndex =
             direction === "left" ? dateIndex - 1 : dateIndex + 1;

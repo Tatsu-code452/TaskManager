@@ -1,4 +1,4 @@
-import { GanttDrag } from "../../cell";
+import { CellDrag } from "../../cell";
 
 export type TooltipState = {
     from: string;
@@ -12,7 +12,7 @@ export type TooltipState = {
 
 export type TooltipApi = {
     state: TooltipState;
-    preview: (drag: GanttDrag, e: React.PointerEvent) => void;
+    preview: (drag: CellDrag, e: React.PointerEvent) => void;
     hide: () => void;
 }
 

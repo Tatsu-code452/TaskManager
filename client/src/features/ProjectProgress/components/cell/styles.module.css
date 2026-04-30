@@ -76,7 +76,7 @@
     cursor: pointer;
 }
 
-.matrix_cell {
+.cell {
     position: relative;
     padding: 0;
     min-width: 1rem;

@@ -12,11 +12,6 @@
 /* ===========================
    テーブル全体
 =========================== */
-.gantt_root {
-    overflow-y: scroll;
-    height: 70vh;
-}
-
 .header_cell {
     font-weight: bold;
     text-align: left;
@@ -72,13 +67,15 @@
 }
 
 .body_cell {
-    padding: 1.37rem 0.5rem;
+    padding: 0rem 0.5rem;
     background: var(--bg);
+    height: 66.85px;
 }
 
 .body_progress_row1,
 .body_progress_row2 {
-    padding: 0.29rem 0.5rem;
+    padding: 0rem 0.5rem;
+    height: 32.63px;
 }
 
 .body_gantt_row1 > div,
@@ -111,4 +108,32 @@
 
 .status_Delayed {
     background-color: rgba(220, 53, 69, 0.15);
+}
+
+.wbs_area {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: white;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 68.3vh;
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
+    overscroll-behavior: none;
+}
+.wbs_area::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+.gantt_area {
+    overflow-x: scroll;
+    overflow-y: auto;
+    overscroll-behavior: none;
+}
+
+.gantt_root {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 0.938fr;
+    height: 70vh;
 }

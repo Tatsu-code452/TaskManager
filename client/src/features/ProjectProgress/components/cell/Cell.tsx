@@ -1,16 +1,16 @@
 import React from "react";
 import styles from "./styles.module.css";
-import { GanttParams } from "./types/type";
+import { CellParams } from "./types/type";
 
 interface Props {
-    params: GanttParams;
+    params: CellParams;
     CellVisualRenderer: () => JSX.Element;
     CellDragHandleRenderer: () => JSX.Element;
     CellEditorRenderer: () => JSX.Element;
     CellInteractionRenderer: () => JSX.Element;
 }
 
-export const GanttCell = ({
+export const Cell = ({
     params,
     CellVisualRenderer,
     CellDragHandleRenderer,
@@ -19,7 +19,7 @@ export const GanttCell = ({
 }: Props) => {
     return (
         <div
-            className={styles.matrix_cell}
+            className={styles.cell}
             data-task-id={params.taskId}
             data-date={params.date}
             data-is-plan={params.isPlan}
@@ -32,4 +32,4 @@ export const GanttCell = ({
     );
 };
 
-export default React.memo(GanttCell);
+export default React.memo(Cell);
