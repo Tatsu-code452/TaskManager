@@ -1,0 +1,36 @@
+import { renderHook } from "@testing-library/react";
+import { {{hookName}} } from "./{{fileName}}";
+import { describe, it, expect, beforeEach } from "vitest";
+
+describe("Hook: {{hookName}}", () => {
+
+  let hook: ReturnType<typeof {{hookName}}>;
+
+  beforeEach(() => {
+    const { result } = renderHook(() => {{hookName}}());
+    hook = result.current;
+  });
+
+  it("初期状態が正しく定義されている", () => {
+    expect(hook).toBeDefined();
+  });
+
+  {{!-- ------------------------------
+        戻り値のプロパティ存在チェック
+      ------------------------------ --}}
+  {{#each returnProperties}}
+  it("{{this}} が存在する", () => {
+    expect(hook).toHaveProperty("{{this}}");
+  });
+  {{/each}}
+
+  {{!-- ------------------------------
+        useState 初期値チェック
+      ------------------------------ --}}
+  {{#each initialStates}}
+  it("{{@key}} の初期値が正しい", () => {
+    expect(hook.{{@key}}).toEqual({{{json this}}});
+  });
+  {{/each}}
+
+});

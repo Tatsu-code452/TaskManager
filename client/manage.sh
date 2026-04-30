@@ -104,7 +104,7 @@ while true; do
     7) npm run type-check ;;
     8) npm run lint ;;
     10) npm test ;;
-    11) npm run clean:test:coverage ;;
+    11) npm run test:coverage ;;
     q) echo "終了します"; exit 0 ;;
     *) echo "無効な選択です" ;;
   esac

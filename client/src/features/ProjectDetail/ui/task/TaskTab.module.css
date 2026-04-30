@@ -1,0 +1,76 @@
+.section_card {
+    background: #fff;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    margin-bottom: 2rem;
+}
+
+.section_title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.header_actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+/* ステータス表示 */
+.badge {
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+    display: inline-block;
+    line-height: 1;
+}
+
+/* ステータス表示 */
+.status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+}
+
+.status_NotStarted {
+    background: #0078d4;
+}
+.status_InProgress {
+    background: #ff9800;
+}
+.status_Done {
+    background: #9e9e9e;
+}
+
+/* 列幅の最適化 */
+.col_name {
+    width: 10rem;
+}
+
+.col_status {
+    width: 6rem;
+}
+
+.col_date {
+    width: 7rem;
+}
+
+.col_num {
+    width: 6rem;
+}
+
+.col_progress {
+    width: 6rem;
+}
+
+.col_actions {
+    width: 1rem;
+    text-align: center;
+}

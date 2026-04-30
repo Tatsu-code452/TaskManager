@@ -1,36 +1,40 @@
+import React from "react";
 import styles from "./Button.module.css";
 
-interface ButtonProps {
-    children: React.ReactNode;
-    type?: "button" | "submit";
-    variant?: "primary" | "secondary" | "danger";
-    loading?: boolean;
-    disabled?: boolean;
-    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}
+type ButtonVariant = "primary" | "secondary" | "danger" | "success";
+
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    variant?: ButtonVariant;
+    icon?: boolean;
+};
 
 export const Button = ({
     children,
-    type = "button",
-    variant = "primary",
-    loading = false,
-    disabled = false,
     onClick,
+    type = "button",
+    className = "",
+    variant = "primary",
+    icon = false,
+    ...rest
 }: ButtonProps) => {
+    const classNameList = [
+        icon ? styles.icon_button : styles.button,
+        !icon && styles[`button_${variant}`],
+        className,
+    ]
+        .filter(Boolean)
+        .join(" ");
+
     return (
         <button
             type={type}
-            className={`${styles.button} ${styles[variant]}`}
+            className={classNameList}
             onClick={onClick}
-            disabled={disabled || loading}
+            {...rest}
         >
-            {loading ? (
-                <span className={styles.spinner}>
-                    <span className={styles["spinner-inner"]} />
-                </span>
-            ) : (
-                children
-            )}
+            {children}
         </button>
     );
 };
+
+export default React.memo(Button);

@@ -13,16 +13,22 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "npm run clean:test:coverage && npx vitest run --coverage",
-    "clean:test:coverage":"rm -rf coverage",
-    "lint": "eslint ."
+    "clean:test:coverage": "rm -rf coverage",
+    "lint": "eslint .",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "dependencies": {
+    "@tauri-apps/api": "^2.10.1",
+    "@tauri-apps/cli": "^2.10.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",
+    "@playwright/test": "^1.58.2",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.3.1",
     "@testing-library/user-event": "^14.4.3",

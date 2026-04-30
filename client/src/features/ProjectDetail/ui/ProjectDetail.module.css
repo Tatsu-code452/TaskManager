@@ -1,0 +1,14 @@
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.active {
+  background: #4287f5;
+  color: white;
+}
+
+.content {
+  margin-top: 16px;
+}

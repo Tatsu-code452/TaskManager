@@ -1,0 +1,99 @@
+.section_card {
+    background: #fff;
+    padding: 1.25rem 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    margin-bottom: 2rem;
+}
+
+.section_title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* 新規作成ボタン（右上） */
+.header_actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+/* ステータス表示 */
+.badge {
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+    display: inline-block;
+    line-height: 1;
+}
+
+.status_Open {
+    background: #0078d4;
+}
+.status_InProgress {
+    background: #ff9800;
+}
+.status_Fixed {
+    background: #4caf50;
+}
+.status_Verified {
+    background: #d7e9ee;
+    color: #333;
+}
+.status_Closed {
+    background: #9e9e9e;
+}
+.severity_Minor {
+    background: #4caf50;
+}
+.severity_Major {
+    background: #ff9800;
+}
+.severity_Critical {
+    background: #f44336;
+}
+.severity_Blocker {
+    background: #b71c1c;
+}
+
+.tag_list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* 列幅の最適化 */
+.col_title {
+    width: 18rem;
+}
+
+.col_detail {
+    width: 24rem;
+}
+
+.col_tags {
+    width: 12rem;
+}
+
+.col_severity,
+.col_status {
+    width: 6rem;
+}
+
+.col_owner,
+.col_reviewer {
+    width: 6rem;
+}
+
+.col_date {
+    width: 7rem;
+}
+
+.col_actions {
+    width: 1rem;
+    text-align: center;
+}

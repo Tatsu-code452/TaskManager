@@ -1,0 +1,38 @@
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.tag_remove {
+    margin-left: 6px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-weight: bold;
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.tag_remove:hover {
+    color: #333;
+}
+
+.tag_Domain {
+    background: #d0e7ff;
+    color: #084c8d;
+}
+
+.tag_Area {
+    background: #e8d9f1;
+    color: #5a2d82;
+}
+
+.tag_Topic {
+    background: #ffe4c4;
+    color: #8a4b00;
+}

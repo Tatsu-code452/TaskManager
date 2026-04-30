@@ -1,0 +1,69 @@
+{
+    "entity": {
+        "static_name": "defect",
+        "command_name": "DefectCommand",
+        "table_name": "defects",
+        "model_type": "Defect"
+    },
+    "use": [
+        "use app_lib::command::defect::DefectCommand;",
+        "use app_lib::db::database::Database;",
+        "use app_lib::model::defect::{Defect, DefectRequest, DefectSeverity, DefectStatus};",
+        "use app_lib::model::tag::{Tag, TagType};",
+        "use app_lib::model::time_stamps::Timestamps;",
+        "use it::mock_db::load_mock_db;"
+    ],
+    "test_helper": {
+        "builder_type": "DefectRequestBuilder",
+        "request_type": "DefectRequest",
+        "model_type": "Defect",
+        "required_fields": {
+            "id": "String => \"\".into()",
+            "project_id": "String => \"\".into()"
+        },
+        "optional_fields": {
+            "task_id": "Option<String> => None",
+            "title": "String => None",
+            "description": "String => None",
+            "severity": "DefectSeverity => None",
+            "status": "DefectStatus => None",
+            "owner": "String => None",
+            "reviewer": "String => None",
+            "due_date": "Option<String> => None",
+            "fixed_date": "Option<String> => None",
+            "verified_date": "Option<String> => None",
+            "tags": "Vec<Tag> => None"
+        }
+    },
+    "list": {
+        "list_key_no": "\"\".into()",
+        "list_key_single": "\"P1\".into()",
+        "list_find_expr": "|d| d.project_id == \"P1\""
+    },
+    "create": {
+        "create_payload_init": "project_id: \"P1\".into()",
+        "create_expected_init": "project_id: \"P1\".into(),\n        id: \"DEFECT-4\".into(),\n        task_id: None,\n        title: \"\".into(),\n        description: \"\".into(),\n        severity: DefectSeverity::Minor,\n        status: DefectStatus::Open,\n        owner: \"\".into(),\n        reviewer: \"\".into(),\n        due_date: None,\n        fixed_date: None,\n        verified_date: None,\n        tags: vec![]",
+        "create_payload_full": "project_id: \"P1\".into(),\n        task_id: Some(Some(\"T1\".into())),\n        title: Some(\"タイトル\".into()),\n        description: Some(\"説明\".into()),\n        severity: Some(DefectSeverity::Major),\n        status: Some(DefectStatus::Open),\n        owner: Some(\"佐藤\".into()),\n        reviewer: Some(\"田中\".into()),\n        tags: Some(vec![Tag { tag_type: TagType::Domain, value: \"Rust\".into(), }, Tag { tag_type: TagType::Topic, value: \"採番\".into(), }])",
+        "create_expected_full": "project_id: \"P1\".into(),\n        id: \"DEFECT-5\".into(),\n        task_id: Some(\"T1\".into()),\n        title: \"タイトル\".into(),\n        description: \"説明\".into(),\n        severity: DefectSeverity::Major,\n        status: DefectStatus::Open,\n        owner: \"佐藤\".into(),\n        reviewer: \"田中\".into(),\n        due_date: None,\n        fixed_date: None,\n        verified_date: None,\n        tags: vec![Tag { tag_type: TagType::Domain, value: \"Rust\".into(), }, Tag { tag_type: TagType::Topic, value: \"採番\".into(), }]",
+        "create_find_expr_full": "\"P1\", \"DEFECT-5\"",
+        "create_payload_gap": "DefectRequestBuilder::new().project_id(\"P1\").build()",
+        "create_find_expr_gap": "\"P1\", \"DEFECT-4\"",
+        "create_expected_gap": "\"DEFECT-4\""
+    },
+    "update": {
+        "update_payload_no": "DefectRequestBuilder::new().title(\"変更後\".into()).build()",
+        "update_payload_init": "DefectRequestBuilder::new()\n            .id(\"D1\")\n            .project_id(\"P1\")\n            .build()",
+        "update_find_expr_init": "\"P1\", \"D1\"",
+        "update_expected_init": "project_id: \"P1\".into(),\n        id: \"D1\".into()",
+        "update_payload_full": "id: \"D1\".into(),\n        project_id: \"P1\".into(),\n        task_id: Some(Some(\"T2\".into())),\n        title: Some(\"修正後\".into()),\n        description: Some(\"説明修正\".into()),\n        severity: Some(DefectSeverity::Minor),\n        status: Some(DefectStatus::Fixed),\n        owner: Some(\"山田\".into()),\n        reviewer: Some(\"鈴木\".into()),\n        tags: Some(vec![Tag { tag_type: TagType::Area, value: \"テスト\".into(), }, Tag { tag_type: TagType::Topic, value: \"バリデーション\".into(), }])",
+        "update_expected_full": "project_id: \"P1\".into(),\n        id: \"D1\".into(),\n        task_id: Some(\"T2\".into()),\n        title: \"修正後\".into(),\n        description: \"説明修正\".into(),\n        severity: DefectSeverity::Minor,\n        status: DefectStatus::Fixed,\n        owner: \"山田\".into(),\n        reviewer: \"鈴木\".into(),\n        due_date: None,\n        fixed_date: None,\n        verified_date: None,\n        tags: vec![Tag { tag_type: TagType::Area, value: \"テスト\".into(), }, Tag { tag_type: TagType::Topic, value: \"バリデーション\".into(), }]",
+        "update_find_expr_full": "\"P1\", \"D1\"",
+        "update_payload_not": "DefectRequestBuilder::new()\n            .id(\"D999\")\n            .project_id(\"P1\")\n            .title(\"更新\".into())\n            .build()"
+    },
+    "delete": {
+        "delete_key_no": "\"\".into(), \"\".into()",
+        "delete_key_ok": "\"P1\".into(), \"DEFECT-1\".into()",
+        "delete_key_ng": "\"P1\".into(), \"D999\".into()",
+        "delete_find_expr_ok": "|d| !(d.project_id == \"P1\" && d.id == \"DEFECT-1\")"
+    }
+}

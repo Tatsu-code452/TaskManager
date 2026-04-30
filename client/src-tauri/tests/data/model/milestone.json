@@ -1,0 +1,124 @@
+{
+  "use": [
+    "app_lib::model::milestone::{Milestone, MilestoneRequest, MilestoneStatus}",
+    "serde::Deserialize"
+  ],
+  "keys": ["id", "project_id"],
+  "tests": [
+    {
+      "data_path": "tests/data/model/milestone.json",
+      "method": "apply_request",
+      "input_type": "MilestoneRequest",
+      "expected_type": "Milestone",
+      "input": {
+        "id": "m1",
+        "project_id": "p1"
+      },
+      "expected": {
+        "id": "m1",
+        "project_id": "p1",
+        "title": "",
+        "description": "",
+        "status": "Open",
+        "progress": 0,
+        "start_date": null,
+        "end_date": null,
+        "owner": "",
+        "tags": [],
+        "timestamps": {
+          "created_at": "2024-01-01T00:00:00Z",
+          "updated_at": "2024-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "data_path": "tests/data/model/milestone.json",
+      "method": "apply_request",
+      "input_type": "MilestoneRequest",
+      "expected_type": "Milestone",
+      "input": {
+        "id": "m1",
+        "project_id": "p1",
+        "title": "title1",
+        "description": "description1",
+        "status": "InProgress"
+      },
+      "expected": {
+        "id": "m1",
+        "project_id": "p1",
+        "title": "title1",
+        "description": "description1",
+        "status": "InProgress",
+        "progress": 0,
+        "start_date": null,
+        "end_date": null,
+        "owner": "",
+        "tags": [],
+        "timestamps": {
+          "created_at": "2024-01-01T00:00:00Z",
+          "updated_at": "2024-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "data_path": "tests/data/model/milestone.json",
+      "method": "apply_request",
+      "input_type": "MilestoneRequest",
+      "expected_type": "Milestone",
+      "input": {
+        "id": "m1",
+        "project_id": "p1",
+        "title": "title1",
+        "description": "description1",
+        "status": "InProgress",
+        "progress": 25,
+        "start_date": "2026-01-01",
+        "end_date": "2026-02-01",
+        "owner": "Owner",
+        "tags": [
+          {
+            "tag_type": "Domain",
+            "value": "Backend"
+          },
+          {
+            "tag_type": "Area",
+            "value": "仕様"
+          },
+          {
+            "tag_type": "Topic",
+            "value": "採番"
+          }
+        ]
+      },
+      "expected": {
+        "id": "m1",
+        "project_id": "p1",
+        "title": "title1",
+        "description": "description1",
+        "status": "InProgress",
+        "progress": 25,
+        "start_date": "2026-01-01",
+        "end_date": "2026-02-01",
+        "owner": "Owner",
+        "tags": [
+          {
+            "tag_type": "Domain",
+            "value": "Backend"
+          },
+          {
+            "tag_type": "Area",
+            "value": "仕様"
+          },
+          {
+            "tag_type": "Topic",
+            "value": "採番"
+          }
+        ],
+        "timestamps": {
+          "created_at": "2024-01-01T00:00:00Z",
+          "updated_at": "2024-01-01T00:00:00Z"
+        }
+      }
+    }
+  ]
+}

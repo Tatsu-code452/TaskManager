@@ -1,0 +1,137 @@
+/* 新規作成ボタン（右上） */
+.header_actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+/* ボタン行 */
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+/* ---------------------- */
+/* 検索関連 */
+/* ---------------------- */
+/* 検索ヘッダー */
+.search_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.search_header h3 {
+    align-items: flex-end;
+    margin: 0;
+}
+
+/* 件数表示 */
+.result_count {
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* 検索パネル全体 */
+.search_area {
+    background: #fff;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.4rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    margin-bottom: 0.75rem;
+}
+
+/* 3項目を横並びにする */
+/* グリッド（単一クラス名） */
+.search_grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 0.5rem 1rem;
+}
+
+.search_row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+    gap: 0.4rem;
+}
+
+.search_label {
+    width: 4rem;
+}
+/* 入力欄の幅を短くする（ここが重要） */
+.search_input {
+    width: 180px; /* ← 好きな幅に調整 */
+}
+
+/* 検索ボタン行 */
+.search_button_group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* ---------------------- */
+/* テーブル関連            */
+/* ---------------------- */
+.table_wrapper {
+    height: 63vh;
+}
+
+.table_row {
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.table_row:hover {
+    background: #f5f7fa;
+}
+
+/* ---------------- */
+/* テーブル行関連    */
+/* ---------------- */
+.table_row {
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.table_row:hover {
+    background: #f5f7fa;
+}
+.operation_cell {
+    text-align: right;
+}
+
+.col_id {
+    width: 5rem;
+}
+
+.col_name {
+    min-width: 12rem; /* 約192px */
+    max-width: 25rem; /* 約400px */
+}
+
+.col_client {
+    min-width: 10rem; /* 約160px */
+}
+
+.col_status {
+    width: 8rem; /* 約128px */
+}
+
+.col_period {
+    width: 12rem; /* 約192px */
+}
+
+.col_owner {
+    min-width: 8rem; /* 約128px */
+}
+
+.col_actions {
+    width: 5rem; /* 約80px */
+}

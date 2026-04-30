@@ -1,0 +1,89 @@
+{
+  "use": [
+    "app_lib::model::project::{Project, ProjectRequest, ProjectStatus}",
+    "serde::Deserialize"
+  ],
+  "keys": [
+    "id"
+  ],
+  "tests": [
+    {
+      "data_path": "tests/data/model/project.json",
+      "method": "apply_request",
+      "input_type": "ProjectRequest",
+      "expected_type": "Project",
+      "input": {
+        "id": "p1"
+      },
+      "expected": {
+        "id": "p1",
+        "name": "",
+        "client": "",
+        "description": "",
+        "status": "Planned",
+        "start_date": null,
+        "end_date": null,
+        "owner": "",
+        "timestamps": {
+          "created_at": "2024-01-01T00:00:00Z",
+          "updated_at": "2024-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "data_path": "tests/data/model/project.json",
+      "method": "apply_request",
+      "input_type": "ProjectRequest",
+      "expected_type": "Project",
+      "input": {
+        "id": "p1",
+        "client": "Client A",
+        "owner": "Owner"
+      },
+      "expected": {
+        "id": "p1",
+        "name": "",
+        "client": "Client A",
+        "description": "",
+        "status": "Planned",
+        "start_date": null,
+        "end_date": null,
+        "owner": "Owner",
+        "timestamps": {
+          "created_at": "2024-01-01T00:00:00Z",
+          "updated_at": "2024-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "data_path": "tests/data/model/project.json",
+      "method": "apply_request",
+      "input_type": "ProjectRequest",
+      "expected_type": "Project",
+      "input": {
+        "id": "p1",
+        "name": "Updated Project",
+        "client": "Client A",
+        "description": "Updated description",
+        "status": "Active",
+        "start_date": "2024-01-01",
+        "end_date": "2024-12-31",
+        "owner": "Owner"
+      },
+      "expected": {
+        "id": "p1",
+        "name": "Updated Project",
+        "client": "Client A",
+        "description": "Updated description",
+        "status": "Active",
+        "start_date": "2024-01-01",
+        "end_date": "2024-12-31",
+        "owner": "Owner",
+        "timestamps": {
+          "created_at": "2024-01-01T00:00:00Z",
+          "updated_at": "2024-01-01T00:00:00Z"
+        }
+      }
+    }
+  ]
+}

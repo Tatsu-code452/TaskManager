@@ -1,0 +1,28 @@
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    align-items: flex-end;
+    margin-bottom: 0.5rem;
+}
+
+.pagination_buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    gap: 0.7rem;
+    padding: 0 !important;
+}
+
+.pagination_buttons button {
+    padding: 0 !important;
+}
+
+.pagination_buttons button:disabled {
+    color: darkgrey;
+}
+
+.pagination_buttons button:disabled:hover {
+    cursor: unset;
+    background-color: unset;
+}

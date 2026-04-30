@@ -1,0 +1,20 @@
+/* 画面全体 */
+.container {
+    padding: 1rem;
+    background: #f3f4f6; /* ← 淡いグレーで階層が生まれる */
+    max-height: 90vh;
+}
+
+.table_wrapper {
+    overflow: auto;
+    padding-bottom: 0.5rem;
+    position: relative;
+    max-height: 65vh;
+}
+
+.detail_buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}

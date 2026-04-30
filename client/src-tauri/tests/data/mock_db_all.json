@@ -1,0 +1,103 @@
+{
+    "schema_version": 1,
+    "projects": [
+        {
+            "id": "P1",
+            "name": "プロジェクトA",
+            "client": "顧客X",
+            "description": "プロジェクトAの説明",
+            "status": "Active",
+            "start_date": "2024-01-01",
+            "end_date": "2024-12-31",
+            "owner": "佐藤",
+            "timestamps": {
+                "created_at": "2024-01-01T00:00:00Z",
+                "updated_at": "2024-01-01T00:00:00Z"
+            }
+        },
+        {
+            "id": "P2",
+            "name": "プロジェクトB",
+            "client": "顧客Y",
+            "description": "プロジェクトBの説明",
+            "status": "Planned",
+            "start_date": null,
+            "end_date": null,
+            "owner": "田中",
+            "timestamps": {
+                "created_at": "2024-01-02T00:00:00Z",
+                "updated_at": "2024-01-02T00:00:00Z"
+            }
+        }
+    ],
+    "phases": [],
+    "milestones": [],
+    "tasks": [],
+    "task_plan_cells": [],
+    "task_actual_cells": [],
+    "issues": [],
+    "defects": [
+        {
+            "project_id": "P1",
+            "id": "D1",
+            "task_id": "T1",
+            "title": "初期タイトル",
+            "description": "初期説明",
+            "severity": "Minor",
+            "status": "Open",
+            "owner": "佐藤",
+            "reviewer": "田中",
+            "due_date": null,
+            "fixed_date": null,
+            "verified_date": null,
+            "tags": [
+                {
+                    "tag_type": "Domain",
+                    "value": "Rust"
+                }
+            ],
+            "timestamps": {
+                "created_at": "2024-01-01T00:00:00Z",
+                "updated_at": "2024-01-01T00:00:00Z"
+            }
+        },
+        {
+            "project_id": "P1",
+            "id": "DEFECT-1",
+            "task_id": null,
+            "title": "",
+            "description": "",
+            "severity": "Minor",
+            "status": "Open",
+            "owner": "",
+            "reviewer": "",
+            "due_date": null,
+            "fixed_date": null,
+            "verified_date": null,
+            "tags": [],
+            "timestamps": {
+                "created_at": "2024-01-01T00:00:00Z",
+                "updated_at": "2024-01-01T00:00:00Z"
+            }
+        },
+        {
+            "project_id": "P1",
+            "id": "DEFECT-3",
+            "task_id": null,
+            "title": "",
+            "description": "",
+            "severity": "Minor",
+            "status": "Open",
+            "owner": "",
+            "reviewer": "",
+            "due_date": null,
+            "fixed_date": null,
+            "verified_date": null,
+            "tags": [],
+            "timestamps": {
+                "created_at": "2024-01-01T00:00:00Z",
+                "updated_at": "2024-01-01T00:00:00Z"
+            }
+        }
+    ]
+}

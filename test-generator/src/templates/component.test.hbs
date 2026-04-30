@@ -1,0 +1,67 @@
+{{!-- 追加の import --}}
+{{#each testImports}}
+{{{this}}}
+{{/each}}
+
+import { describe, it, expect, vi, Mock } from "vitest";
+import { render, fireEvent, screen } from "@testing-library/react";
+import { {{fileName}} as Component } from "./{{fileName}}";
+
+describe("Component: {{fileName}}", () => {
+
+  {{!-- テスト用変数の挿入 --}}
+  {{#each testVars}}
+  {{{this}}}
+  {{/each}}
+
+  {{!-- input/select のテスト --}}
+  {{#each inputs}}
+  it("{{type}}[{{label}}] の onChange で {{handlers}} が呼ばれる", () => {
+    render(
+      <Component
+        {{#unless ../noProps}}
+          {{#each ../testVarNames}}
+            {{this}}={ {{this}} }
+          {{/each}}
+        {{/unless}}
+      />
+    );
+
+    {{#if (eq role "")}}
+      {{!-- role が無い場合（date input など） --}}
+      const el = screen.getByLabelText("{{label}}");
+    {{else}}
+      {{!-- role がある場合 --}}
+      const el = screen.getAllByRole("{{role}}")[{{index}}];
+    {{/if}}
+
+    fireEvent.change(el, { target: { value: "test" } });
+
+    {{#each handlers}}
+      expect({{this}}).toHaveBeenCalled();
+    {{/each}}
+  });
+  {{/each}}
+
+  {{!-- ボタンのテスト --}}
+  {{#each buttons}}
+  it("ボタン '{{label}}' を押すと {{handlers}} が呼ばれる", () => {
+    render(
+      <Component
+        {{#unless ../noProps}}
+          {{#each ../testVarNames}}
+            {{this}}={ {{this}} }
+          {{/each}}
+        {{/unless}}
+      />
+    );
+
+    fireEvent.click(screen.getByText("{{label}}"));
+
+    {{#each handlers}}
+      expect({{this}}).toHaveBeenCalled();
+    {{/each}}
+  });
+  {{/each}}
+
+});

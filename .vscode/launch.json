@@ -4,6 +4,33 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Debug TS directly",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "ts-node",
+                "${workspaceFolder}/test-generator/src/cli.ts"
+            ],
+            "cwd": "${workspaceFolder}/test-generator",
+            "console": "integratedTerminal",
+            "sourceMaps": true
+        },
+        {
+            "name": "Tauri Full Debug",
+            "type": "lldb",
+            "request": "launch",
+            "program": "cargo",
+            "args": [
+                "tauri",
+                "dev"
+            ],
+            "cwd": "${workspaceFolder}/client/src-tauri",
+            "sourceLanguages": [
+                "rust"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "サーバ起動",
             "runtimeExecutable": "npx",
             "runtimeArgs": [
@@ -29,11 +56,19 @@
             "console": "integratedTerminal"
         },
         {
-            "type": "chrome",
+            "type": "msedge",
             "request": "launch",
             "name": "Vite Attach",
             "url": "http://localhost:3001",
             "webRoot": "${workspaceFolder}/client/src"
+        },
+        {
+            "name": "Tauri React Debug",
+            "type": "msedge",
+            "request": "launch",
+            "url": "http://localhost:3001",
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMaps": true
         }
     ],
     "compounds": [
