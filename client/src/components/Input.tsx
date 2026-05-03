@@ -21,20 +21,27 @@ type TextareaProps = BaseProps & {
     onChange: (value: string) => void;
 };
 
-type TextInputProps = BaseProps &
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> & {
-        type: "text" | "date" | "number";
-        value: string;
-        onChange: (value: string) => void;
-    };
+type TextInputProps = BaseProps & {
+    type: "text";
+    value: string;
+    onChange: (value: string) => void;
+    onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+};
+
+type OtherInputProps = BaseProps & {
+    type: "date" | "number";
+    value: string;
+    onChange: (value: string) => void;
+};
 
 export type InputProps<T extends string = string> =
     | SelectProps<T>
     | TextareaProps
-    | TextInputProps;
+    | TextInputProps
+    | OtherInputProps;
 
 export const Input = <T extends string>(props: InputProps<T>) => {
-    const { label, className, rowClassName, ...rest } = props;
+    const { label, className, rowClassName } = props;
 
     return (
         <div className={`${styles.detail_row} ${rowClassName ?? ""}`}>
@@ -43,12 +50,12 @@ export const Input = <T extends string>(props: InputProps<T>) => {
             {props.type === "select" && (
                 <select
                     className={`${styles.detail_select} ${className ?? ""}`}
-                    value={props.value as T}
+                    value={props.value}
                     onChange={(e) => props.onChange(e.target.value as T)}
                 >
                     {props.options.map((opt) => (
                         <option key={opt} value={opt}>
-                            {props.labelMap[opt as T]}
+                            {props.labelMap[opt]}
                         </option>
                     ))}
                 </select>
@@ -59,16 +66,26 @@ export const Input = <T extends string>(props: InputProps<T>) => {
                     className={`${styles.detail_input} ${className ?? ""}`}
                     rows={4}
                     value={props.value}
-                    onChange={(e) => props.onChange(e.target.value as T)}
+                    onChange={(e) => props.onChange(e.target.value)}
                 />
             )}
 
-            {props.type !== "select" && props.type !== "textarea" && (
+            {props.type === "text" && (
                 <input
-                    {...rest}
+                    type="text"
                     className={`${styles.detail_input} ${className ?? ""}`}
                     value={props.value}
-                    onChange={(e) => props.onChange(e.target.value as T)}
+                    onChange={(e) => props.onChange(e.target.value)}
+                    onKeyDown={props.onKeyDown}
+                />
+            )}
+
+            {(props.type === "date" || props.type === "number") && (
+                <input
+                    type={props.type}
+                    className={`${styles.detail_input} ${className ?? ""}`}
+                    value={props.value}
+                    onChange={(e) => props.onChange(e.target.value)}
                 />
             )}
         </div>
