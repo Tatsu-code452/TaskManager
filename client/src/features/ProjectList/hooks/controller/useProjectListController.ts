@@ -1,171 +1,109 @@
-import { ProjectPayload, ProjectRow, ProjectStatus, toProjectPayload } from "../../../../types/db/project";
-
-import { useProjectListActions } from "../handler/useProjectListActions";
+import { useMemo } from "react";
+import { ProjectPayload, ProjectRow, ProjectSearchCondition, ProjectStatus, toProjectPayload } from "../../../../types/db/project";
+import { emptyPayload } from "../../types/model";
+import { useProjectListHandler } from "../handler/useProjectListHandler";
 import { useProjectListStates } from "../state/useProjectListStates";
 
+
 export const useProjectListController = () => {
-    // 一覧・検索
     const {
-        projects, setProjects,
-        search, setSearch,
-        page, setPage,
-        totalNum, setTotalNum, limit,
-        modalState, setModalState,
+        projects,
+        search,
+        modal,
+        form,
+        pagination,
     } = useProjectListStates();
 
-    const { createProject, updateProject, searchProjects } =
-        useProjectListActions(setProjects, setTotalNum);
+    const {
+        handleValidate,
+        handleSubmit,
+        searchProjects
+    } = useProjectListHandler();
 
-    // -----------------------------
-    // モーダル制御
-    // -----------------------------
-    const closeModal = () => {
-        setModalState({ open: false });
+    const onSearch = async (condition: ProjectSearchCondition, page: number, limit: number) => {
+        const result = await searchProjects(condition, page, limit);
+        if (!result) return;
+        projects.setState(result.items);
+        pagination.updateTotal(result.total_num);
     };
 
-    const openCreateModal = () => {
-        const empty: ProjectPayload = {
-            id: "",
-            name: "",
-            client: "",
-            description: "",
-            status: ProjectStatus.Planned,
-            start_date: "",
-            end_date: "",
-            owner: "",
-        };
-
-        setModalState({ open: true, mode: "new", form: empty });
+    const onSearchByState = async () => {
+        await onSearch(search.state, pagination.state.page, pagination.state.limit);
     };
 
-    const openEditModal = (project: ProjectRow) => {
-        setModalState({
-            open: true,
-            mode: "edit",
-            form: toProjectPayload(project),
-            projectId: project.id
-        });
+    const onSearchByPage = async (page: number) => {
+        await onSearch(search.state, page, pagination.state.limit);
+        pagination.setPage(page);
     };
 
-    const validate = (data: ProjectPayload): string[] => {
-        // 必須項目のメッセージ定義（型安全）
-        const required: Record<keyof ProjectPayload, string> = {
-            id: "IDは必須です",
-            name: "案件名は必須です",
-            client: "顧客名は必須です",
-            description: "",
-            status: "ステータスは必須です",
-            start_date: "開始日は必須です",
-            end_date: "終了日は必須です",
-            owner: "担当者は必須です",
-            timestamps: "",
-        };
+    const onSearchByInitCondition = async () => {
+        await onSearch(
+            { name: "", client: "", status: ProjectStatus.All },
+            pagination.state.page, pagination.state.limit);
+        search.reset();
+        pagination.reset();
+    };
 
-        const errors: string[] = [];
+    const onCloseModal = () => {
+        form.reset();
+        modal.close();
+    };
 
-        (Object.keys(required) as (keyof ProjectPayload)[]).forEach((key) => {
-            const message = required[key];
-            if (!message) return;
+    type ModalMode = "new" | "edit";
+    const onOpenModal = (mode: ModalMode, payload: ProjectPayload) => {
+        form.setAll(payload);
+        if (mode === "new") {
+            modal.open.new(payload);
+        } else if (mode === "edit") {
+            modal.open.edit(payload.id, payload);
+        }
+    };
 
-            const value = data[key];
-            if (!value || value.toString().trim() === "") {
-                errors.push(message);
+    const modalDispatch = useMemo(() => ({
+        state: modal.state,
+        isOpen: modal.state.isOpen,
+        onClose: onCloseModal,
+        onOpenCreate: () => onOpenModal("new", emptyPayload),
+        onOpenEdit: (project: ProjectRow) =>
+            onOpenModal("edit", toProjectPayload(project)),
+        onChangeForm: form.setField,
+        onConfirm: async () => {
+            if (!handleValidate(form.state)) {
+                return;
             }
-        });
+            await handleSubmit(modal.state.data.mode, form.state);
+            await onSearchByState();
+            onCloseModal();
+        },
+    }), [modal.state, form.state]);
 
-        if (data.start_date && data.end_date &&
-            data.start_date > data.end_date) {
-            errors.push("開始日は終了日より前である必要があります");
-        }
-        return errors;
-    };
+    const pageDispatch = useMemo(() => ({
+        state: {
+            projects: projects.state,
+            pagination: pagination.state,
+            search: search.state,
+        },
 
-    // -----------------------------
-    // 作成
-    // -----------------------------
-    const handleCreate = async () => {
-        if (!modalState.open || modalState.mode !== "new") return;
-
-        const errors = validate(modalState.form);
-        if (errors.length > 0) {
-            alert(errors.join("\n"));
-            return;
-        }
-
-        await createProject(modalState.form, search, page, limit);
-        closeModal();
-    };
-
-    // -----------------------------
-    // 更新処理
-    // -----------------------------
-    const handleUpdate = async () => {
-        if (!modalState.open || modalState.mode !== "edit") return;
-
-        const errors = validate(modalState.form);
-        if (errors.length > 0) {
-            alert(errors.join("\n"));
-            return;
-        }
-
-        await updateProject(modalState.form, search, page, limit);
-        closeModal();
-    };
-
-    // -----------------------------
-    // 検索
-    // -----------------------------
-    const handleSearch = async () => {
-        await searchProjects(search, page, limit);
-    };
-
-
-    // -----------------------------
-    // 検索クリア
-    // -----------------------------
-    const clearSearch = async () => {
-        setSearch({
-            name: "",
-            client: "",
-            status: ProjectStatus.All,
-        });
-        await searchProjects({}, 1, limit);
-    };
-
-    const updateForm = (key: keyof ProjectPayload, value: string) => {
-        if (!modalState.open) return;
-        setModalState({
-            ...modalState,
-            form: {
-                ...modalState.form,
-                [key]: value,
-            },
-        });
-    };
+        onChangeSearchCondition: search.setField,
+        onSearch: onSearchByState,
+        onClearSearch: onSearchByInitCondition,
+        onSearchKeyDown: async (e: React.KeyboardEvent<HTMLElement>) => {
+            if (e.key === "Enter") await onSearchByState();
+        },
+        onNextPage: async () => onSearchByPage(pagination.next()),
+        onPrevPage: async () => onSearchByPage(pagination.prev()),
+        onStartEdit: (project: ProjectRow) => {
+            form.setAll(toProjectPayload(project));
+        },
+        onChangeForm: form.setField,
+        onSubmitForm: async () => {
+            await handleSubmit("edit", form.state);
+            await onSearchByState();
+        },
+    }), [form.state, projects.state, search.state, pagination.state]);
 
     return {
-        // 一覧
-        projects,
-        searchProjects,
-        page, setPage,
-        totalNum, setTotalNum, limit,
-
-        // 検索
-        search,
-        setSearch,
-        handleSearch,
-        clearSearch,
-
-        // モーダル
-        modalState,
-        setModalState,
-        openCreateModal,
-        openEditModal,
-        closeModal,
-        updateForm,
-
-        // 作成・更新
-        handleCreate,
-        handleUpdate,
+        modalDispatch,
+        pageDispatch,
     };
 };

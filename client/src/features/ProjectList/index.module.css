@@ -63,9 +63,8 @@
 .search_label {
     width: 4rem;
 }
-/* 入力欄の幅を短くする（ここが重要） */
 .search_input {
-    width: 180px; /* ← 好きな幅に調整 */
+    width: 180px;
 }
 
 /* 検索ボタン行 */
@@ -81,57 +80,4 @@
 /* ---------------------- */
 .table_wrapper {
     height: 63vh;
-}
-
-.table_row {
-    cursor: pointer;
-    transition: background 0.15s ease;
-}
-
-.table_row:hover {
-    background: #f5f7fa;
-}
-
-/* ---------------- */
-/* テーブル行関連    */
-/* ---------------- */
-.table_row {
-    cursor: pointer;
-    transition: background 0.15s ease;
-}
-
-.table_row:hover {
-    background: #f5f7fa;
-}
-.operation_cell {
-    text-align: right;
-}
-
-.col_id {
-    width: 5rem;
-}
-
-.col_name {
-    min-width: 12rem; /* 約192px */
-    max-width: 25rem; /* 約400px */
-}
-
-.col_client {
-    min-width: 10rem; /* 約160px */
-}
-
-.col_status {
-    width: 8rem; /* 約128px */
-}
-
-.col_period {
-    width: 12rem; /* 約192px */
-}
-
-.col_owner {
-    min-width: 8rem; /* 約128px */
-}
-
-.col_actions {
-    width: 5rem; /* 約80px */
 }

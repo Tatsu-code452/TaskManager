@@ -1,20 +1,43 @@
 import React, { useMemo } from "react";
 import { NavigateFunction } from "react-router-dom";
 import { Button, TableColumn, TableCreator } from "../../../components";
-import { ProjectRow } from "../../../types/db/project";
-import styles from "../index.module.css";
+import {
+    ProjectPayload,
+    ProjectRow,
+    ProjectStatus,
+} from "../../../types/db/project";
 import { ProjectStatusLabel } from "../types/model";
+import { InlineSelectEditor } from "./InlineSelectEditor";
+import styles from "./ProjectForm.module.css";
 
 type ProjectTableProps = {
     projects: ProjectRow[];
     navigation: NavigateFunction;
     openEditModal: (project: ProjectRow) => void;
+    onChangeForm: <K extends keyof ProjectPayload>(
+        key: K,
+        value: ProjectPayload[K],
+    ) => void;
+    onCommit: () => void;
+    onStartEdit: (project: ProjectRow) => void;
+};
+
+const statusStyle: Record<ProjectStatus, string> = {
+    All: "",
+    Planned: styles.status_planned,
+    Active: styles.status_active,
+    OnHold: styles.status_onhold,
+    Archived: styles.status_archived,
+    Completed: styles.status_completed,
 };
 
 export const ProjectTable = ({
     projects,
     navigation,
     openEditModal,
+    onChangeForm,
+    onCommit,
+    onStartEdit,
 }: ProjectTableProps) => {
     const tableDef = useMemo(
         (): TableColumn<ProjectRow>[] => [
@@ -32,13 +55,21 @@ export const ProjectTable = ({
             {
                 headerContent: "ステータス",
                 headerClassName: styles.col_status,
-
-                bodyContent: (p) => ProjectStatusLabel[p.status],
+                bodyContent: (p) => (
+                    <InlineSelectEditor<ProjectStatus>
+                        value={p.status}
+                        options={Object.values(ProjectStatus)}
+                        labelMap={ProjectStatusLabel}
+                        className={`${styles.status_badge} ${statusStyle[p.status]}`}
+                        onStartEdit={() => onStartEdit(p)}
+                        onChange={(v) => onChangeForm("status", v)}
+                        onCommit={onCommit}
+                    />
+                ),
             },
             {
                 headerContent: "期間",
                 headerClassName: styles.col_period,
-
                 bodyContent: (p) => `${p.start_date} 〜 ${p.end_date}`,
             },
             {
@@ -64,10 +95,12 @@ export const ProjectTable = ({
                 ),
             },
         ],
-        [openEditModal],
+        [openEditModal, onCommit, onChangeForm, onStartEdit],
     );
 
-    const onClickRow = (p: ProjectRow) => navigation(`/projects/${p.id}`);
+    const onClickRow = (p: ProjectRow) => {
+        navigation(`/projects/${p.id}`);
+    };
 
     return (
         <TableCreator

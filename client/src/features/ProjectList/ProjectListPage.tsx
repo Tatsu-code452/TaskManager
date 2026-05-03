@@ -9,37 +9,11 @@ import { createSearchInputs } from "./types/model";
 import { ProjectForm, ProjectTable } from "./ui";
 
 export const ProjectListPage = () => {
-    const {
-        // 一覧
-        projects,
-        searchProjects,
-        page,
-        setPage,
-        totalNum,
-        limit,
-
-        // 検索
-        search,
-        setSearch,
-        handleSearch,
-        clearSearch,
-
-        // モーダル
-        modalState,
-        // setModalState,
-        openCreateModal,
-        openEditModal,
-        closeModal,
-        updateForm,
-
-        // 作成・更新
-        handleCreate,
-        handleUpdate,
-    } = useProjectListController();
+    const { modalDispatch, pageDispatch } = useProjectListController();
 
     useEffect(() => {
-        searchProjects({}, page, limit);
-    }, [searchProjects, page, limit]);
+        pageDispatch.onSearch();
+    }, []);
 
     const navigation = useNavigate();
     return (
@@ -48,29 +22,36 @@ export const ProjectListPage = () => {
 
             <div className={styles.search_header}>
                 <h3>検索</h3>
-                <Button variant="primary" onClick={openCreateModal}>
+                <Button variant="primary" onClick={modalDispatch.onOpenCreate}>
                     新規作成
                 </Button>
             </div>
 
             <div data-testid="search-area" className={styles.search_area}>
                 <div className={styles.search_grid}>
-                    {createSearchInputs(search).map((input) => (
-                        <InputSelector
-                            key={input.key}
-                            input={input}
-                            className={styles.search_input}
-                            rowClassName={styles.search_row}
-                            onChange={(key, value) =>
-                                setSearch({ ...search, [key]: value })
-                            }
-                        />
-                    ))}
+                    {createSearchInputs(pageDispatch.state.search).map(
+                        (input) => (
+                            <InputSelector
+                                key={input.key}
+                                input={input}
+                                className={styles.search_input}
+                                rowClassName={styles.search_row}
+                                onChange={pageDispatch.onChangeSearchCondition}
+                                onKeyDown={pageDispatch.onSearchKeyDown}
+                            />
+                        ),
+                    )}
                     <div className={styles.search_button_group}>
-                        <Button variant="primary" onClick={handleSearch}>
+                        <Button
+                            variant="primary"
+                            onClick={pageDispatch.onSearch}
+                        >
                             検索
                         </Button>
-                        <Button variant="secondary" onClick={clearSearch}>
+                        <Button
+                            variant="secondary"
+                            onClick={pageDispatch.onClearSearch}
+                        >
                             クリア
                         </Button>
                     </div>
@@ -79,11 +60,9 @@ export const ProjectListPage = () => {
 
             <div>
                 <Pagination
-                    length={totalNum}
-                    totalPages={Math.ceil(totalNum / limit)}
-                    page={page}
-                    setPage={setPage}
-                    onClick={handleSearch}
+                    state={pageDispatch.state.pagination}
+                    onNext={pageDispatch.onNextPage}
+                    onPrev={pageDispatch.onPrevPage}
                 />
             </div>
 
@@ -92,22 +71,22 @@ export const ProjectListPage = () => {
                 className={`${commonStyles.table_wrapper} ${styles.table_wrapper}`}
             >
                 <ProjectTable
-                    projects={projects}
+                    projects={pageDispatch.state.projects}
                     navigation={navigation}
-                    openEditModal={openEditModal}
+                    onChangeForm={pageDispatch.onChangeForm}
+                    onStartEdit={pageDispatch.onStartEdit}
+                    onCommit={pageDispatch.onSubmitForm}
+                    openEditModal={modalDispatch.onOpenEdit}
                 />
             </div>
 
             {/* モーダル */}
-            {modalState.open && (
+            {modalDispatch.isOpen && (
                 <ProjectForm
-                    mode={modalState.mode}
-                    form={modalState.form}
-                    onChange={updateForm}
-                    onSubmit={
-                        modalState.mode === "new" ? handleCreate : handleUpdate
-                    }
-                    onClose={closeModal}
+                    state={modalDispatch.state}
+                    onChange={modalDispatch.onChangeForm}
+                    onSubmit={modalDispatch.onConfirm}
+                    onClose={modalDispatch.onClose}
                 />
             )}
         </div>
