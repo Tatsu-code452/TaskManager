@@ -1,33 +1,36 @@
-import { renderHook, RenderHookResult } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
 
+import { setup } from "./useProjectApiMock";
+
+import { renderHook } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useProjectApi } from "./../../hooks/handler/useProjectApi";
+
+import { payloads, projects, searchCondition } from "@features/ProjectList/__tests__/hooks/define";
 import { ProjectSearchResult } from "../../../../types/db/project";
-import { payloads, projects, searchCondition } from "./define";
-import { createProjectApiMock } from "./mockApi/projectApi";
-
-const projectApiMock = createProjectApiMock();
-
-import { useProjectApi } from "../../hooks/handler/useProjectApi";
+import { projectApiMock } from "./mockCommon";
 
 describe("useProjectApi", () => {
-  let hook: RenderHookResult<ReturnType<typeof useProjectApi>, void>;
+  let hook;
+  let hookResult: ReturnType<typeof useProjectApi>;
 
   beforeEach(() => {
+    setup();
     hook = renderHook(() => useProjectApi());
+    hookResult = hook.result.current;
   });
 
   it("should work", () => {
-    expect(hook.result.current).toBeDefined();
+    expect(hookResult).toBeDefined();
   });
 
   it("should call projectApi.create", async () => {
-    await hook.result.current.createProject(payloads.create);
+    await hookResult.createProject(payloads.create);
 
     expect(projectApiMock.create).toHaveBeenCalledWith(payloads.create);
   });
 
   it("should call projectApi.update", async () => {
-    await hook.result.current.updateProject(payloads.update);
+    await hookResult.updateProject(payloads.update);
 
     expect(projectApiMock.update).toHaveBeenCalledWith(payloads.update);
   });
@@ -36,7 +39,7 @@ describe("useProjectApi", () => {
     const expected: ProjectSearchResult = { items: projects, total_num: 120 };
     vi.mocked(projectApiMock.search).mockResolvedValueOnce(expected);
 
-    const result = await hook.result.current.searchProjects(searchCondition.allInput, 1, 30);
+    const result = await hookResult.searchProjects(searchCondition.allInput, 1, 30);
 
     expect(projectApiMock.search).toHaveBeenCalledWith(searchCondition.allInput, 1, 30);
     expect(result).toEqual(expected);

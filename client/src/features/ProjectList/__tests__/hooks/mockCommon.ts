@@ -1,3 +1,8 @@
+export const projectApiMock = {
+        create: vi.fn(),
+        update: vi.fn(),
+        search: vi.fn(),
+};
 
 export const useMessageMock = {
     Messages: {},

@@ -1,58 +1,27 @@
+import { setup } from "./useProjectListStatesMock";
+
 import { renderHook } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
-import { useProjectListStates } from "../../hooks/state/useProjectListStates";
-import { useFormMock, useModalMock, usePaginationMock, useSearchMock, useStateObjMock } from "./mockCommon";
-
-import { beforeEach } from "vitest";
-
-vi.mock("../../../../hooks/useStateObj", () => ({
-  useStateObj: vi.fn(),
-}));
-
-vi.mock("../../../../hooks/useSearch", () => ({
-  useSearch: vi.fn(),
-}));
-
-vi.mock("../../../../hooks/useModal", () => ({
-  useModal: vi.fn(),
-}));
-
-vi.mock("../../../../hooks/useForm", () => ({
-  useForm: vi.fn(),
-}));
-
-vi.mock("../../../../hooks/usePagination", () => ({
-  usePagination: vi.fn(),
-}));
-
-// --- 空モックを import ---
-import { useForm } from "../../../../hooks/useForm";
-import { useModal } from "../../../../hooks/useModal";
-import { usePagination } from "../../../../hooks/usePagination";
-import { useSearch } from "../../../../hooks/useSearch";
-import { useStateObj } from "../../../../hooks/useStateObj";
-import { setupMocks } from "./utils";
+import { beforeEach, describe, expect, it } from "vitest";
+import { useProjectListStates } from "./../../hooks/state/useProjectListStates";
 
 describe("useProjectListStates", () => {
+  let hook;
+  let hookResult: ReturnType<typeof useProjectListStates>;
+
   beforeEach(() => {
-    setupMocks([
-      { target: useStateObj, mock: useStateObjMock },
-      { target: useSearch, mock: useSearchMock },
-      { target: useModal, mock: useModalMock },
-      { target: useForm, mock: useFormMock },
-      { target: usePagination, mock: usePaginationMock },
-    ]);
+    setup();
+
+    hook = renderHook(() => useProjectListStates());
+    hookResult = hook.result.current;
   });
 
   it("should work", () => {
-    const { result } = renderHook(() => useProjectListStates());
+    expect(hookResult).toBeDefined();
 
-    expect(result.current).toBeDefined();
-
-    expect(result.current.projects).toBeDefined();
-    expect(result.current.search).toBeDefined();
-    expect(result.current.modal).toBeDefined();
-    expect(result.current.form).toBeDefined();
-    expect(result.current.pagination).toBeDefined();
+    expect(hookResult.projects).toBeDefined();
+    expect(hookResult.search).toBeDefined();
+    expect(hookResult.modal).toBeDefined();
+    expect(hookResult.form).toBeDefined();
+    expect(hookResult.pagination).toBeDefined();
   });
 });

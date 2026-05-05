@@ -1,36 +1,25 @@
-import { renderHook, RenderHookResult } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
-import { useProjectListController } from "../../hooks/controller/useProjectListController";
-import { projects } from "./define";
+
+import { setup } from "./useProjectListControllerMock";
+
+import { renderHook } from "@testing-library/react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { useProjectListController } from "./../../hooks/controller/useProjectListController";
+
+import { projects } from "@features/ProjectList/__tests__/hooks/define";
 import { useProjectListHandlerMock, useProjectListStatesMock } from "./mock";
-import { setupMocks } from "./utils";
-
-vi.mock("../../hooks/handler/useProjectListHandler", () => ({
-  useProjectListHandler: vi.fn()
-}));
-
-vi.mock("../../hooks/state/useProjectListStates", () => ({
-  useProjectListStates: vi.fn()
-}));
-
-import { useProjectListHandler } from "../../hooks/handler/useProjectListHandler";
-import { useProjectListStates } from "../../hooks/state/useProjectListStates";
 
 describe("useProjectListController", () => {
-
-  let hook: RenderHookResult<ReturnType<typeof useProjectListController>, void>;
+  let hook;
+  let hookResult: ReturnType<typeof useProjectListController>;
 
   beforeEach(() => {
-    setupMocks([
-      { target: useProjectListHandler, mock: useProjectListHandlerMock },
-      { target: useProjectListStates, mock: useProjectListStatesMock },
-    ]);
-
+    setup();
     hook = renderHook(() => useProjectListController());
+    hookResult = hook.result.current;
   });
 
   it("should work", () => {
-    expect(hook.result.current).toBeDefined();
+    expect(hookResult).toBeDefined();
   });
 
   // -----------------------------
@@ -39,7 +28,7 @@ describe("useProjectListController", () => {
 
   it("modalDispatch.onOpenCreate should open new modal", () => {
     useProjectListStatesMock.modal.state.data = { mode: "new" };
-    hook.result.current.modalDispatch.onOpenCreate();
+    hookResult.modalDispatch.onOpenCreate();
 
     expect(useProjectListStatesMock.form.setAll).toHaveBeenCalled();
     expect(useProjectListStatesMock.modal.open.new).toHaveBeenCalled();
@@ -47,14 +36,14 @@ describe("useProjectListController", () => {
 
   it("modalDispatch.onOpenEdit should open edit modal", () => {
     useProjectListStatesMock.modal.state.data = { mode: "edit" };
-    hook.result.current.modalDispatch.onOpenEdit(projects[0]);
+    hookResult.modalDispatch.onOpenEdit(projects[0]);
 
     expect(useProjectListStatesMock.form.setAll).toHaveBeenCalled();
     expect(useProjectListStatesMock.modal.open.edit).toHaveBeenCalled();
   });
 
   it("modalDispatch.onClose should reset form and close modal", () => {
-    hook.result.current.modalDispatch.onClose();
+    hookResult.modalDispatch.onClose();
 
     expect(useProjectListStatesMock.form.reset).toHaveBeenCalled();
     expect(useProjectListStatesMock.modal.close).toHaveBeenCalled();
@@ -67,7 +56,7 @@ describe("useProjectListController", () => {
       total_num: 10,
     });
 
-    await hook.result.current.modalDispatch.onConfirm();
+    await hookResult.modalDispatch.onConfirm();
 
     expect(useProjectListHandlerMock.handleValidate).toHaveBeenCalled();
     expect(useProjectListHandlerMock.handleSubmit).toHaveBeenCalled();
@@ -78,7 +67,7 @@ describe("useProjectListController", () => {
   it("modalDispatch.onConfirm should stop when validate fails", async () => {
     useProjectListHandlerMock.handleValidate.mockReturnValue(false);
 
-    await hook.result.current.modalDispatch.onConfirm();
+    await hookResult.modalDispatch.onConfirm();
 
     expect(useProjectListHandlerMock.handleSubmit).not.toHaveBeenCalled();
     expect(useProjectListStatesMock.modal.close).not.toHaveBeenCalled();
@@ -89,7 +78,7 @@ describe("useProjectListController", () => {
   // -----------------------------
 
   it("pageDispatch.onChangeSearchCondition should call search.setField", () => {
-    hook.result.current.pageDispatch.onChangeSearchCondition("name", "abc");
+    hookResult.pageDispatch.onChangeSearchCondition("name", "abc");
 
     expect(useProjectListStatesMock.search.setField).toHaveBeenCalledWith("name", "abc");
   });
@@ -100,7 +89,7 @@ describe("useProjectListController", () => {
       total_num: 10,
     });
 
-    await hook.result.current.pageDispatch.onSearch();
+    await hookResult.pageDispatch.onSearch();
 
     expect(useProjectListHandlerMock.searchProjects).toHaveBeenCalled();
   });
@@ -111,7 +100,7 @@ describe("useProjectListController", () => {
       total_num: 10,
     });
 
-    await hook.result.current.pageDispatch.onClearSearch();
+    await hookResult.pageDispatch.onClearSearch();
 
     expect(useProjectListStatesMock.search.reset).toHaveBeenCalled();
     expect(useProjectListStatesMock.pagination.reset).toHaveBeenCalled();
@@ -123,7 +112,7 @@ describe("useProjectListController", () => {
       total_num: 10,
     });
 
-    await hook.result.current.pageDispatch.onNextPage();
+    await hookResult.pageDispatch.onNextPage();
 
     expect(useProjectListStatesMock.pagination.next).toHaveBeenCalled();
     expect(useProjectListHandlerMock.searchProjects).toHaveBeenCalled();
@@ -135,14 +124,14 @@ describe("useProjectListController", () => {
       total_num: 10,
     });
 
-    await hook.result.current.pageDispatch.onPrevPage();
+    await hookResult.pageDispatch.onPrevPage();
 
     expect(useProjectListStatesMock.pagination.prev).toHaveBeenCalled();
     expect(useProjectListHandlerMock.searchProjects).toHaveBeenCalled();
   });
 
   it("pageDispatch.onStartEdit should set form values", () => {
-    hook.result.current.pageDispatch.onStartEdit(projects[0]);
+    hookResult.pageDispatch.onStartEdit(projects[0]);
 
     expect(useProjectListStatesMock.form.setAll).toHaveBeenCalled();
   });
@@ -153,7 +142,7 @@ describe("useProjectListController", () => {
       total_num: 10,
     });
 
-    await hook.result.current.pageDispatch.onSubmitForm();
+    await hookResult.pageDispatch.onSubmitForm();
 
     expect(useProjectListHandlerMock.handleSubmit).toHaveBeenCalled();
     expect(useProjectListHandlerMock.searchProjects).toHaveBeenCalled();
