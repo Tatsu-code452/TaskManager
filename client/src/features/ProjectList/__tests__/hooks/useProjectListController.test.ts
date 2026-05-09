@@ -1,19 +1,19 @@
 
-import { setup } from "./useProjectListControllerMock";
+import { setupUseProjectListHandlerMock, useProjectListHandlerMock } from "@features/ProjectList/__tests__/hooks/mocks/useProjectListHandlerMock";
+import { setupUseProjectListStatesMock, useProjectListStatesMock } from "@features/ProjectList/__tests__/hooks/mocks/useProjectListStatesMock";
 
+import { projects } from "@features/ProjectList/__tests__/tables";
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { useProjectListController } from "./../../hooks/controller/useProjectListController";
-
-import { projects } from "@features/ProjectList/__tests__/hooks/define";
-import { useProjectListHandlerMock, useProjectListStatesMock } from "./mock";
 
 describe("useProjectListController", () => {
   let hook;
   let hookResult: ReturnType<typeof useProjectListController>;
 
   beforeEach(() => {
-    setup();
+    setupUseProjectListHandlerMock();
+    setupUseProjectListStatesMock();
     hook = renderHook(() => useProjectListController());
     hookResult = hook.result.current;
   });
@@ -147,4 +147,17 @@ describe("useProjectListController", () => {
     expect(useProjectListHandlerMock.handleSubmit).toHaveBeenCalled();
     expect(useProjectListHandlerMock.searchProjects).toHaveBeenCalled();
   });
+
+  it("pageDispatch.onRemove should delete and search", async () => {
+    useProjectListHandlerMock.searchProjects.mockResolvedValue({
+      items: [],
+      total_num: 10,
+    });
+
+    await hookResult.pageDispatch.onRemove(projects[0].id);
+
+    expect(useProjectListHandlerMock.deleteProject).toHaveBeenCalled();
+    expect(useProjectListHandlerMock.searchProjects).toHaveBeenCalled();
+  });
+
 });

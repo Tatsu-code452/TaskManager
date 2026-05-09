@@ -1,14 +1,3 @@
-export const projectApiMock = {
-        create: vi.fn(),
-        update: vi.fn(),
-        search: vi.fn(),
-};
-
-export const useMessageMock = {
-    Messages: {},
-    getMessage: vi.fn((code, ...args) => `MSG:${code}:${args.join(",")}`),
-};
-
 export const useStateObjMock = {
     dispatch: {
         state: [],
@@ -77,3 +66,24 @@ export const usePaginationMock = {
         updateTotal: vi.fn(),
     }
 }
+
+vi.mock("@hooks/useStateObj", () => ({
+    useStateObj: useStateObjMock,
+}));
+
+vi.mock("@hooks/useSearch", () => ({
+    useSearch: useSearchMock,
+}));
+
+vi.mock("@hooks/useModal", () => ({
+    useModal: useModalMock,
+}));
+
+vi.mock("@hooks/useForm", () => ({
+    useForm: useFormMock,
+}));
+
+vi.mock("@hooks/usePagination", () => ({
+    usePagination: usePaginationMock,
+}));
+

@@ -3,7 +3,7 @@ import { ProjectPayload } from "../../../../types/db/project";
 import { useProjectApi } from "./useProjectApi";
 
 export const useProjectListHandler = () => {
-    const { createProject, updateProject, searchProjects } =
+    const { createProject, updateProject, deleteProject, searchProjects } =
         useProjectApi();
 
     const handleValidate = (data: ProjectPayload) => {
@@ -55,6 +55,6 @@ export const useProjectListHandler = () => {
 
 
     return {
-        handleValidate, handleSubmit, searchProjects,
+        handleValidate, handleSubmit, searchProjects, deleteProject,
     }
 }

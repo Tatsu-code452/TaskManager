@@ -1,20 +1,19 @@
 
-import { setup } from "./useProjectListHandlerMock";
+import { setupUseProjectApiMock, useProjectApiMock } from "./mocks/useProjectApiMock";
 
+import { payloads, searchCondition } from "@features/ProjectList/__tests__/hooks/define";
+import { projects } from "@features/ProjectList/__tests__/tables";
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useProjectListHandler } from "./../../hooks/handler/useProjectListHandler";
-
-import { payloads, projects, searchCondition } from "@features/ProjectList/__tests__/hooks/define";
 import { ProjectSearchResult } from "../../../../types/db/project";
-import { useProjectApiMock } from "./mock";
+import { useProjectListHandler } from "./../../hooks/handler/useProjectListHandler";
 
 describe("useProjectListHandler", () => {
   let hook;
   let hookResult: ReturnType<typeof useProjectListHandler>;
 
   beforeEach(() => {
-    setup();
+    setupUseProjectApiMock();
     vi.spyOn(window, "alert").mockImplementation(() => { });
     hook = renderHook(() => useProjectListHandler());
     hookResult = hook.result.current;
@@ -34,6 +33,12 @@ describe("useProjectListHandler", () => {
     await hookResult.handleSubmit("edit", payloads.update);
 
     expect(useProjectApiMock.updateProject).toHaveBeenCalledWith(payloads.update);
+  });
+
+  it("should call useProjectApi.deleteProject", async () => {
+    await hookResult.deleteProject(payloads.update.id);
+
+    expect(useProjectApiMock.deleteProject).toHaveBeenCalledWith(payloads.update.id);
   });
 
   it("should call useProjectApi.search", async () => {

@@ -16,6 +16,9 @@ export const projectApi = {
         const response = await invoke("update_project", { payload });
         return response;
     },
+    delete: async (id: string) => {
+        return await invoke("delete_project", { id });
+    },
     search: async (
         condition: ProjectSearchCondition = {},
         page: number = 1,

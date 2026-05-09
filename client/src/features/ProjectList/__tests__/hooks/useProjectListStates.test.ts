@@ -1,4 +1,4 @@
-import { setup } from "./useProjectListStatesMock";
+import { setupUseProjectListStatesMock } from "./mocks/useProjectListStatesMock";
 
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -9,7 +9,7 @@ describe("useProjectListStates", () => {
   let hookResult: ReturnType<typeof useProjectListStates>;
 
   beforeEach(() => {
-    setup();
+    setupUseProjectListStatesMock();
 
     hook = renderHook(() => useProjectListStates());
     hookResult = hook.result.current;

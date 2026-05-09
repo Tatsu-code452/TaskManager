@@ -1,20 +1,20 @@
 
-import { setup } from "./useProjectApiMock";
+import { projectApiMock, setupProjectApiMock } from "./mocks/projectApiMock";
 
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useProjectApi } from "./../../hooks/handler/useProjectApi";
 
-import { payloads, projects, searchCondition } from "@features/ProjectList/__tests__/hooks/define";
+import { payloads, searchCondition } from "@features/ProjectList/__tests__/hooks/define";
+import { projects } from "@features/ProjectList/__tests__/tables";
 import { ProjectSearchResult } from "../../../../types/db/project";
-import { projectApiMock } from "./mockCommon";
 
 describe("useProjectApi", () => {
   let hook;
   let hookResult: ReturnType<typeof useProjectApi>;
 
   beforeEach(() => {
-    setup();
+    setupProjectApiMock();
     hook = renderHook(() => useProjectApi());
     hookResult = hook.result.current;
   });
@@ -33,6 +33,12 @@ describe("useProjectApi", () => {
     await hookResult.updateProject(payloads.update);
 
     expect(projectApiMock.update).toHaveBeenCalledWith(payloads.update);
+  });
+
+  it("should call projectApi.delete", async () => {
+    await hookResult.deleteProject(payloads.update.id);
+
+    expect(projectApiMock.delete).toHaveBeenCalledWith(payloads.update.id);
   });
 
   it("should call projectApi.search", async () => {

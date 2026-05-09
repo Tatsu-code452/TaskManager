@@ -17,7 +17,8 @@ export const useProjectListController = () => {
     const {
         handleValidate,
         handleSubmit,
-        searchProjects
+        searchProjects,
+        deleteProject,
     } = useProjectListHandler();
 
     const onSearch = async (condition: ProjectSearchCondition, page: number, limit: number) => {
@@ -98,6 +99,10 @@ export const useProjectListController = () => {
         onChangeForm: form.setField,
         onSubmitForm: async () => {
             await handleSubmit("edit", form.state);
+            await onSearchByState();
+        },
+        onRemove: async (id: string) => {
+            await deleteProject(id);
             await onSearchByState();
         },
     }), [form.state, projects.state, search.state, pagination.state]);

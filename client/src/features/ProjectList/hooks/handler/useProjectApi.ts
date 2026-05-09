@@ -21,9 +21,16 @@ export const useProjectApi = () => {
         await projectApi.update(payload);
     }, []);
 
+    const deleteProject = useCallback(async (
+        id: string,
+    ) => {
+        await projectApi.delete(id);
+    }, []);
+
     return {
         createProject,
         updateProject,
+        deleteProject,
         searchProjects,
     };
 };

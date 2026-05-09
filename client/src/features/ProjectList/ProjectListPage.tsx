@@ -1,7 +1,8 @@
+import { InputSelectors } from "@features/ProjectList/ui/InputSelectors";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import commonStyles from "../../common.module.css";
-import { Button, InputSelector } from "../../components";
+import { Button } from "../../components";
 import Pagination from "../../components/Pagination";
 import { useProjectListController } from "./hooks/controller/useProjectListController";
 import styles from "./index.module.css";
@@ -28,33 +29,24 @@ export const ProjectListPage = () => {
             </div>
 
             <div data-testid="search-area" className={styles.search_area}>
-                <div className={styles.search_grid}>
-                    {createSearchInputs(pageDispatch.state.search).map(
-                        (input) => (
-                            <InputSelector
-                                key={input.key}
-                                input={input}
-                                className={styles.search_input}
-                                rowClassName={styles.search_row}
-                                onChange={pageDispatch.onChangeSearchCondition}
-                                onKeyDown={pageDispatch.onSearchKeyDown}
-                            />
-                        ),
-                    )}
-                    <div className={styles.search_button_group}>
-                        <Button
-                            variant="primary"
-                            onClick={pageDispatch.onSearch}
-                        >
-                            検索
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            onClick={pageDispatch.onClearSearch}
-                        >
-                            クリア
-                        </Button>
-                    </div>
+                <InputSelectors
+                    inputs={createSearchInputs(pageDispatch.state.search)}
+                    className={styles.search_input}
+                    rowClassName={styles.search_row}
+                    onChange={pageDispatch.onChangeSearchCondition}
+                    onKeyDown={pageDispatch.onSearchKeyDown}
+                />
+
+                <div className={styles.search_button_group}>
+                    <Button variant="primary" onClick={pageDispatch.onSearch}>
+                        検索
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        onClick={pageDispatch.onClearSearch}
+                    >
+                        クリア
+                    </Button>
                 </div>
             </div>
 
@@ -76,6 +68,7 @@ export const ProjectListPage = () => {
                     onChangeForm={pageDispatch.onChangeForm}
                     onStartEdit={pageDispatch.onStartEdit}
                     onCommit={pageDispatch.onSubmitForm}
+                    onRemove={pageDispatch.onRemove}
                     openEditModal={modalDispatch.onOpenEdit}
                 />
             </div>

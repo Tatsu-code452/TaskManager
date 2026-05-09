@@ -1,5 +1,6 @@
+import { InputSelectors } from "@features/ProjectList/ui/InputSelectors";
 import commonStyle from "../../../common.module.css";
-import { Button, InputSelector, Modal } from "../../../components";
+import { Button, Modal } from "../../../components";
 import { ModalState } from "../../../hooks/useModal";
 import { ProjectPayload } from "../../../types/db/project";
 import { createInputs } from "../types/model";
@@ -34,13 +35,10 @@ export const ProjectForm = ({
     return (
         <Modal title={modeLabel[state.data.mode].title} onClose={onClose}>
             <div>
-                {createInputs(state.data.form).map((input) => (
-                    <InputSelector
-                        key={input.key}
-                        input={input}
-                        onChange={onChange}
-                    />
-                ))}
+                <InputSelectors
+                    inputs={createInputs(state.data.form)}
+                    onChange={onChange}
+                />
             </div>
 
             <div className={commonStyle.detail_buttons}>

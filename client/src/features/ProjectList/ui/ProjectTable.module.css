@@ -12,37 +12,35 @@
     background-color: #e6e9ef;
 }
 
-.operation_cell {
-    text-align: right;
-}
-
 .col_id {
-    width: 5rem;
+    width: 7rem;
 }
 
 .col_name {
-    min-width: 12rem; /* 約192px */
-    max-width: 25rem; /* 約400px */
+    min-width: 12rem;
+    max-width: 25rem;
 }
 
 .col_client {
-    min-width: 10rem; /* 約160px */
+    min-width: 10rem;
+    max-width: 25rem;
 }
 
 .col_status {
-    width: 8rem; /* 約128px */
+    width: 8rem;
 }
 
 .col_period {
-    width: 12rem; /* 約192px */
+    width: 12rem;
 }
 
 .col_owner {
-    min-width: 8rem; /* 約128px */
+    min-width: 8rem;
 }
 
-.col_actions {
-    width: 5rem; /* 約80px */
+.col_action {
+    text-align: right;
+    width: 1rem;
 }
 
 .status_badge {
