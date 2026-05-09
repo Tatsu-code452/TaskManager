@@ -5,6 +5,7 @@ import Input from "./Input";
 interface InputSelectorProps<T extends string, K extends string> {
     input: InputConfig<K>;
     onChange: (key: string, value: T) => void;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
     className?: string;
     rowClassName?: string;
 }
@@ -12,6 +13,7 @@ interface InputSelectorProps<T extends string, K extends string> {
 export const InputSelector = <T extends string, K extends string>({
     input,
     onChange,
+    onKeyDown,
     className,
     rowClassName,
 }: InputSelectorProps<T, K>) => {
@@ -27,6 +29,21 @@ export const InputSelector = <T extends string, K extends string>({
                 onChange={(v) => onChange(input.key, v as T)}
                 className={className}
                 rowClassName={rowClassName}
+            />
+        );
+    }
+
+    if (input.type === "text") {
+        return (
+            <Input
+                key={input.key}
+                type={input.type}
+                label={input.label}
+                value={input.value}
+                onChange={(v) => onChange(input.key, v as T)}
+                className={className}
+                rowClassName={rowClassName}
+                onKeyDown={onKeyDown}
             />
         );
     }

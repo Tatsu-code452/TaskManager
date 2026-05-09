@@ -1,35 +1,49 @@
+import { InputSelectors } from "@features/ProjectList/ui/InputSelectors";
 import commonStyle from "../../../common.module.css";
-import { Button, InputSelector, Modal } from "../../../components";
+import { Button, Modal } from "../../../components";
+import { ModalState } from "../../../hooks/useModal";
 import { ProjectPayload } from "../../../types/db/project";
-import { FormProps } from "../../common/ui/props";
 import { createInputs } from "../types/model";
 
-type ProjectFormProps = FormProps<ProjectPayload> & {
-    mode: string;
+type ProjectFormProps = {
+    state: ModalState<ProjectPayload, string>;
+    onChange: <K extends keyof ProjectPayload>(
+        key: K,
+        value: ProjectPayload[K],
+    ) => void;
+    onSubmit: () => void;
+    onClose: () => void;
+};
+
+const modeLabel: Record<"new" | "edit", { title: string; submit: string }> = {
+    new: {
+        title: "新規作成",
+        submit: "作成",
+    },
+    edit: {
+        title: "編集",
+        submit: "更新",
+    },
 };
 
 export const ProjectForm = ({
-    mode,
-    form,
+    state,
     onChange,
     onSubmit,
     onClose,
 }: ProjectFormProps) => {
     return (
-        <Modal title={mode === "new" ? "新規作成" : "編集"} onClose={onClose}>
+        <Modal title={modeLabel[state.data.mode].title} onClose={onClose}>
             <div>
-                {createInputs(form).map((input) => (
-                    <InputSelector
-                        key={input.key}
-                        input={input}
-                        onChange={onChange}
-                    />
-                ))}
+                <InputSelectors
+                    inputs={createInputs(state.data.form)}
+                    onChange={onChange}
+                />
             </div>
 
             <div className={commonStyle.detail_buttons}>
                 <Button variant="primary" onClick={onSubmit}>
-                    {mode === "new" ? "作成" : "更新"}
+                    {modeLabel[state.data.mode].submit}
                 </Button>
                 <Button variant="secondary" onClick={onClose}>
                     キャンセル

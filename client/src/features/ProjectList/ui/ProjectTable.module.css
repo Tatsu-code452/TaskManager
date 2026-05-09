@@ -1,0 +1,68 @@
+.table_row {
+    cursor: pointer;
+    min-height: 36px;
+    transition: background-color 0.15s ease;
+}
+
+.table_row:hover {
+    background-color: #f5f7fa;
+}
+
+.table_row:active {
+    background-color: #e6e9ef;
+}
+
+.col_id {
+    width: 7rem;
+}
+
+.col_name {
+    min-width: 12rem;
+    max-width: 25rem;
+}
+
+.col_client {
+    min-width: 10rem;
+    max-width: 25rem;
+}
+
+.col_status {
+    width: 8rem;
+}
+
+.col_period {
+    width: 12rem;
+}
+
+.col_owner {
+    min-width: 8rem;
+}
+
+.col_action {
+    text-align: right;
+    width: 1rem;
+}
+
+.status_badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: white;
+    display: inline-block;
+}
+
+.status_planned {
+    background: #e6b800;
+} /* 計画中 */
+.status_active {
+    background: #007bff;
+} /* 実行中 */
+.status_onhold {
+    background: #6c757d;
+} /* 休止 */
+.status_completed {
+    background: #28a745;
+} /* 完工 */
+.status_archived {
+    background: #444;
+} /* アーカイブ */

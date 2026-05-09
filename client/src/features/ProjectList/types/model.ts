@@ -10,16 +10,24 @@ export const ProjectStatusLabel: Record<ProjectStatus, string> = {
     [ProjectStatus.Archived]: "アーカイブ済",
 };
 
-export type RequiredKeys =
-    | "id"
-    | "name"
-    | "client"
-    | "status"
-    | "start_date"
-    | "end_date"
-    | "owner";
+export const createSearchInputs = (form: ProjectSearchCondition): InputConfig<keyof ProjectSearchCondition>[] => {
+    return [
+        { key: "name", value: form.name, type: "text", label: "案件名" },
+        { key: "client", value: form.client, type: "text", label: "顧客名" },
+        {
+            key: "status",
+            value: form.status as ProjectStatus,
+            type: "select",
+            label: "ステータス",
+            options: Object.values(ProjectStatus),
+            labelMap: ProjectStatusLabel,
+        },
+    ];
+}
 
-export const createInputs = (form: ProjectPayload): InputConfig<RequiredKeys>[] => {
+export const createInputs = (
+    form: ProjectPayload,
+): InputConfig<keyof ProjectPayload>[] => {
     return [
         { key: "id", value: form.id, type: "text", label: "ID" },
         { key: "name", value: form.name, type: "text", label: "案件名" },
@@ -51,20 +59,15 @@ export const createInputs = (form: ProjectPayload): InputConfig<RequiredKeys>[] 
             label: "担当者",
         },
     ];
-}
+};
 
-export const createSearchInputs = (form: ProjectSearchCondition): InputConfig<keyof ProjectSearchCondition>[] => {
-    return [
-        { key: "name", value: form.name, type: "text", label: "案件名" },
-        { key: "client", value: form.client, type: "text", label: "顧客名" },
-        {
-            key: "status",
-            value: form.status as ProjectStatus,
-            type: "select",
-            label: "ステータス",
-            options: Object.values(ProjectStatus),
-            labelMap: ProjectStatusLabel,
-        },
-    ];
-}
-
+export const emptyPayload: ProjectPayload = {
+    id: "",
+    name: "",
+    client: "",
+    description: "",
+    status: ProjectStatus.Planned,
+    start_date: "",
+    end_date: "",
+    owner: "",
+};
