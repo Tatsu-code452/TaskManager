@@ -1,6 +1,8 @@
 import { ProjectPayload, ProjectSearchCondition, ProjectStatus } from "../../../types/db/project";
 import { InputConfig } from "../../../types/inputConfig";
 
+export const InitCondition = { name: "", client: "", status: ProjectStatus.All };
+
 export const ProjectStatusLabel: Record<ProjectStatus, string> = {
     [ProjectStatus.All]: "",
     [ProjectStatus.Planned]: "計画中",

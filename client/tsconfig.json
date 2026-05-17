@@ -16,7 +16,25 @@
     "noEmit": true,
     "types": [
       "vitest/globals"
-    ]
+    ],
+    "ignoreDeprecations": "6.0",
+    "paths": {
+      "@api/*": [
+        "./src/api/tauri/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@features/*": [
+        "./src/features/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@comtypes/*": [
+        "./src/types/*"
+      ],
+    }
   },
   "include": [
     "src",

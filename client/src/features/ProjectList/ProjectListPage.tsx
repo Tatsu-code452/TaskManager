@@ -1,4 +1,4 @@
-import { InputSelectors } from "@features/ProjectList/ui/InputSelectors";
+import { InputSelectors } from "@components/InputSelectors";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import commonStyles from "../../common.module.css";
@@ -6,14 +6,15 @@ import { Button } from "../../components";
 import Pagination from "../../components/Pagination";
 import { useProjectListController } from "./hooks/controller/useProjectListController";
 import styles from "./index.module.css";
-import { createSearchInputs } from "./types/model";
+import { createSearchInputs, InitCondition } from "./types/model";
 import { ProjectForm, ProjectTable } from "./ui";
 
 export const ProjectListPage = () => {
-    const { modalDispatch, pageDispatch } = useProjectListController();
+    const { modalDispatch, pageDispatch, searchDispatch } =
+        useProjectListController();
 
     useEffect(() => {
-        pageDispatch.onSearch();
+        pageDispatch.handleLoadProjects();
     }, []);
 
     const navigation = useNavigate();
@@ -30,31 +31,45 @@ export const ProjectListPage = () => {
 
             <div data-testid="search-area" className={styles.search_area}>
                 <InputSelectors
-                    inputs={createSearchInputs(pageDispatch.state.search)}
+                    inputs={createSearchInputs(searchDispatch.search)}
                     className={styles.search_input}
                     rowClassName={styles.search_row}
-                    onChange={pageDispatch.onChangeSearchCondition}
-                    onKeyDown={pageDispatch.onSearchKeyDown}
+                    onChange={searchDispatch.onChangeCondition}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => {
+                        if (e.key === "Enter")
+                            pageDispatch.handleLoadProjects();
+                    }}
                 />
 
                 <div className={styles.search_button_group}>
-                    <Button variant="primary" onClick={pageDispatch.onSearch}>
+                    <Button
+                        variant="primary"
+                        onClick={() => pageDispatch.handleLoadProjects()}
+                    >
                         検索
                     </Button>
                     <Button
                         variant="secondary"
-                        onClick={pageDispatch.onClearSearch}
+                        onClick={() =>
+                            pageDispatch.handleLoadProjects({
+                                condition: InitCondition,
+                            })
+                        }
                     >
                         クリア
                     </Button>
                 </div>
             </div>
 
-            <div>
+            <div data-testid="pagination-area">
                 <Pagination
-                    state={pageDispatch.state.pagination}
-                    onNext={pageDispatch.onNextPage}
-                    onPrev={pageDispatch.onPrevPage}
+                    state={searchDispatch.pagination}
+                    onNext={() =>
+                        pageDispatch.handleLoadProjects({ mode: "next" })
+                    }
+                    onPrev={() =>
+                        pageDispatch.handleLoadProjects({ mode: "prev" })
+                    }
                 />
             </div>
 
@@ -63,7 +78,7 @@ export const ProjectListPage = () => {
                 className={`${commonStyles.table_wrapper} ${styles.table_wrapper}`}
             >
                 <ProjectTable
-                    projects={pageDispatch.state.projects}
+                    projects={pageDispatch.projects}
                     navigation={navigation}
                     onChangeForm={pageDispatch.onChangeForm}
                     onStartEdit={pageDispatch.onStartEdit}
@@ -78,8 +93,8 @@ export const ProjectListPage = () => {
                 <ProjectForm
                     state={modalDispatch.state}
                     onChange={modalDispatch.onChangeForm}
-                    onSubmit={modalDispatch.onConfirm}
-                    onClose={modalDispatch.onClose}
+                    onSubmit={modalDispatch.handleConfirm}
+                    onClose={modalDispatch.handleClose}
                 />
             )}
         </div>

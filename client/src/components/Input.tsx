@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import styles from "./Input.module.css";
 
 type BaseProps = {
@@ -43,12 +43,19 @@ export type InputProps<T extends string = string> =
 export const Input = <T extends string>(props: InputProps<T>) => {
     const { label, className, rowClassName } = props;
 
+    const id = useId();
+
     return (
         <div className={`${styles.detail_row} ${rowClassName ?? ""}`}>
-            {label && <label className={styles.detail_label}>{label}</label>}
+            {label && (
+                <label htmlFor={id} className={styles.detail_label}>
+                    {label}
+                </label>
+            )}
 
             {props.type === "select" && (
                 <select
+                    id={id}
                     className={`${styles.detail_select} ${className ?? ""}`}
                     value={props.value}
                     onChange={(e) => props.onChange(e.target.value as T)}
@@ -63,6 +70,7 @@ export const Input = <T extends string>(props: InputProps<T>) => {
 
             {props.type === "textarea" && (
                 <textarea
+                    id={id}
                     className={`${styles.detail_input} ${className ?? ""}`}
                     rows={4}
                     value={props.value}
@@ -72,6 +80,7 @@ export const Input = <T extends string>(props: InputProps<T>) => {
 
             {props.type === "text" && (
                 <input
+                    id={id}
                     type="text"
                     className={`${styles.detail_input} ${className ?? ""}`}
                     value={props.value}
@@ -82,6 +91,7 @@ export const Input = <T extends string>(props: InputProps<T>) => {
 
             {(props.type === "date" || props.type === "number") && (
                 <input
+                    id={id}
                     type={props.type}
                     className={`${styles.detail_input} ${className ?? ""}`}
                     value={props.value}

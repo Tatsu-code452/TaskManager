@@ -24,3 +24,4 @@ Thumbs.db
 # VSCode
 .vscode/
 client/test-results/
+client/data/

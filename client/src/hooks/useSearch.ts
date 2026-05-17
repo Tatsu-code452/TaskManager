@@ -16,7 +16,7 @@ export const useSearch = <T extends object>(
     const dispatch = useMemo(() => {
         const setField = <
             K extends keyof T
-        >(field: K, v: T[K]) => setValue({ ...value, [field]: v });
+        >(field: K, v: T[K]) => setValue((prev) => ({ ...prev, [field]: v }));
         const setAll = (v: T) => setValue(v);
         const reset = () => setValue(initialValue);
         const save = () => storage.setState(value);

@@ -1,5 +1,6 @@
 import InputSelector from "@components/InputSelector";
-import { InputConfig } from "../../../types/inputConfig";
+import { InputConfig } from "@comtypes/inputConfig";
+import { memo } from "react";
 
 export const InputSelectors = <T extends string>({
     inputs,
@@ -25,3 +26,5 @@ export const InputSelectors = <T extends string>({
         />
     ));
 };
+
+export default memo(InputSelector);

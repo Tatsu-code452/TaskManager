@@ -1,36 +1,48 @@
+import { projectApi } from "@api/projectApi";
+import { ProjectPayload } from "@comtypes/db/project";
+import { SearchCondition } from "@features/ProjectList/types/types";
 import { useCallback } from "react";
-import { projectApi } from "../../../../api/tauri/projectApi";
-import { ProjectPayload, ProjectSearchCondition } from "../../../../types/db/project";
 
 export const useProjectApi = () => {
-    const searchProjects = useCallback(async (
-        condition: ProjectSearchCondition, page: number, limit: number
+    const { create, update, remove, search } = projectApi();
+
+    const handleSearch = useCallback(async (
+        condition: SearchCondition, page: number, limit: number
     ) => {
-        return await projectApi.search(condition, page, limit);
+        return await search(condition, page, limit);
     }, []);
 
-    const createProject = useCallback(async (
+    const handleCreate = useCallback(async (
         payload: ProjectPayload,
     ) => {
-        await projectApi.create(payload);
+        await create(payload);
     }, []);
 
-    const updateProject = useCallback(async (
+    const handleUpdate = useCallback(async (
         payload: ProjectPayload,
     ) => {
-        await projectApi.update(payload);
+        await update(payload);
     }, []);
 
-    const deleteProject = useCallback(async (
+    const handleDelete = useCallback(async (
         id: string,
     ) => {
-        await projectApi.delete(id);
+        await remove(id);
     }, []);
 
+    const handleSubmit = async (mode: string, payload: ProjectPayload) => {
+        if (mode === "new") {
+            await handleCreate(payload);
+        } else if (mode === "edit") {
+            await handleUpdate(payload);
+        }
+    }
+
     return {
-        createProject,
-        updateProject,
-        deleteProject,
-        searchProjects,
+        handleCreate,
+        handleUpdate,
+        handleDelete,
+        handleSearch,
+        handleSubmit
     };
 };

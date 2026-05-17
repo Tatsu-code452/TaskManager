@@ -1,7 +1,8 @@
+import Button from "@components/Button";
+import { InlineSelectEditor } from "@components/InlineSelectEditor";
+import TableCreator, { TableColumn } from "@components/TableCreator";
 import React from "react";
 import { NavigateFunction } from "react-router-dom";
-import { Button, TableColumn, TableCreator } from "../../../components";
-import { InlineSelectEditor } from "../../../components/InlineSelectEditor";
 import {
     ProjectPayload,
     ProjectRow,
@@ -129,7 +130,7 @@ export const ProjectTable = ({
                 onStartEdit,
             )}
             rows={projects}
-            rowProps={(p) => ({
+            rowProps={(p: ProjectRow) => ({
                 onClick: () => navigation(`/projects/${p.id}`),
                 className: styles.table_row,
             })}

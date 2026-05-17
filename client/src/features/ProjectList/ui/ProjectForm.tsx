@@ -1,4 +1,5 @@
-import { InputSelectors } from "@features/ProjectList/ui/InputSelectors";
+import { InputSelectors } from "@components/InputSelectors";
+import { memo } from "react";
 import commonStyle from "../../../common.module.css";
 import { Button, Modal } from "../../../components";
 import { ModalState } from "../../../hooks/useModal";
@@ -52,3 +53,5 @@ export const ProjectForm = ({
         </Modal>
     );
 };
+
+export default memo(ProjectForm);

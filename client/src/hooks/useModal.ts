@@ -52,6 +52,12 @@ export const useModal = <T, K>() => {
             });
         };
 
+        const setFormField = <K extends keyof T>(key: K, v: T[K]) => {
+            const form = { ...state.data.form, [key]: v };
+            const data = { ...state.data, form: { ...form } };
+            setState({ ...state, isDirty: true, data: { ...data } });
+        };
+
         const reset = () => {
             if (!state.initialForm || !state.data) return;
 
@@ -100,6 +106,7 @@ export const useModal = <T, K>() => {
                 new: openNew,
                 edit: openEdit,
             },
+            setFormField,
             reset,
             close,
             confirmClose,
