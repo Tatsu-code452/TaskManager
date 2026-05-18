@@ -1,5 +1,6 @@
-use crate::define_model_all;
+use crate::model::macro_model::model_with_default;
 use crate::model::time_stamps::Timestamps;
+use crate::model::utils::DefaultValue;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -11,6 +12,12 @@ pub enum ProjectStatus {
     Completed, // 完了
     Archived,  // アーカイブ
     All,       // 検索用
+}
+
+impl DefaultValue for ProjectStatus {
+    fn default_value() -> Self {
+        ProjectStatus::Planned
+    }
 }
 
 #[derive(Debug, Clone, serde::Deserialize)]
@@ -28,18 +35,17 @@ pub struct ProjectSearchCondition {
     pub limit: Option<usize>,
 }
 
-define_model_all!(
+model_with_default!(
     Project,
-    ProjectRequest,
     ProjectRequest,
     { id: String },
     {
-        name: String => "".into(),
-        client: String => "".into(),
-        description: String => "".into(),
-        status: ProjectStatus => ProjectStatus::Planned,
-        start_date: Option<String> => None,
-        end_date: Option<String> => None,
-        owner: String => "".into(),
+        name: String,
+        client: String,
+        description: String,
+        status: ProjectStatus,
+        start_date: Option<String>,
+        end_date: Option<String>,
+        owner: String,
     }
 );
