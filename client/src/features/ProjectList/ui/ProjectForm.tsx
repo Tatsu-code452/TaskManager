@@ -1,10 +1,11 @@
+import { Button } from "@components/Button";
 import { InputSelectors } from "@components/InputSelectors";
+import { Modal } from "@components/Modal";
+import { ProjectPayload } from "@comtypes/db/project";
+import styles from "@features/ProjectList/index.module.css";
+import { createInputs } from "@features/ProjectList/types/model";
+import { ModalState } from "@hooks/useModal";
 import { memo } from "react";
-import commonStyle from "../../../common.module.css";
-import { Button, Modal } from "../../../components";
-import { ModalState } from "../../../hooks/useModal";
-import { ProjectPayload } from "../../../types/db/project";
-import { createInputs } from "../types/model";
 
 type ProjectFormProps = {
     state: ModalState<ProjectPayload, string>;
@@ -42,7 +43,7 @@ export const ProjectForm = ({
                 />
             </div>
 
-            <div className={commonStyle.detail_buttons}>
+            <div className={styles.detail_buttons}>
                 <Button variant="primary" onClick={onSubmit}>
                     {modeLabel[state.data.mode].submit}
                 </Button>

@@ -1,13 +1,15 @@
+import { Button } from "@components/Button";
 import { InputSelectors } from "@components/InputSelectors";
+import Pagination from "@components/Pagination";
+import { useProjectListController } from "@features/ProjectList/hooks/controller/useProjectListController";
+import styles from "@features/ProjectList/index.module.css";
+import {
+    createSearchInputs,
+    InitCondition,
+} from "@features/ProjectList/types/model";
+import { ProjectForm, ProjectTable } from "@features/ProjectList/ui";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import commonStyles from "../../common.module.css";
-import { Button } from "../../components";
-import Pagination from "../../components/Pagination";
-import { useProjectListController } from "./hooks/controller/useProjectListController";
-import styles from "./index.module.css";
-import { createSearchInputs, InitCondition } from "./types/model";
-import { ProjectForm, ProjectTable } from "./ui";
 
 export const ProjectListPage = () => {
     const { modalDispatch, pageDispatch, searchDispatch } =
@@ -19,7 +21,7 @@ export const ProjectListPage = () => {
 
     const navigation = useNavigate();
     return (
-        <div data-testid="container" className={commonStyles.container}>
+        <div data-testid="container" className={styles.container}>
             <h2>プロジェクト一覧</h2>
 
             <div className={styles.search_header}>
@@ -75,7 +77,7 @@ export const ProjectListPage = () => {
 
             <div
                 data-testid="table_wrapper"
-                className={`${commonStyles.table_wrapper} ${styles.table_wrapper}`}
+                className={`${styles.table_wrapper} ${styles.table_wrapper}`}
             >
                 <ProjectTable
                     projects={pageDispatch.projects}

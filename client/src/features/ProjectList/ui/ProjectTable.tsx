@@ -1,15 +1,15 @@
 import Button from "@components/Button";
 import { InlineSelectEditor } from "@components/InlineSelectEditor";
 import TableCreator, { TableColumn } from "@components/TableCreator";
-import React from "react";
-import { NavigateFunction } from "react-router-dom";
 import {
     ProjectPayload,
     ProjectRow,
     ProjectStatus,
-} from "../../../types/db/project";
-import { ProjectStatusLabel } from "../types/model";
-import styles from "./ProjectTable.module.css";
+} from "@comtypes/db/project";
+import { ProjectStatusLabel } from "@features/ProjectList/types/model";
+import styles from "@features/ProjectList/ui/ProjectTable.module.css";
+import React from "react";
+import { NavigateFunction } from "react-router-dom";
 
 type ProjectTableProps = {
     projects: ProjectRow[];
