@@ -2,21 +2,21 @@ import React from "react";
 import { InputConfig } from "../types/inputConfig";
 import Input from "./Input";
 
-interface InputSelectorProps<T extends string, K extends string> {
+interface InputSelectorProps<K extends string, T extends Record<K, unknown>> {
     input: InputConfig<K>;
-    onChange: (key: string, value: T) => void;
+    onChange: (key: K, value: T[K]) => void;
     onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
     className?: string;
     rowClassName?: string;
 }
 
-export const InputSelector = <T extends string, K extends string>({
+export const InputSelector = <K extends string, T extends Record<K, unknown>>({
     input,
     onChange,
     onKeyDown,
     className,
     rowClassName,
-}: InputSelectorProps<T, K>) => {
+}: InputSelectorProps<K, T>) => {
     if (input.type === "select") {
         return (
             <Input
@@ -26,7 +26,7 @@ export const InputSelector = <T extends string, K extends string>({
                 value={input.value}
                 options={input.options}
                 labelMap={input.labelMap}
-                onChange={(v) => onChange(input.key, v as T)}
+                onChange={(v) => onChange(input.key, v as T[K])}
                 className={className}
                 rowClassName={rowClassName}
             />
@@ -40,7 +40,7 @@ export const InputSelector = <T extends string, K extends string>({
                 type={input.type}
                 label={input.label}
                 value={input.value}
-                onChange={(v) => onChange(input.key, v as T)}
+                onChange={(v) => onChange(input.key, v as T[K])}
                 className={className}
                 rowClassName={rowClassName}
                 onKeyDown={onKeyDown}
@@ -53,7 +53,7 @@ export const InputSelector = <T extends string, K extends string>({
             type={input.type}
             label={input.label}
             value={input.value}
-            onChange={(v) => onChange(input.key, v as T)}
+            onChange={(v) => onChange(input.key, v as T[K])}
             className={className}
             rowClassName={rowClassName}
         />

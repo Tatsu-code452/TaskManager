@@ -2,17 +2,17 @@ import InputSelector from "@components/InputSelector";
 import { InputConfig } from "@comtypes/inputConfig";
 import { memo } from "react";
 
-export const InputSelectors = <T extends string>({
+export const InputSelectors = <K extends string, T extends Record<K, unknown>>({
     inputs,
     className,
     rowClassName,
     onChange,
     onKeyDown,
 }: {
-    inputs: InputConfig<T>[];
+    inputs: InputConfig<K>[];
     className?: string;
     rowClassName?: string;
-    onChange?: (key: string, value: string) => void;
+    onChange?: (key: K, value: T[K]) => void;
     onKeyDown?: (e: React.KeyboardEvent<HTMLElement>) => void;
 }) => {
     return inputs.map((input) => (
@@ -27,4 +27,4 @@ export const InputSelectors = <T extends string>({
     ));
 };
 
-export default memo(InputSelector);
+export default memo(InputSelectors);

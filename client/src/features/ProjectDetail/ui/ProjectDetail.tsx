@@ -2,15 +2,14 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import commonStyles from "../../../common.module.css";
 import { Button } from "../../../components";
 import { ProjectProgressPage } from "../../ProjectProgress/ui/ProjectProgressPage";
+import { MilestoneTab } from "../component/Milestone/MilestoneTab";
 import { useDefectStates } from "../hooks/state/useDefectStates";
 import { useIssueStates } from "../hooks/state/useIssueStates";
-import { useMilestoneStates } from "../hooks/state/useMilestoneStates";
 import { usePhaseStates } from "../hooks/state/usePhaseStates";
 import { useTaskStates } from "../hooks/state/useTaskStates";
 import styles from "./ProjectDetail.module.css";
 import { DefectTab } from "./defect/DefectTab";
 import { IssueTab } from "./issue/IssueTab";
-import { MilestoneTab } from "./milestone/MilestoneTab";
 import { PhaseTab } from "./phase/PhaseTab";
 import { TaskTab } from "./task/TaskTab";
 
@@ -35,7 +34,6 @@ export const ProjectDetail = () => {
         setParams(params);
     };
 
-    const milestoneStates = useMilestoneStates();
     const phaseStates = usePhaseStates();
     const taskStates = useTaskStates();
     const issueStates = useIssueStates();
@@ -59,14 +57,8 @@ export const ProjectDetail = () => {
             </div>
 
             <div className={styles.content}>
-
                 {/* {tab === "overview" && <OverviewTab />} */}
-                {tab === "milestone" && (
-                    <MilestoneTab
-                        projectId={projectId}
-                        states={milestoneStates}
-                    />
-                )}
+                {tab === "milestone" && <MilestoneTab projectId={projectId} />}
                 {tab === "phase" && (
                     <PhaseTab projectId={projectId} states={phaseStates} />
                 )}

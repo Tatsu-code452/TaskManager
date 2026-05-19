@@ -7,14 +7,14 @@ export const milestoneApi = {
     },
 
     create: async (milestone: MilestonePayload) => {
-        return await invoke("create_milestone", { payload: milestone });
+        await invoke("create_milestone", { payload: milestone });
     },
 
     update: async (milestone: MilestonePayload) => {
-        return await invoke("update_milestone", { payload: milestone });
+        await invoke("update_milestone", { payload: milestone });
     },
 
     delete: async (projectId: string, id: string) => {
-        return await invoke("delete_milestone", { id, projectId });
+        await invoke("delete_milestone", { id, projectId });
     },
 };

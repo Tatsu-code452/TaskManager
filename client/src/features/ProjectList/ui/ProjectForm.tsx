@@ -1,6 +1,6 @@
 import { Button } from "@components/Button";
 import { InputSelectors } from "@components/InputSelectors";
-import { Modal } from "@components/Modal";
+import { Modal } from "@components/Modal/Modal";
 import { ProjectPayload } from "@comtypes/db/project";
 import styles from "@features/ProjectList/index.module.css";
 import { createInputs } from "@features/ProjectList/types/model";

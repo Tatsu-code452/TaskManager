@@ -46,3 +46,7 @@
 .table tr:last-child td {
     border-bottom: none;
 }
+
+.table tr:nth-child(even) {
+    background: #fafafa;
+}
