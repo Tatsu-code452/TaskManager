@@ -1,0 +1,45 @@
+.table {
+    display: grid;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.table > .row:nth-child(odd) .body {
+    background: #fafafa;
+}
+
+.table > .row:hover .body {
+    background: #f0f8ff;
+}
+
+.table > .row:hover .body:first-child {
+    box-shadow: inset 3px 0 0 #3b82f6;
+}
+
+.row {
+    display: contents;
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+    padding: 0.85rem 0.75rem;
+    font-size: 0.9rem;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.header {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.body {
+    color: #333;
+    border-right: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import { PaginationState } from "../hooks/usePagination";
-import Button from "./Button";
+import Button from "./Button/Button";
 import styles from "./Pagination.module.css";
 
 interface PaginationProps {

@@ -1,4 +1,4 @@
-import { Button } from "@components/Button";
+import { Button } from "@components/Button/Button";
 import { InputSelectors } from "@components/InputSelectors";
 import { Modal } from "@components/Modal/Modal";
 import { ProjectPayload } from "@comtypes/db/project";

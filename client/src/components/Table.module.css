@@ -14,10 +14,6 @@
     border-bottom: 1px solid #f0f0f0;
 }
 
-.table tr:hover {
-    background: #f5f7fa;
-}
-
 /* セル */
 .table th,
 .table td {
@@ -49,4 +45,8 @@
 
 .table tr:nth-child(even) {
     background: #fafafa;
+}
+
+.table tr:hover {
+    background: #f0f8ff;
 }

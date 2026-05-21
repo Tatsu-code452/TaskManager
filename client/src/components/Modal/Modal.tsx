@@ -22,7 +22,7 @@ export const Modal = ({ title, children, onClose }: ModalProps) => {
                 onClick={(e) => e.stopPropagation()}
             >
                 {title && <h2 className={styles.title}>{title}</h2>}
-                <div>{children}</div>
+                <div className={styles.scroll_area}>{children}</div>
             </div>
         </div>
     );

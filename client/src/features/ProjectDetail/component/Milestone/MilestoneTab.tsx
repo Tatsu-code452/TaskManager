@@ -1,7 +1,8 @@
-import Button from "@components/Button";
+import Button from "@components/Button/Button";
+import { GridTableCreator } from "@components/GridTable/GridTableCreator";
 import { useMilestoneController } from "@features/ProjectDetail/component/Milestone/hooks/controller/useMilestoneController";
 import MilestoneForm from "@features/ProjectDetail/component/Milestone/ui/MilestoneForm";
-import MilestoneTable from "@features/ProjectDetail/component/Milestone/ui/MilestoneTable";
+import { MilestoneTable } from "@features/ProjectDetail/component/Milestone/ui/MilestoneTable";
 import { useEffect } from "react";
 import styles from "./MilestoneTab.module.css";
 
@@ -10,7 +11,7 @@ interface MilestoneTabProps {
 }
 export const MilestoneTab = ({ projectId }: MilestoneTabProps) => {
     const { pageDispatch, modalDispatch } = useMilestoneController(projectId);
-
+    const milestoneTable = MilestoneTable();
     useEffect(() => {
         pageDispatch.handleLoad();
     }, []);
@@ -31,10 +32,13 @@ export const MilestoneTab = ({ projectId }: MilestoneTabProps) => {
                 </div>
 
                 <div className={styles.table_wrapper}>
-                    <MilestoneTable
-                        milestones={pageDispatch.pageState}
-                        onRemove={pageDispatch.handleDelete}
-                        openEditModal={modalDispatch.onOpenEdit}
+                    <GridTableCreator
+                        rows={pageDispatch.pageState}
+                        columnDefs={milestoneTable.createColumnDefs(
+                            pageDispatch.handleDelete,
+                            modalDispatch.onOpenEdit,
+                        )}
+                        rowProps={milestoneTable.createRowProps}
                     />
                 </div>
 

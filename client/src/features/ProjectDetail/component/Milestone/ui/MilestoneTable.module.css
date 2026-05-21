@@ -6,6 +6,7 @@
     font-weight: 600;
     display: inline-flex;
     align-items: center;
+    border-radius: 9999px;
 }
 
 /* ステータス表示 */
@@ -37,39 +38,42 @@
     color: #555;
 }
 
-/* 列幅の最適化 */
-.col_title {
-    min-width: 12rem;
-    max-width: 20rem;
-}
-
 .col_detail {
-    min-width: 16rem;
-    max-width: 28rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.col_status {
-    width: 6rem;
-}
-
-.col_date {
-    width: 7rem;
-}
-
-.col_progress {
-    width: 6rem;
-}
-
 .col_actions {
-    width: 1rem;
     text-align: center;
 }
 
-.col_owner {
-    width: 6rem;
+div:has(> .actionBtn) {
+    padding: 0%;
+}
+
+.actionBtn {
+    width: 100%;
+    height: 100%;
+    padding: 0.85rem 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+
+    /* hover をセル全体に反映 */
+    transition: background 0.15s ease;
+}
+
+.actionBtn:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.actionBtn:active {
+    background: #d0e8ff;
 }
 
 .detail_buttons {

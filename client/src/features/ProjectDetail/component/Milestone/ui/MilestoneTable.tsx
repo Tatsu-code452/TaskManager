@@ -1,93 +1,110 @@
-import React from "react";
-import { Button, TableColumn, TableCreator } from "../../../../../components";
-import { MilestoneRow } from "../../../../../types/db/milestone";
-import { MilestoneStatusLabel } from "../types/milestone";
-import styles from "./MilestoneUi.module.css";
+import Button from "@components/Button/Button";
+import { ColumnDef } from "@components/GridTable/types";
+import { MilestoneRow } from "@comtypes/db/milestone";
+import { MilestoneStatusLabel } from "@features/ProjectDetail/component/Milestone/types/milestone";
+import styles from "./MilestoneTable.module.css";
 
-type Props = {
-    milestones: MilestoneRow[];
-    onRemove: (id: string) => void;
-    openEditModal: (milestone: MilestoneRow) => void;
+export const MilestoneTable = () => {
+    const createColumnDefs = (
+        onRemove: (id: string) => void,
+        openEditModal: (milestone: MilestoneRow) => void,
+    ): readonly ColumnDef<MilestoneRow>[] => [
+        {
+            header: "タイトル",
+            headerClass: "",
+            width: "minmax(min-content, 20rem)",
+            cell: (d) => d.title,
+        },
+        {
+            header: "ステータス",
+            headerClass: "",
+            width: "7rem",
+            cell: (d) => (
+                <span
+                    className={`${styles.badge} ${styles[`status_${d.status}`]}`}
+                >
+                    {MilestoneStatusLabel[d.status]}
+                </span>
+            ),
+        },
+        {
+            header: "開始日",
+            headerClass: "",
+            width: "7rem",
+            cell: (d) => d.start_date || "-",
+        },
+        {
+            header: "終了日",
+            headerClass: "",
+            width: "7rem",
+            cell: (d) => d.end_date || "-",
+        },
+        {
+            header: "進捗率",
+            headerClass: "",
+            width: "6rem",
+            cell: (d) => (d.progress ? `${d.progress}%` : "-"),
+        },
+        {
+            header: "担当者",
+            headerClass: "",
+            width: "6rem",
+            cell: (d) => d.owner || "-",
+        },
+        {
+            header: "備考",
+            headerClass: styles.col_detail,
+            width: "minmax(min-content, 28rem)",
+            cell: (d) => (
+                <span title={d.description} className={styles.col_detail}>
+                    {d.description}
+                </span>
+            ),
+        },
+        {
+            header: "",
+            headerClass: styles.col_actions,
+            width: "auto",
+            cell: (d) => (
+                <Button
+                    className={`editBtn ${styles.actionBtn}`}
+                    icon
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        openEditModal(d);
+                    }}
+                >
+                    ✎
+                </Button>
+            ),
+        },
+        {
+            header: "",
+            headerClass: styles.col_actions,
+            width: "auto",
+            cell: (d) => (
+                <Button
+                    className={`${styles.actionBtn}`}
+                    icon
+                    onClick={() => onRemove(d.id)}
+                >
+                    🗑
+                </Button>
+            ),
+        },
+    ];
+
+    const createRowProps: React.HTMLAttributes<HTMLDivElement> = {
+        onDoubleClick: (e) => {
+            const btn = e.currentTarget.querySelector(
+                ":scope .editBtn",
+            ) as HTMLElement | null;
+            btn?.click();
+        },
+    };
+
+    return {
+        createColumnDefs,
+        createRowProps,
+    };
 };
-
-const tableDef = (
-    onRemove: (id: string) => void,
-    openEditModal: (milestone: MilestoneRow) => void,
-): TableColumn<MilestoneRow>[] => [
-    {
-        headerContent: "タイトル",
-        headerClassName: styles.col_title,
-        bodyContent: (d) => d.title,
-    },
-    {
-        headerContent: "ステータス",
-        headerClassName: styles.col_status,
-        bodyContent: (d) => (
-            <span className={`${styles.badge} ${styles[`status_${d.status}`]}`}>
-                {MilestoneStatusLabel[d.status]}
-            </span>
-        ),
-    },
-    {
-        headerContent: "開始日",
-        headerClassName: styles.col_date,
-        bodyContent: (d) => d.start_date || "-",
-    },
-    {
-        headerContent: "終了日",
-        headerClassName: styles.col_date,
-        bodyContent: (d) => d.end_date || "-",
-    },
-    {
-        headerContent: "進捗率",
-        headerClassName: styles.col_progress,
-        bodyContent: (d) => d.progress || "-",
-    },
-    {
-        headerContent: "担当者",
-        headerClassName: styles.col_owner,
-        bodyContent: (d) => d.owner || "-",
-    },
-    {
-        headerContent: "備考",
-        headerClassName: styles.col_detail,
-        bodyContent: (d) => (
-            <span title={d.description} className={styles.col_detail}>
-                {d.description}
-            </span>
-        ),
-    },
-    {
-        headerContent: "",
-        headerClassName: styles.col_actions,
-        bodyContent: (d) => (
-            <Button icon onClick={() => openEditModal(d)}>
-                ✎
-            </Button>
-        ),
-    },
-    {
-        headerContent: "",
-        headerClassName: styles.col_actions,
-        bodyContent: (d) => (
-            <Button icon onClick={() => onRemove(d.id)}>
-                🗑
-            </Button>
-        ),
-    },
-];
-
-export const MilestoneTable = ({
-    milestones,
-    onRemove,
-    openEditModal,
-}: Props) => {
-    return (
-        <TableCreator
-            tableDef={tableDef(onRemove, openEditModal)}
-            rows={milestones}
-        />
-    );
-};
-
-export default React.memo(MilestoneTable);

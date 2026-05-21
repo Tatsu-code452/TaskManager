@@ -1,4 +1,4 @@
-import { Button } from "@components/Button";
+import { Button } from "@components/Button/Button";
 import { InputSelectors } from "@components/InputSelectors";
 import Pagination from "@components/Pagination";
 import { useProjectListController } from "@features/ProjectList/hooks/controller/useProjectListController";

@@ -23,6 +23,13 @@ const TABS = [
     "gantt",
 ] as const;
 type Tab = (typeof TABS)[number];
+// [プロジェクト全体進捗バー]
+
+// [マイルストーン進捗サマリー]   [フェーズ進捗サマリー]
+
+// [WBS 進捗 / タスク状況]          [課題・欠陥のステータス]
+
+// [直近の重要イベント]             [遅延アラート]
 
 export const ProjectDetail = () => {
     const { id } = useParams<{ id: string }>();
