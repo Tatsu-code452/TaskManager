@@ -1,6 +1,7 @@
 pub mod defect_service;
 pub mod issue_service;
 pub mod milestone_service;
+pub mod milestone_summary_service;
 pub mod phase_aggregate_service;
 pub mod phase_service;
 pub mod project_aggregate_service;

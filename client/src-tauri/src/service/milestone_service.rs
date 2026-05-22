@@ -1,5 +1,7 @@
+use serde::Serialize;
+
 use crate::db::database::Database;
-use crate::model::milestone::{Milestone, MilestoneRequest};
+use crate::model::milestone::{Milestone, MilestoneRequest, MilestoneStatus};
 
 pub struct MilestoneService;
 

@@ -6,6 +6,7 @@ pub mod phase_aggregate;
 pub mod project;
 pub mod project_aggregate;
 pub mod state;
+pub mod summary;
 pub mod task;
 pub mod task_actual_cell;
 pub mod task_plan_cell;
