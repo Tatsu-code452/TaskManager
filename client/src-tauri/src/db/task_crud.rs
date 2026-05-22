@@ -1,25 +1,71 @@
-use crate::db::database::Database;
-use crate::define_crud_multiple_id;
-use crate::model::task::Task;
+use crate::{
+    db::{
+        database::Database,
+        table::{add, all, delete, find, find_mut, rebuild_index, update},
+    },
+    model::task::Task,
+    util::id::generate_uuid,
+};
 
 impl Database {
-    define_crud_multiple_id!(
-        add_task,
-        update_task,
-        delete_task,
-        find_task,
-        find_task_mut,
-        find_task_by_project,
-        next_task_id,
-        rebuild_task_index,
-        tasks,
-        task_index,
-        row,
-        Task,
-        project_id,
-        id,
-        "TASK-"
-    );
+    pub fn add_task(&mut self, row: &Task) -> Option<Task> {
+        add(&mut self.tasks, &mut self.task_index, row.clone())
+    }
+
+    pub fn update_task(&mut self, row: &Task) -> Option<Task> {
+        update(&mut self.tasks, &self.task_index, row.clone())
+    }
+
+    pub fn delete_task(&mut self, project_id: &str, id: &str) -> Option<Task> {
+        delete(
+            &mut self.tasks,
+            &mut self.task_index,
+            (project_id.to_string(), id.to_string()),
+        )
+    }
+
+    pub fn find_task(&self, project_id: &str, id: &str) -> Option<&Task> {
+        find(
+            &self.tasks,
+            &self.task_index,
+            (project_id.to_string(), id.to_string()),
+        )
+    }
+
+    pub fn find_task_mut(&mut self, project_id: &str, id: &str) -> Option<&mut Task> {
+        find_mut(
+            &mut self.tasks,
+            &self.task_index,
+            (project_id.to_string(), id.to_string()),
+        )
+    }
+
+    pub fn find_all_task(&self) -> Vec<Task> {
+        all(&self.tasks)
+    }
+
+    pub fn find_task_by_project(&self, project_id: &str) -> Option<Vec<Task>> {
+        let list: Vec<Task> = self
+            .tasks
+            .iter()
+            .filter(|item| item.project_id == project_id)
+            .cloned()
+            .collect();
+
+        if list.is_empty() {
+            None
+        } else {
+            Some(list)
+        }
+    }
+
+    pub fn next_task_id(&self) -> String {
+        generate_uuid()
+    }
+
+    pub fn rebuild_task_index(&mut self) {
+        rebuild_index(&mut self.tasks, &mut self.task_index);
+    }
 
     pub fn find_task_by_task(&mut self, task_id: &str) -> Vec<Task> {
         self.tasks
@@ -28,6 +74,7 @@ impl Database {
             .cloned()
             .collect()
     }
+
     pub fn delete_task_and_relate_data(&mut self, id: &str, project_id: &str) -> Option<Task> {
         let index = self
             .tasks

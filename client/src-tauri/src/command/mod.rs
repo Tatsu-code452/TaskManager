@@ -1,6 +1,3 @@
-pub mod command_composite_macro;
-pub mod command_multiple_id_macro;
-pub mod command_single_id_macro;
 pub mod defect;
 pub mod issue;
 pub mod milestone;

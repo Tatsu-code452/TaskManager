@@ -1,7 +1,8 @@
+pub mod default_value;
 pub mod defect;
 pub mod issue;
+pub mod macro_model;
 pub mod milestone;
-pub mod model_macro;
 pub mod phase;
 pub mod project;
 pub mod tag;
@@ -9,5 +10,3 @@ pub mod task;
 pub mod task_actual_cell;
 pub mod task_plan_cell;
 pub mod time_stamps;
-pub mod utils;
-pub mod macro_model;

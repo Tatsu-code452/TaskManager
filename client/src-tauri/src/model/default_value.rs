@@ -26,3 +26,28 @@ impl DefaultValue for i32 {
         0
     }
 }
+
+// u8 → 0
+impl DefaultValue for u8 {
+    fn default_value() -> Self {
+        0
+    }
+}
+
+impl DefaultValue for u32 {
+    fn default_value() -> Self {
+        0
+    }
+}
+
+impl DefaultValue for f64 {
+    fn default_value() -> Self {
+        0.0
+    }
+}
+
+impl<T> DefaultValue for Vec<T> {
+    fn default_value() -> Self {
+        vec![]
+    }
+}

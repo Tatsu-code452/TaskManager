@@ -1,56 +1,34 @@
 use crate::db::database::Database;
+use crate::db::table::{add, all, delete, find, find_mut, rebuild_index, update};
 use crate::model::project::Project;
 
 impl Database {
-    pub fn add_project(&mut self, item: Project) -> Option<Project> {
-        let id = item.id.clone();
-
-        if self.project_index.contains_key(&id) {
-            return None;
-        }
-
-        self.projects.push(item.clone());
-        self.project_index.insert(id, self.projects.len() - 1);
-
-        Some(item)
+    pub fn add_project(&mut self, row: Project) -> Option<Project> {
+        add(&mut self.projects, &mut self.project_index, row.clone())
     }
 
-    pub fn find_project(&self, id: &str) -> Option<&Project> {
-        self.project_index
-            .get(id)
-            .and_then(|&i| self.projects.get(i))
-    }
-
-    pub fn find_project_mut(&mut self, id: &str) -> Option<&mut Project> {
-        self.project_index
-            .get(id)
-            .and_then(|&i| self.projects.get_mut(i))
-    }
-
-    pub fn find_all_project(&self) -> Vec<Project> {
-        self.projects.iter().cloned().collect()
-    }
-
-    pub fn update_project(&mut self, item: Project) -> Option<Project> {
-        let id = item.id.clone();
-        let index = *self.project_index.get(&id)?;
-        self.projects[index] = item.clone();
-        println!("crud OK");
-        Some(item)
+    pub fn update_project(&mut self, row: Project) -> Option<Project> {
+        update(&mut self.projects, &mut self.project_index, row.clone())
     }
 
     pub fn delete_project(&mut self, id: &str) -> Option<Project> {
-        let index = *self.project_index.get(id)?;
-        let removed = self.projects.remove(index);
-        self.rebuild_project_index();
-        Some(removed)
+        delete(&mut self.projects, &mut self.project_index, id.to_string())
+    }
+
+    pub fn find_project(&self, id: &str) -> Option<&Project> {
+        find(&self.projects, &self.project_index, id.to_string())
+    }
+
+    pub fn find_project_mut(&mut self, id: &str) -> Option<&mut Project> {
+        find_mut(&mut self.projects, &self.project_index, id.to_string())
+    }
+
+    pub fn find_all_project(&self) -> Vec<Project> {
+        all(&self.projects)
     }
 
     pub fn rebuild_project_index(&mut self) {
-        self.project_index.clear();
-        for (i, item) in self.projects.iter().enumerate() {
-            self.project_index.insert(item.id.clone(), i);
-        }
+        rebuild_index(&mut self.projects, &mut self.project_index)
     }
 
     pub fn delete_project_with_relation(&mut self, id: &str) -> Option<Project> {

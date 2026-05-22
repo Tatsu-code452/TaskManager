@@ -1,7 +1,10 @@
 use crate::model::time_stamps::Timestamps;
-use crate::util::id::generate_uuid;
-use crate::{define_apply_request, define_model};
 use serde::{Deserialize, Serialize};
+
+use crate::{
+    db::table::HasKey,
+    model::{macro_model::model_with_default, default_value::DefaultValue},
+};
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "PascalCase")]
@@ -11,7 +14,19 @@ pub enum TaskStatus {
     Done,
 }
 
-define_model!(
+impl DefaultValue for TaskStatus {
+    fn default_value() -> Self {
+        TaskStatus::NotStarted
+    }
+}
+
+impl HasKey<(String, String)> for Task {
+    fn key(&self) -> (String, String) {
+        (self.project_id.clone(), self.id.clone())
+    }
+}
+
+model_with_default!(
     Task,
     TaskRequest,
     {
@@ -29,43 +44,5 @@ define_model!(
         actual_hours: Option<f64>,
         progress_rate: f64,
         status: TaskStatus,
-    }
-);
-
-#[allow(unused_variables)]
-impl Task {
-    pub fn new(id: String, project_id: String) -> Self {
-        Self {
-            id: generate_uuid(),
-            project_id,
-            phase_id: "".into(),
-            name: "".into(),
-            planned_start: None,
-            planned_end: None,
-            planned_hours: None,
-            actual_start: None,
-            actual_end: None,
-            actual_hours: None,
-            progress_rate: 0.0,
-            status: TaskStatus::NotStarted,
-            timestamps: Timestamps::new(),
-        }
-    }
-}
-
-define_apply_request!(
-    Task,
-    TaskRequest,
-    {
-        phase_id,
-        name,
-        planned_start,
-        planned_end,
-        planned_hours,
-        actual_start,
-        actual_end,
-        actual_hours,
-        progress_rate,
-        status,
     }
 );

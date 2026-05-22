@@ -1,16 +1,14 @@
-use crate::define_model_all;
+use crate::model::macro_model::model_with_default;
 use crate::model::time_stamps::Timestamps;
-use serde::{Deserialize};
 
-define_model_all!(
+model_with_default!(
     TaskActualCell,
-    TaskActualCellRequest,
     TaskActualCellRequest,
     {
         task_id: String,
         date: String,
     },
     {
-        hours: f64 => 0.0,
+        hours: f64,
     }
 );

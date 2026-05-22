@@ -16,7 +16,7 @@ macro_rules! model_with_default {
             pub timestamps: Timestamps,
         }
 
-        #[derive(serde::Deserialize)]
+        #[derive(Clone, serde::Deserialize)]
         pub struct $option_name {
             $( pub $key: $type ),*,
             $( pub $field: Option<$field_type> ),*
@@ -29,10 +29,10 @@ macro_rules! model_with_default {
             fn default() -> Self {
                 Self {
                     $(
-                        $key: $crate::model::utils::default_value::<$type>(),
+                        $key: $crate::model::default_value::default_value::<$type>(),
                     )*
                     $(
-                        $field: $crate::model::utils::default_value::<$field_type>(),
+                        $field: $crate::model::default_value::default_value::<$field_type>(),
                     )*
                     timestamps: Timestamps::new(),
                 }

@@ -1,6 +1,6 @@
-use crate::model::macro_model::model_with_default;
+use crate::model::default_value::DefaultValue;
 use crate::model::time_stamps::Timestamps;
-use crate::model::utils::DefaultValue;
+use crate::{db::table::HasKey, model::macro_model::model_with_default};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -33,6 +33,12 @@ pub struct ProjectSearchCondition {
 
     pub page: Option<usize>,
     pub limit: Option<usize>,
+}
+
+impl HasKey<String> for Project {
+    fn key(&self) -> String {
+        self.id.clone()
+    }
 }
 
 model_with_default!(

@@ -1,4 +1,6 @@
-use crate::define_model_all;
+use crate::db::table::HasKey;
+use crate::model::default_value::DefaultValue;
+use crate::model::macro_model::model_with_default;
 use crate::model::tag::Tag;
 use crate::model::time_stamps::Timestamps;
 use serde::{Deserialize, Serialize};
@@ -13,6 +15,12 @@ pub enum IssueStatus {
     Closed,     // 完全クローズ
 }
 
+impl DefaultValue for IssueStatus {
+    fn default_value() -> Self {
+        IssueStatus::Open
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "PascalCase")]
 pub enum IssuePriority {
@@ -22,24 +30,35 @@ pub enum IssuePriority {
     Critical,
 }
 
-define_model_all!(
+impl DefaultValue for IssuePriority {
+    fn default_value() -> Self {
+        IssuePriority::Low
+    }
+}
+
+impl HasKey<(String, String)> for Issue {
+    fn key(&self) -> (String, String) {
+        (self.project_id.clone(), self.id.clone())
+    }
+}
+
+model_with_default!(
     Issue,
-    IssueRequest,
     IssueRequest,
     {
         id: String,
         project_id: String,
     },
     {
-        task_id: Option<String> => None,
-        title: String => "".into(),
-        description: String => "".into(),
-        status: IssueStatus => IssueStatus::Open,
-        priority: IssuePriority => IssuePriority::Low,
-        owner: String => "".into(),
-        reviewer: String => "".into(),
-        due_date: Option<String> => None,
-        completed_date: Option<String> => None,
-        tags: Vec<Tag> => vec![],
+        task_id: Option<String>,
+        title: String,
+        description: String,
+        status: IssueStatus,
+        priority: IssuePriority,
+        owner: String,
+        reviewer: String,
+        due_date: Option<String>,
+        completed_date: Option<String>,
+        tags: Vec<Tag>,
     }
 );
