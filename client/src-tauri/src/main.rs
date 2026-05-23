@@ -1,62 +1,57 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 extern crate app_lib;
 
-use app_lib::command;
 use app_lib::command::state::AppState;
+use app_lib::domain::{
+    defect, issue, milestone, phase, project, task, task_actual_cell, task_plan_cell,
+};
 
 fn main() {
     tauri::Builder::default()
         .manage(AppState::new())
         .invoke_handler(tauri::generate_handler![
             // Project
-            command::project::list_projects,
-            command::project::create_project,
-            command::project::update_project,
-            command::project::delete_project,
-            command::project::search_projects,
+            project::command::list_projects,
+            project::command::create_project,
+            project::command::update_project,
+            project::command::delete_project,
+            project::command::search_projects,
             // Phase
-            command::phase::list_phases,
-            command::phase::create_phase,
-            command::phase::update_phase,
-            command::phase::delete_phase,
+            phase::command::list_phases,
+            phase::command::create_phase,
+            phase::command::update_phase,
+            phase::command::delete_phase,
             // Milestone
-            command::milestone::list_milestones,
-            command::milestone::create_milestone,
-            command::milestone::update_milestone,
-            command::milestone::delete_milestone,
+            milestone::command::list_milestones,
+            milestone::command::create_milestone,
+            milestone::command::update_milestone,
+            milestone::command::delete_milestone,
             // Task
-            command::task::list_tasks,
-            command::task::create_task,
-            command::task::update_task,
-            command::task::delete_task,
-            command::task::fetch_task_and_cells,
+            task::command::list_tasks,
+            task::command::create_task,
+            task::command::update_task,
+            task::command::delete_task,
+            task::command::fetch_task_and_cells,
             // Issue
-            command::issue::list_issues,
-            command::issue::create_issue,
-            command::issue::update_issue,
-            command::issue::delete_issue,
+            issue::command::list_issues,
+            issue::command::create_issue,
+            issue::command::update_issue,
+            issue::command::delete_issue,
             // Defect
-            command::defect::list_defects,
-            command::defect::create_defect,
-            command::defect::update_defect,
-            command::defect::delete_defect,
+            defect::command::list_defects,
+            defect::command::create_defect,
+            defect::command::update_defect,
+            defect::command::delete_defect,
             // TaskPlanCell
-            command::task_plan_cell::list_task_plan_cells,
-            command::task_plan_cell::create_task_plan_cell,
-            command::task_plan_cell::update_task_plan_cell,
-            command::task_plan_cell::delete_task_plan_cell,
+            task_plan_cell::command::list_task_plan_cells,
+            task_plan_cell::command::create_task_plan_cell,
+            task_plan_cell::command::update_task_plan_cell,
+            task_plan_cell::command::delete_task_plan_cell,
             // TaskActualCell
-            command::task_actual_cell::list_task_actual_cells,
-            command::task_actual_cell::create_task_actual_cell,
-            command::task_actual_cell::update_task_actual_cell,
-            command::task_actual_cell::delete_task_actual_cell,
-            // Phase 集計
-            command::phase_aggregate::get_phase_progress,
-            // Project 集計
-            command::project_aggregate::get_project_progress,
-            command::project_aggregate::get_project_issue_count,
-            command::project_aggregate::get_project_defect_count,
-            command::project_aggregate::get_project_delayed_tasks,
+            task_actual_cell::command::list_task_actual_cells,
+            task_actual_cell::command::create_task_actual_cell,
+            task_actual_cell::command::update_task_actual_cell,
+            task_actual_cell::command::delete_task_actual_cell,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

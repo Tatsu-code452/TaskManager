@@ -5,10 +5,12 @@ use std::io::Write;
 use std::panic;
 use std::path::Path;
 
-use crate::model::{
-    defect::Defect, issue::Issue, milestone::Milestone, phase::Phase, project::Project, task::Task,
-    task_actual_cell::TaskActualCell, task_plan_cell::TaskPlanCell,
+use crate::domain::{
+    defect::model::Defect, issue::model::Issue, milestone::model::Milestone, phase::model::Phase,
+    project::model::Project, task::model::Task, task_actual_cell::model::TaskActualCell,
+    task_plan_cell::model::TaskPlanCell,
 };
+
 const DB_DIR: &str = "../data";
 const DB_PATH: &str = "../data/db.json";
 const DB_TMP_PATH: &str = "../data/db.json.tmp";

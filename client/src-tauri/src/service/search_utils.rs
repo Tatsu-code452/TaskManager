@@ -1,5 +1,3 @@
-use crate::model::project::ProjectStatus;
-
 pub struct SearchBuilder<T> {
     items: Vec<T>,
     filters: Vec<FilterExpr<T>>,
@@ -227,18 +225,6 @@ impl IntoOpt<String> for &String {
         } else {
             Some(s.to_string())
         }
-    }
-}
-
-impl IntoOpt<ProjectStatus> for ProjectStatus {
-    fn into_opt(self) -> Option<ProjectStatus> {
-        Some(self)
-    }
-}
-
-impl IntoOpt<ProjectStatus> for &ProjectStatus {
-    fn into_opt(self) -> Option<ProjectStatus> {
-        Some(self.clone())
     }
 }
 
