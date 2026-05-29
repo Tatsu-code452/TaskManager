@@ -48,6 +48,21 @@ export const col = <T extends Record<string, unknown>>() => ({
         headerClass: opts?.headerClass ?? "",
     }),
 
+    texts: (
+        header: string,
+        accessor: (d: T) => string[],
+        opts?: Partial<ColumnDef<T>>,
+    ): ColumnDef<T> => ({
+        header,
+        cell: (d) => (
+            <div style={{ whiteSpace: "pre-wrap" }}>
+                {accessor(d) ? accessor(d).join("\n") : "-"}
+            </div>
+        ),
+        width: opts?.width ?? "auto",
+        headerClass: opts?.headerClass ?? "",
+    }),
+
     badge: (
         header: string,
         accessor: (d: T) => string,

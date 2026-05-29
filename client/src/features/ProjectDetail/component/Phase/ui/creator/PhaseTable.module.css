@@ -23,11 +23,6 @@
     color: #004578;
 }
 
-.status_Open {
-    background: #d0e7ff;
-    color: #004578;
-}
-
 .status_InProgress {
     background: #fff4ce;
     color: #8a6d00;
@@ -38,15 +33,9 @@
     color: #0f6a0f;
 }
 
-.status_Archived {
-    background: #e1e1e1;
-    color: #555;
-}
-
 .col_detail {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    display: flex;
+    flex-direction: column;
 }
 
 .col_actions {

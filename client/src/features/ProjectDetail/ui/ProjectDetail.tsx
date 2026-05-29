@@ -3,14 +3,13 @@ import commonStyles from "../../../common.module.css";
 import { Button } from "../../../components";
 import { ProjectProgressPage } from "../../ProjectProgress/ui/ProjectProgressPage";
 import { MilestoneTab } from "../component/Milestone/MilestoneTab";
+import { PhaseTab } from "../component/Phase/PhaseTab";
 import { useDefectStates } from "../hooks/state/useDefectStates";
 import { useIssueStates } from "../hooks/state/useIssueStates";
-import { usePhaseStates } from "../hooks/state/usePhaseStates";
 import { useTaskStates } from "../hooks/state/useTaskStates";
 import styles from "./ProjectDetail.module.css";
 import { DefectTab } from "./defect/DefectTab";
 import { IssueTab } from "./issue/IssueTab";
-import { PhaseTab } from "./phase/PhaseTab";
 import { TaskTab } from "./task/TaskTab";
 
 const TABS = [
@@ -41,7 +40,6 @@ export const ProjectDetail = () => {
         setParams(params);
     };
 
-    const phaseStates = usePhaseStates();
     const taskStates = useTaskStates();
     const issueStates = useIssueStates();
     const defectStates = useDefectStates();
@@ -66,9 +64,7 @@ export const ProjectDetail = () => {
             <div className={styles.content}>
                 {/* {tab === "overview" && <OverviewTab />} */}
                 {tab === "milestone" && <MilestoneTab projectId={projectId} />}
-                {tab === "phase" && (
-                    <PhaseTab projectId={projectId} states={phaseStates} />
-                )}
+                {tab === "phase" && <PhaseTab projectId={projectId} />}
                 {tab === "task" && (
                     <TaskTab projectId={projectId} states={taskStates} />
                 )}

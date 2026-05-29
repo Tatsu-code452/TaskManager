@@ -1,0 +1,36 @@
+/* 画面全体 */
+.container {
+    padding: 1rem;
+    background: #f3f4f6; /* ← 淡いグレーで階層が生まれる */
+    max-height: 90vh;
+}
+
+.table_wrapper {
+    overflow: auto;
+    padding-bottom: 0.5rem;
+    position: relative;
+    max-height: 65vh;
+}
+
+.section_card {
+    background: #ffffff;
+    padding: 1.5rem 1.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.header_actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.section_title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    color: #1f2937;
+}
