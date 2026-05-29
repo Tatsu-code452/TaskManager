@@ -1,7 +1,7 @@
 import { Timestamps } from "./common";
 
 export enum MilestoneStatus {
-    NotStarted = "NotStarted",
+    Open = "Open",
     InProgress = "InProgress",
     Completed = "Completed",
     Archived = "Archived"
@@ -39,4 +39,18 @@ export const toMilestonePayload = (param: MilestoneRow): MilestonePayload => (
         end_date: param.end_date,
         owner: param.owner,
     }
-)
+);
+
+export const InitPayload = (project_id: string): MilestonePayload => (
+    {
+        id: "",
+        project_id,
+        title: "",
+        description: "",
+        status: MilestoneStatus.Open,
+        progress: 0,
+        start_date: "",
+        end_date: "",
+        owner: "",
+    }
+);

@@ -2,24 +2,25 @@ import { GridTable } from "@components/GridTable/GridTable";
 import { RowCreator } from "@components/GridTable/Row/RowCreator";
 import { ColumnDef } from "@components/GridTable/types";
 
-export type Props<T> = React.HTMLAttributes<HTMLDivElement> & {
-    columnDefs: readonly ColumnDef<T>[];
-    rows: T[];
+type DbRow = Record<string, unknown>;
+export type Props = React.HTMLAttributes<HTMLDivElement> & {
+    columnDefs: readonly ColumnDef<DbRow>[];
     rowProps?: React.HTMLAttributes<HTMLDivElement>;
+    rows: DbRow[];
 };
 
-export const GridTableCreator = <T extends object>({
+export const GridTableCreator = ({
     columnDefs,
     rows,
     rowProps,
     ...rest
-}: Props<T>) => {
+}: Props) => {
     return (
         <GridTable
             columns={columnDefs.map((c) => c.width ?? "auto").join(" ")}
             {...rest}
         >
-            {RowCreator<T>({ columnDefs, rows }, rowProps)}
+            {RowCreator({ columnDefs, rows }, rowProps)}
         </GridTable>
     );
 };

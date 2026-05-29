@@ -1,0 +1,84 @@
+/* ステータス表示 */
+.badge {
+    padding: 0.25rem 0.55rem;
+    border-radius: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+}
+
+/* ステータス表示 */
+.status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+}
+
+.status_Open {
+    background: #d0e7ff;
+    color: #004578;
+}
+
+.status_InProgress {
+    background: #fff4ce;
+    color: #8a6d00;
+}
+
+.status_Completed {
+    background: #dff6dd;
+    color: #0f6a0f;
+}
+
+.status_Archived {
+    background: #e1e1e1;
+    color: #555;
+}
+
+.col_detail {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.col_actions {
+    text-align: center;
+}
+
+div:has(> .actionBtn) {
+    padding: 0%;
+}
+
+.actionBtn {
+    width: 100%;
+    height: 100%;
+    padding: 0.85rem 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+
+    /* hover をセル全体に反映 */
+    transition: background 0.15s ease;
+}
+
+.actionBtn:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.actionBtn:active {
+    background: #d0e8ff;
+}
+
+.detail_buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}

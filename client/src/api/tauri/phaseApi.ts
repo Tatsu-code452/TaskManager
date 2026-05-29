@@ -7,14 +7,14 @@ export const phaseApi = {
     },
 
     create: async (phase: PhasePayload) => {
-        return await invoke("create_phase", { payload: phase });
+        await invoke("create_phase", { payload: phase });
     },
 
     update: async (phase: PhasePayload) => {
-        return await invoke("update_phase", { payload: phase });
+        await invoke("update_phase", { payload: phase });
     },
 
     delete: async (projectId: string, id: string) => {
-        return await invoke("delete_phase", { id, projectId });
+        await invoke("delete_phase", { id, projectId });
     },
 };

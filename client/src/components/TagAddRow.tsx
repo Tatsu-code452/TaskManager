@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TagType } from "../types/db/common";
 import Button from "./Button/Button";
-import Input from "./Input";
+import Input from "./Input/Input";
 import styles from "./TagAddRow.module.css";
 
 interface TagAddRowProps {

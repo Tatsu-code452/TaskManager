@@ -1,19 +1,18 @@
 import Button from "@components/Button/Button";
-import InputSelectors from "@components/InputSelectors";
+import {
+    createFormCreator,
+    OnChange,
+    Payload,
+    SectionDefinitions
+} from "@components/Form/FormCreator";
 import Modal from "@components/Modal/Modal";
-import { InputConfig } from "@comtypes/inputConfig";
+import Section from "@components/Section/Section";
+import { ModalState } from "@hooks/useModal";
 import { memo } from "react";
 import styles from "./Form.module.css";
 
-type Props<K extends string, T extends Record<K, unknown>> = {
-    mode: "new" | "edit";
-    inputs: InputConfig<K>[];
-    onChange: (key: K, value: T[K]) => void;
-    onSubmit: () => void;
-    onClose: () => void;
-};
-
-const modeLabel: Record<"new" | "edit", { title: string; submit: string }> = {
+type Labels = { title: string; submit: string };
+const ModeLabel: Record<"new" | "edit", Labels> = {
     new: {
         title: "新規作成",
         submit: "作成",
@@ -24,22 +23,40 @@ const modeLabel: Record<"new" | "edit", { title: string; submit: string }> = {
     },
 };
 
-export const Form = <K extends string, T extends Record<K, object>>({
-    mode,
-    inputs,
+type Props = {
+    state: ModalState<Payload, string>;
+    sectionDefinition: SectionDefinitions;
+    onChange: OnChange;
+    onSubmit: () => void;
+    onClose: () => void;
+};
+
+export const Form = ({
+    state,
+    sectionDefinition,
     onChange,
     onSubmit,
     onClose,
-}: Props<K, T>) => {
+}: Props) => {
+    const sections = createFormCreator()(sectionDefinition).build(
+        state.data.form,
+        onChange,
+    );
+
     return (
-        <Modal title={modeLabel[mode].title} onClose={onClose}>
-            <div>
-                <InputSelectors inputs={inputs} onChange={onChange} />
+        <Modal title={ModeLabel[state.data.mode].title} onClose={onClose}>
+            <div className={styles.form_container}>
+                {Object.entries(sections).map(([key, section], index) => (
+                    <Section
+                        key={`section_${key}_${index}`}
+                        section={section}
+                    />
+                ))}
             </div>
 
-            <div className={styles.detail_buttons}>
+            <div className={styles.modal_footer}>
                 <Button variant="primary" onClick={onSubmit}>
-                    {modeLabel[mode].submit}
+                    {ModeLabel[state.data.mode].submit}
                 </Button>
                 <Button variant="secondary" onClick={onClose}>
                     キャンセル

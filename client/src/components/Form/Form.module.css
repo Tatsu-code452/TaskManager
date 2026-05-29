@@ -1,104 +1,28 @@
-.section_card {
-    background: #ffffff;
-    padding: 1.5rem 1.75rem;
+/* ============================
+   全体レイヤー
+============================ */
+.form_container {
+    background: #f3f4f6; /* ← グレーを少し濃くしてレイヤーを明確化 */
+    padding: 1.25rem 1.5rem;
     border-radius: 0.75rem;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
 }
 
-.header_actions {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.section_title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 1.25rem;
-    color: #1f2937;
-}
-
-/* ステータス表示 */
-.badge {
-    padding: 0.25rem 0.55rem;
-    border-radius: 0.4rem;
-    font-size: 0.78rem;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-}
-
-/* ステータス表示 */
-.status {
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.4rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: white;
-}
-
-.status_NotStarted {
-    background: #d0e7ff;
-    color: #004578;
-}
-
-.status_InProgress {
-    background: #fff4ce;
-    color: #8a6d00;
-}
-
-.status_Completed {
-    background: #dff6dd;
-    color: #0f6a0f;
-}
-
-.status_Archived {
-    background: #e1e1e1;
-    color: #555;
-}
-
-/* 列幅の最適化 */
-.col_title {
-    min-width: 12rem;
-    max-width: 20rem;
-}
-
-.col_detail {
-    min-width: 16rem;
-    max-width: 28rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.col_status {
-    width: 6rem;
-}
-
-.col_date {
-    width: 7rem;
-}
-
-.col_progress {
-    width: 6rem;
-}
-
-.col_actions {
-    width: 1rem;
-    text-align: center;
-}
-
-.col_owner {
-    width: 6rem;
-}
-
-
-.detail_buttons {
+/* ============================
+   フッター（保存/キャンセル）
+============================ */
+.modal_footer {
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
-    margin-top: 1.5rem;
+
+    position: sticky;
+    bottom: 0;
+
+    background: #f8fafc; /* ← 明るくて軽い色に変更 */
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e2e8f0; /* 境界線も少し明るく */
+
+    width: 100%;
+    box-sizing: border-box;
 }

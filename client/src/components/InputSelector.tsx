@@ -1,6 +1,8 @@
 import React from "react";
-import { InputConfig } from "../types/inputConfig";
-import Input from "./Input";
+import {
+    InputConfig
+} from "../types/inputConfig";
+import Input from "./Input/Input";
 
 interface InputSelectorProps<K extends string, T extends Record<K, unknown>> {
     input: InputConfig<K>;
@@ -17,6 +19,7 @@ export const InputSelector = <K extends string, T extends Record<K, unknown>>({
     className,
     rowClassName,
 }: InputSelectorProps<K, T>) => {
+    // --- select ---
     if (input.type === "select") {
         return (
             <Input
@@ -33,11 +36,12 @@ export const InputSelector = <K extends string, T extends Record<K, unknown>>({
         );
     }
 
+    // --- text ---
     if (input.type === "text") {
         return (
             <Input
                 key={input.key}
-                type={input.type}
+                type="text"
                 label={input.label}
                 value={input.value}
                 onChange={(v) => onChange(input.key, v as T[K])}
@@ -47,6 +51,39 @@ export const InputSelector = <K extends string, T extends Record<K, unknown>>({
             />
         );
     }
+
+    // --- textarea（string / string[] 両対応）---
+    if (input.type === "textarea") {
+        if (typeof input.value === "string") {
+            // string 用 textarea
+            return (
+                <Input
+                    key={input.key}
+                    type="textarea"
+                    label={input.label}
+                    value={input.value}
+                    onChange={(v: string) => onChange(input.key, v as T[K])}
+                    className={className}
+                    rowClassName={rowClassName}
+                />
+            );
+        }
+
+        // string[] 用 textarea
+        return (
+            <Input
+                key={input.key}
+                type="textarea"
+                label={input.label}
+                value={input.value}
+                onChange={(v: string[]) => onChange(input.key, v as T[K])}
+                className={className}
+                rowClassName={rowClassName}
+            />
+        );
+    }
+
+    // --- date / number ---
     return (
         <Input
             key={input.key}

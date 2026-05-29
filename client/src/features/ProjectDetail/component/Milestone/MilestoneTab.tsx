@@ -1,8 +1,9 @@
 import Button from "@components/Button/Button";
-import { GridTableCreator } from "@components/GridTable/GridTableCreator";
+import Form from "@components/Form/Form";
+import { GridTableCreator } from "@components/GridTable/GridTableCreatorExtend";
 import { useMilestoneController } from "@features/ProjectDetail/component/Milestone/hooks/controller/useMilestoneController";
-import MilestoneForm from "@features/ProjectDetail/component/Milestone/ui/MilestoneForm";
-import { MilestoneTable } from "@features/ProjectDetail/component/Milestone/ui/MilestoneTable";
+import { sectionDefinitions } from "@features/ProjectDetail/component/Milestone/ui/creator/MilestoneFormCreator";
+import { milestoneTable } from "@features/ProjectDetail/component/Milestone/ui/creator/MilestoneTableCreator";
 import { useEffect } from "react";
 import styles from "./MilestoneTab.module.css";
 
@@ -11,11 +12,10 @@ interface MilestoneTabProps {
 }
 export const MilestoneTab = ({ projectId }: MilestoneTabProps) => {
     const { pageDispatch, modalDispatch } = useMilestoneController(projectId);
-    const milestoneTable = MilestoneTable();
+
     useEffect(() => {
         pageDispatch.handleLoad();
     }, []);
-
     return (
         <div className={styles.container}>
             <div className={styles.section_card}>
@@ -33,18 +33,18 @@ export const MilestoneTab = ({ projectId }: MilestoneTabProps) => {
 
                 <div className={styles.table_wrapper}>
                     <GridTableCreator
-                        rows={pageDispatch.pageState}
-                        columnDefs={milestoneTable.createColumnDefs(
+                        tableDefinition={milestoneTable(
                             pageDispatch.handleDelete,
                             modalDispatch.onOpenEdit,
                         )}
-                        rowProps={milestoneTable.createRowProps}
+                        rows={pageDispatch.pageState}
                     />
                 </div>
 
                 {modalDispatch.isOpen && (
-                    <MilestoneForm
+                    <Form
                         state={modalDispatch.state}
+                        sectionDefinition={sectionDefinitions}
                         onChange={modalDispatch.onChangeForm}
                         onSubmit={modalDispatch.handleConfirm}
                         onClose={modalDispatch.handleClose}
