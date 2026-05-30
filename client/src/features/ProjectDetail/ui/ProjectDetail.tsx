@@ -1,15 +1,13 @@
+import { DefectTab } from "@features/ProjectDetail/component/Defect/DefectTab";
+import { IssueTab } from "@features/ProjectDetail/component/Issue/IssueTab";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import commonStyles from "../../../common.module.css";
 import { Button } from "../../../components";
 import { ProjectProgressPage } from "../../ProjectProgress/ui/ProjectProgressPage";
 import { MilestoneTab } from "../component/Milestone/MilestoneTab";
 import { PhaseTab } from "../component/Phase/PhaseTab";
-import { useDefectStates } from "../hooks/state/useDefectStates";
-import { useIssueStates } from "../hooks/state/useIssueStates";
 import { useTaskStates } from "../hooks/state/useTaskStates";
 import styles from "./ProjectDetail.module.css";
-import { DefectTab } from "./defect/DefectTab";
-import { IssueTab } from "./issue/IssueTab";
 import { TaskTab } from "./task/TaskTab";
 
 const TABS = [
@@ -41,8 +39,6 @@ export const ProjectDetail = () => {
     };
 
     const taskStates = useTaskStates();
-    const issueStates = useIssueStates();
-    const defectStates = useDefectStates();
 
     const navigation = useNavigate();
 
@@ -68,12 +64,8 @@ export const ProjectDetail = () => {
                 {tab === "task" && (
                     <TaskTab projectId={projectId} states={taskStates} />
                 )}
-                {tab === "issue" && (
-                    <IssueTab projectId={projectId} states={issueStates} />
-                )}
-                {tab === "defect" && (
-                    <DefectTab projectId={projectId} states={defectStates} />
-                )}
+                {tab === "issue" && <IssueTab projectId={projectId} />}
+                {tab === "defect" && <DefectTab projectId={projectId} />}
                 {tab === "gantt" && (
                     <ProjectProgressPage projectId={projectId} />
                 )}

@@ -57,3 +57,21 @@ export const toDefectPayload = (param: DefectRow): DefectPayload => (
         tags: param.tags,
     }
 )
+
+export const InitPayload = (projectId: string): DefectPayload => (
+    {
+        id: "",
+        project_id: projectId,
+        task_id: "",
+        title: "",
+        description: "",
+        severity: DefectSeverity.Minor,
+        status: DefectStatus.Open,
+        owner: "",
+        reviewer: "",
+        due_date: "",
+        fixed_date: "",
+        verified_date: "",
+        tags: [],
+    }
+);

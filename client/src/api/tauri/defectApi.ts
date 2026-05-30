@@ -7,14 +7,14 @@ export const defectApi = {
     },
 
     create: async (defect: DefectPayload) => {
-        return await invoke("create_defect", { payload: defect });
+        await invoke("create_defect", { payload: defect });
     },
 
     update: async (defect: DefectPayload) => {
-        return await invoke("update_defect", { payload: defect });
+        await invoke("update_defect", { payload: defect });
     },
 
     delete: async (projectId: string, id: string) => {
-        return await invoke("delete_defect", { id, projectId });
+        await invoke("delete_defect", { id, projectId });
     },
 };

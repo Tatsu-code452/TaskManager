@@ -7,14 +7,14 @@ export const issueApi = {
     },
 
     create: async (issue: IssuePayload) => {
-        return await invoke("create_issue", { payload: issue });
+        await invoke("create_issue", { payload: issue });
     },
 
     update: async (issue: IssuePayload) => {
-        return await invoke("update_issue", { payload: issue });
+        await invoke("update_issue", { payload: issue });
     },
 
     delete: async (projectId: string, id: string) => {
-        return await invoke("delete_issue", { id, projectId });
+        await invoke("delete_issue", { id, projectId });
     },
 };

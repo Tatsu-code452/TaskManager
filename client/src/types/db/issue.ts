@@ -54,3 +54,20 @@ export const toIssuePayload = (param: IssueRow): IssuePayload => (
         tags: param.tags,
     }
 )
+
+export const InitPayload = (projectId: string): IssuePayload => (
+    {
+        id: "",
+        project_id: projectId,
+        task_id: "",
+        title: "",
+        description: "",
+        priority: IssuePriority.Low,
+        status: IssueStatus.Open,
+        owner: "",
+        reviewer: "",
+        due_date: "",
+        completed_date: "",
+        tags: [],
+    }
+);
