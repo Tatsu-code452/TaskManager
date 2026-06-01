@@ -48,3 +48,20 @@ export const toTaskPayload = (param: TaskRow): TaskPayload => (
         status: param.status,
     }
 )
+
+export const InitPayload = (project_id: string): TaskPayload => (
+    {
+        id: "",
+        project_id,
+        phase_id: "",
+        name: "",
+        planned_start: "",
+        planned_end: "",
+        planned_hours: 0.0,
+        actual_start: "",
+        actual_end: "",
+        actual_hours: 0.0,
+        progress_rate: 0.0,
+        status: TaskStatus.NotStarted,
+    }
+)

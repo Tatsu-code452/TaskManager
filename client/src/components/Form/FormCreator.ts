@@ -1,4 +1,4 @@
-import { InputPropsWithKey, SectionType } from "@components/Section/Section";
+import { CustomComponent, InputPropsWithKey, SectionItem, SectionType } from "@components/Section/Section";
 
 export type Payload = Record<string, unknown>;
 export type SectionDefinitions = Record<string, SectionDefinition>;
@@ -7,7 +7,7 @@ export type OnChange = (key: PayloadKey, v: Payload[PayloadKey]) => void;
 type PayloadKey = keyof Payload;
 type SectionDefinition = {
     title: string;
-    build: (form: Payload, change: OnChange) => InputPropsWithKey[];
+    build: (form: Payload, change: OnChange) => SectionItem[];
 };
 type SectionTypes = Record<string, SectionType>;
 type FormCreator = {
@@ -26,7 +26,7 @@ const createSectionTypes = (
         (acc, [key, sec]) => {
             acc[key] = {
                 title: sec.title,
-                inputs: sec.build(form, change),
+                items: sec.build(form, change),
             }
             return acc;
         }, {} as SectionTypes
@@ -108,5 +108,13 @@ export const input = {
         label,
         value: String(value),
         onChange: (e) => change(key, Number(e.target.value)),
+    }),
+
+    custom: (
+        key: string,
+        render: () => React.ReactNode,
+    ): CustomComponent => ({
+        key,
+        render,
     }),
 };

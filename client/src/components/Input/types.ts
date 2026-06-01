@@ -23,6 +23,7 @@ export type TextInputProps = BaseProps & {
     value: string;
     onChange: (value: string) => void;
     onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+    placeholder?: string;
 };
 
 export type OtherInputProps = BaseProps & {

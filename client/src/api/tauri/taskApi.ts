@@ -16,14 +16,14 @@ export const taskApi = {
         return await invoke("fetch_task_and_cells", { projectId });
     },
     create: async (task: TaskPayload) => {
-        return await invoke("create_task", { payload: task });
+        await invoke("create_task", { payload: task });
     },
 
     update: async (task: TaskPayload) => {
-        return await invoke("update_task", { payload: task });
+        await invoke("update_task", { payload: task });
     },
 
     delete: async (projectId: string, id: string) => {
-        return await invoke("delete_task", { id, projectId });
+        await invoke("delete_task", { id, projectId });
     },
 };

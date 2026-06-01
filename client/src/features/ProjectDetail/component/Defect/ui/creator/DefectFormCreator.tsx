@@ -1,4 +1,6 @@
 import { input, SectionDefinitions } from "@components/Form/FormCreator";
+import TagAddRow from "@components/Tag/TagAddRow";
+import { TagTypeLabel } from "@comtypes/db/common";
 import {
     DefectPayload,
     DefectSeverity,
@@ -48,6 +50,25 @@ export const sectionDefinitions: SectionDefinitions = {
             input.date("fixed_date", "修正日", form.fixed_date, change),
             input.date("verified_date", "完了日", form.verified_date, change),
             input.text("reviewer", "確認者", form.reviewer, change),
+        ],
+    },
+
+    tags: {
+        title: "タグ",
+        build: (form: DefectPayload, change) => [
+            input.custom("addTag", () => (
+                <TagAddRow
+                    tags={form.tags}
+                    tagTypeLabel={TagTypeLabel}
+                    onAdd={(tag) => change("tags", [...form.tags, tag])}
+                    onRemove={(tag) =>
+                        change(
+                            "tags",
+                            form.tags.filter((t) => t !== tag),
+                        )
+                    }
+                />
+            )),
         ],
     },
 };

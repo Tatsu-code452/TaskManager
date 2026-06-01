@@ -16,6 +16,7 @@ export const renderText = (id: string, props: TextInputProps) => (
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
         onKeyDown={props.onKeyDown}
+        placeholder={props.placeholder}
     />
 );
 

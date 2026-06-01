@@ -4,6 +4,6 @@ export * from "./InputSelector";
 export * from "./Modal/Modal";
 export * from "./Table";
 export * from "./TableCreator";
-export * from "./TagAddRow";
-export * from "./Tags";
+export * from "./Tag/TagAddRow";
+export * from "./Tag/Tags";
 

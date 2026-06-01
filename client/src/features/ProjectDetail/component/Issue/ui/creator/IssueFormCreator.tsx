@@ -1,4 +1,6 @@
 import { input, SectionDefinitions } from "@components/Form/FormCreator";
+import TagAddRow from "@components/Tag/TagAddRow";
+import { TagTypeLabel } from "@comtypes/db/common";
 import { IssuePayload, IssuePriority, IssueStatus } from "@comtypes/db/issue";
 import {
     IssuePriorityLabel,
@@ -43,6 +45,25 @@ export const sectionDefinitions: SectionDefinitions = {
             input.text("owner", "担当者", form.owner, change),
             input.date("completed_date", "完了日", form.completed_date, change),
             input.text("reviewer", "確認者", form.reviewer, change),
+        ],
+    },
+
+    tags: {
+        title: "タグ",
+        build: (form: IssuePayload, change) => [
+            input.custom("addTag", () => (
+                <TagAddRow
+                    tags={form.tags}
+                    tagTypeLabel={TagTypeLabel}
+                    onAdd={(tag) => change("tags", [...form.tags, tag])}
+                    onRemove={(tag) =>
+                        change(
+                            "tags",
+                            form.tags.filter((t) => t !== tag),
+                        )
+                    }
+                />
+            )),
         ],
     },
 };

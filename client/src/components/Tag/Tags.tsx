@@ -1,11 +1,11 @@
 import React from "react";
-import { Tag, TagType } from "../types/db/common";
+import { Tag, TagType } from "../../types/db/common";
 import styles from "./Tags.module.css";
 
 interface TagsProps {
     tags: Tag[];
     tagTypeLabel: Record<TagType, string>;
-    onRemove: (index: number) => void;
+    onRemove?: (tag: Tag) => void;
 }
 
 export const Tags = ({ tags, tagTypeLabel, onRemove }: TagsProps) => {
@@ -15,18 +15,20 @@ export const Tags = ({ tags, tagTypeLabel, onRemove }: TagsProps) => {
 
     return (
         <>
-            {tags.map((tag, index) => (
+            {tags.map((tag) => (
                 <span
                     key={`${tag.tag_type}-${tag.value}`}
                     className={`${styles.tag} ${styles[`tag_${tag.tag_type}`]}`}
                 >
                     {tagTypeLabel[tag.tag_type]}: {tag.value}
-                    <button
-                        className={styles.tag_remove}
-                        onClick={() => onRemove(index)}
-                    >
-                        ×
-                    </button>
+                    {onRemove && (
+                        <button
+                            className={styles.tag_remove}
+                            onClick={() => onRemove(tag)}
+                        >
+                            ×
+                        </button>
+                    )}
                 </span>
             ))}
         </>
